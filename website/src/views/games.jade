@@ -1,0 +1,162 @@
+extends ./_layout.jade
+
+block vars
+    - section = "games";
+    - title = "Games";
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li.current Games
+            
+        form#search-form(action="/games/find", method="get")
+            .row
+                .small-12.medium-6.columns
+                    row
+                        .small-4.columns
+                            label.big.text-right.middle(for="host") Server IP:
+                        .small-8.columns
+                            input#host(type="text", name="host", placeholder="Server host IP...", value=(query? query.host: ""))
+                .small-12.medium-6.columns
+                    row
+                        .small-4.columns
+                            label.big.text-right.middle(for="port") Server port:
+                        .small-8.columns
+                            input#port(type="text", name="port", placeholder="Server port...", value=(query? query.port: ""))
+            .row
+                .small-12.medium-6.columns
+                    row
+                        .small-4.columns
+                            label.big.text-right.middle(for="map") Map:
+                        .small-8.columns
+                            input#map(type="text", name="map", placeholder="Map...", value=(query? query.map: ""))
+                .small-12.medium-6.columns
+                    row
+                        .small-4.columns
+                            label.big.text-right.middle(for="serverdesc") Server name:
+                        .small-8.columns
+                            input#serverdesc(type="text", name="serverdesc", placeholder="Server name...", value=(query? query.serverdesc: ""))
+            .row
+                .small-12.medium-6.columns
+                    row
+                        .small-4.columns
+                            label.big.text-right.middle(for="gamemode") Mode:
+                        .small-8.columns
+                            select#gamemode(name="gamemode")
+                                option(value="")
+                                for group in vars.gameModeGroups
+                                    optgroup(label=group.name)
+                                        for mode in group.modes
+                                             option(value=mode.name, selected=(query&&query.gamemode==mode.name? "selected": undefined)) #{mode.name} (#{mode.title})
+                .small-12.medium-6.columns
+                    row
+                        .small-4.columns
+                            label.big.text-right.middle(for="fromdate") From date:
+                        .small-8.columns
+                            input#fromdate.fdate(type="text", name="fromdate", placeholder="From (yyyy-mm-dd)...", value=(query? query.fromdate: ""))
+            .row
+                .small-12.medium-6.columns
+                    row
+                        .small-4.columns
+                            label.big.text-right.middle(for="gametype") Type:
+                        .small-8.columns
+                            select#gametype(name="gametype")
+                                for type in ["", "public", "duel", "mix", "clanwar", "intern", "other"]
+                                    option(value=type, selected=(query&&query.gametype==type? "selected": undefined))= type
+                .small-12.medium-6.columns
+                    row
+                        .small-4.columns
+                            label.big.text-right.middle(for="todate") To date:
+                        .small-8.columns
+                            input#todate.fdate(type="text", name="todate", placeholder="To (yyyy-mm-dd)...", value=(query? query.todate: ""))
+            .row
+                .medium-10.large-8.columns
+                    row
+                        .small-4.medium-3.columns
+                            label.big.text-right.middle(for="players") Players:
+                        .small-8.medium-9.columns
+                            input#players(type="text", name="players", placeholder="Player1 Player2 Player3...", value=(query? query.players: ""))
+                .medium-12.large-4.columns
+                    row
+                        .small-12.medium-6.columns
+                            label.big
+                                input#exact(name="exact", type="checkbox", checked=(query&&query.exact? "checked": undefined))
+                                | Exact names
+                        .small-12.medium-6.columns
+                            label.big
+                                input#specs(name="specs", type="checkbox", checked=(query&&query.specs? "checked": undefined))
+                                | Include spectators
+            .row
+                .small-6.medium-3.columns.small-centered
+                    button.button.expanded.large#submit(type="submit") Search
+        
+        #search-result-container
+            if results
+                include _partials/game-search-results.jade
+            
+            else if error
+                = error
+            
+            else
+                .small-12.columns#search-contents
+                    .row
+                        .medium-12.large-6.columns
+                            label.big Recent <a href="/games/find?gametype=duel" onclick="return loadPage('/games/find?gametype=duel')")>duels</a>
+                            
+                            table(width="100%")
+                                thead
+                                    tr
+                                        td(width="60%") Game
+                                        td(width="40%") Mode / Map
+                                tbody
+                                    for game in latestDuels
+                                        tr.clickable(onclick=("showGame("+game.id+")"))
+                                            td: a.disable-default(href=("/game/"+game.id)).nowrap
+                                                .row
+                                                    .small-6.columns(style="text-align: right; padding-right: 10;")
+                                                        = game.meta[2]+" "
+                                                        span.label(class=(game.draw? "warning": "success"), style="cursor: pointer")
+                                                            = game.meta[3]
+                                                    .small-6.columns(style="text-align: left; padding-right: 10;")
+                                                        span.label(class=(game.draw? "warning": "alert"), style="cursor: pointer")
+                                                            = game.meta[1]
+                                                        = " "+game.meta[0]
+                                            td
+                                                | #{game.gamemode} #{game.map}
+                                                
+                        .medium-12.large-6.columns
+                            label.big Recent <a href="/games/find?gametype=clanwar" onclick="return loadPage('/games/find?gametype=clanwar')">clanwars</a>
+                            
+                            table(width="100%")
+                                thead
+                                    tr
+                                        td(width="60%") Game
+                                        td(width="40%") Mode / Map
+                                tbody
+                                    for game in latestClanwars
+                                        tr.clickable(onclick=("showGame("+game.id+")"))
+                                            td: a.disable-default(href=("/game/"+game.id)).nowrap
+                                                .row
+                                                    .small-6.columns(onclick=("showGame("+game.id+")"), style="text-align: right; padding-right: 10;")
+                                                        = game.meta[2]+" "
+                                                        span.label(class=(game.draw? "warning": "success"), style="cursor: pointer")
+                                                            = game.meta[3]
+                                                    .small-6.columns(style="text-align: left; padding-right: 10;")
+                                                        span.label(class=(game.draw? "warning": "alert"), style="cursor: pointer")
+                                                            = game.meta[1]
+                                                        = " "+game.meta[0]
+                                            td
+                                                | #{game.gamemode} #{game.map}
+                                                
+    .reveal#connect-info(data-reveal)
+        | Copy the following line, paste it in the game, and press Enter to connect to the server:
+        br
+        br
+        input#connect-command(type="text", value="/connect", onfocus="$(this).select()")
+    .reveal.large#game-info(data-reveal)
+        div
+        button.close-button(data-close, type="button") &times;
+        button.close-button.maximize-button(type="button", onclick="expandGame()") <i class="fa fa-expand"></i>
+        
+block scripts
+    script(src="/js/games.js")

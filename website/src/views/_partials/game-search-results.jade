@@ -1,0 +1,71 @@
+mixin results()
+    for game in results
+        tr.clickable
+            td.nowrap(onclick=("showGame("+game.id+")")): a.disable-default(href=("/game/"+game.id))= game.serverdesc||(game.host+":"+game.port)
+            td(onclick=("showGame("+game.id+")"))= game.gamemode
+            td.nowrap(onclick=("showGame("+game.id+")"))= game.map
+            td(onclick=("showGame("+game.id+")"))= game.gametype
+            td.nowrap(onclick=("showGame("+game.id+")"))
+                if game.isintern
+                    = game.meta[0]
+                else if game.iswar
+                    .row
+                        .small-6.columns(style="text-align: right; padding-right: 10;")
+                            = game.meta[2]+" "
+                            span.label(class=(game.draw? "warning": "success"), style="cursor: pointer")
+                                = game.meta[3]
+                        .small-6.columns(style="text-align: left; padding-right: 10;")
+                            span.label(class=(game.draw? "warning": "alert"), style="cursor: pointer")
+                                = game.meta[1]
+                            = " "+game.meta[0]
+            td(onclick=("showGame("+game.id+")"))= game.numplayers
+            td.nowrap(onclick=("showGame("+game.id+")")): span.date= (game.timestamp instanceof Date)? game.timestamp.toJSON(): game.timestamp
+
+if (!noHead)
+    .medium-12.columns
+        if results.length == 0
+            h3 No results!
+        else
+            //- - var hasResults = _.find(results, function(game) { return game.meta&&game.meta[0]; });
+            table.scroll#search-results(width="100%")
+                thead
+                    tr
+                        td(width="16%") Server
+                        td(width="10%") Mode
+                        td(width="10%") Map
+                        td(width="10%") Type
+                        td.text-center(width="26%") Results
+                        td(width="8%") Clients
+                        td(width="20%") End time
+                tbody
+                    +results()
+                            
+            .row
+                .columns.medium-8.large-6.medium-centered
+                    .row
+                        .small-4.columns.text-center
+                            if prevPageURL
+                                a.hollow.button.secondary(href=(prevPageURL), onclick="return loadPage('"+prevPageURL+"');")
+                                    i.fa.fa-angle-double-left
+                                    |  Newer
+                            else
+                                | &nbsp;
+                        .small-4.columns.text-center
+                            label.big #{stats.count} results
+                        .small-4.columns.text-center
+                            if nextPageURL
+                                a#next-page-button.hollow.button.secondary(href=(nextPageURL), onclick=("return loadPage('"+nextPageURL+"');")) Older 
+                                    i.fa.fa-angle-double-right
+                            else
+                                | &nbsp;
+                
+else
+    tr.scroll-to
+        td(width="16%") Server
+        td(width="10%") Mode
+        td(width="10%") Map
+        td(width="10%") Type
+        td.text-center(width="26%") Results
+        td(width="8%") Clients
+        td(width="20%") End time
+    +results()

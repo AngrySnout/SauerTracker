@@ -1,0 +1,21 @@
+extends ./_layout.jade
+
+block vars
+    - section = "players";
+    - title = "Profile";
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li.current Profile
+        .medium-12.columns
+            if names && names.length
+                | Possible names for your IP address (#{ip}) are:
+                div(style="margin-left: 3em")
+                    for name in names
+                        a(href=("/player/"+encodeURIComponent(name)))= name
+                        br
+                br
+                | None of these are you? Try searching for your name on the <a href="/players">players page</a>.
+            else
+                | No names found for your IP address. You can search for your name on the <a href="/players">players page</a>.

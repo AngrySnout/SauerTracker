@@ -1,0 +1,26 @@
+extends ./_layout.jade
+
+block vars
+    - section = "home";
+    - title = "Stats";
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li.current= title
+        .medium-12.columns.end
+            label.big Last 7 days' statistics:
+            table(width="100%")
+                thead
+                    tr
+                        td(width="25%") Day
+                        td(width="25%") Games
+                        td(width="25%") Visitors
+                        td(width="25%") Requests
+                tbody
+                    for row in stats
+                        tr
+                            td= (row.date==today)? "Today": ((row.date==yesterday)? "Yesterday": row.date)
+                            td= row.games||0
+                            td= row.visitors||0
+                            td= row.requests||0

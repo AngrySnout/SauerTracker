@@ -1,0 +1,41 @@
+extends ./_layout.jade
+
+block vars
+    - section = "home";
+    - title = "Frequently Asked Questions";
+    
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li.current Frequently Asked Questions
+        .medium-12.columns.end
+            h4 What is this?
+            p This is a server tracker for the game <a href="http://sauerbraten.org">Cube 2: Sauerbraten</a>.
+            br
+            h4 Does this tracker have an API?
+            p Yes. See the <a href="/api">API reference page</a>.
+            br
+            h4 Is this tracker open source?
+            p It will be soon.
+            //- p Yes. You can find the source on <a href="http://github.com/">GitHub</a>.
+            br
+            h4 At what rate are servers pinged?
+            p Servers with players are pinged 3 times every 5 seconds, one ping of each type (info, player stats, and team scores). The rest of the servers are only pinged once every 10 seconds. However, when a server approaches intermission, the ping delay is reduced from 5 to 2 seconds until the beginning of intermission, to record end-game stats as accurately as possible.
+            br
+            h4 How can I have my server removed from the tracker?
+            p If the server is in the master server list, we won't actually remove it, but we can ban your server from stats tracking, so that games played on it won't get saved nor have any effect on player stats. Contact me (Origin) on <a href="https://mibbit.com/?channel=%23impressivesquad&server=irc.gamesurge.net">IRC</a> for more information.
+            br
+            h4 Will name protection be restored in the future?
+            p One day, maybe.
+            br
+            h4 How can I add my clan to the Tracker's clan list (for clanwar detection, server browser, ... etc)?
+            p Contact me (Origin) on <a href="https://mibbit.com/?channel=%23impressivesquad&server=irc.gamesurge.net">IRC</a> and I will add it.
+            br
+            h4 How reliable is this tracker?
+            p Reliable enough, but you don't count on it too much, as it can crash or go offline at times.
+            br
+            h4 How accurate is this tracker?
+            p The server list, servers (live games), and saved games are pretty accurate. Player stats however are not very accurate, as they are only meant to provide a relative measure of skill/activity among players.
+            br
+            h4 I have a question/suggestion/bug report/... What do I do?
+            p Contact me (Origin) on <a href="https://mibbit.com/?channel=%23impressivesquad&server=irc.gamesurge.net">IRC</a> and I will do my best to answer/add/fix it.

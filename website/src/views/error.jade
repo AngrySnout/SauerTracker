@@ -1,0 +1,25 @@
+extends ./_layout.jade
+
+block vars
+    - section = "";
+    - title = "Error "+status;
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li.current Error
+        .medium-12.columns
+            if status===404
+                h3 Error 404. Page not found.
+                | If you typed the address manually, check your spelling.
+                br
+                | If this is a server's page, the server might be down at the moment. Try again at a later time.
+            else if status===500
+                h3 Error 500. Internal server error.
+                | An internal error occurred. Please report this using the links in the footer below.
+                if error
+                    br
+                    | Error message:
+                    br
+                    br
+                    div(style="margin-left: 2em;") !{error.stack? error.stack.replace(/\n/g, "<br>"): error}

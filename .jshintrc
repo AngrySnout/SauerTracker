@@ -1,0 +1,7 @@
+{
+    "esnext": true,
+    "-W069": true,
+	"globals" : {
+		"Promise" : true
+	}
+}

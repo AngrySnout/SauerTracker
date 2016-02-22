@@ -1,0 +1,384 @@
+@import '../../bower_components/foundation-sites/scss/foundation';
+@import '../../bower_components/motion-ui/motion-ui';
+@import '../../bower_components/font-awesome/scss/font-awesome';
+@import './_settings.scss';
+@import './_datepicker.scss';
+@import './_nprogress.scss';
+@include foundation-everything;
+
+.client-side {
+	display: none;
+}
+
+body {
+	height: 100%;
+	background-color: #333;
+	background: #333 url("/images/6.jpg") no-repeat fixed center center / cover ;
+}
+
+a {
+	color: #78CCF0;
+}
+
+label {
+	color: $body-font-color;
+}
+
+label.big {
+	font-size: 1.1em;
+	//font-weight: bold;
+}
+
+@include breakpoint(medium) {
+	.title-bar {
+		display: none;
+	}
+}
+
+.top-bar {
+	border-bottom: solid 1px #444;
+	box-shadow: inset 0 10px 10px #555, 0 2px 2px #555;
+	padding: 0;
+
+	.logo {
+		height: 43px;
+		width: auto;
+		margin: -0.5em 0.5em -0.5em 0;
+	}
+
+	@include breakpoint(small down) {
+		.top-bar-left {
+			display: none;
+		}
+	}
+
+	.top-bar-left, .top-bar-right {
+		ul, ul li {
+			background: rgba(0, 0, 0, 0);
+		}
+
+		a, a:hover {
+			color: $body-font-color;
+		}
+	}
+
+	.top-bar-right {
+		ul li a {
+			padding-top: 1rem;
+			padding-bottom: 1em;
+			color: $body-font-color;
+		}
+
+		ul li:hover {
+			background: rgba(0, 0, 0, 0.3);
+		}
+
+		ul li.active a {
+			border-bottom: solid 1px #00ACDA;
+			background-color: #00ACDA;
+		}
+	}
+}
+
+#wrapper {
+	min-height: 100%;
+	position: relative;
+
+	#content {
+		margin-top: 1em;
+		position: relative;
+
+		.breadcrumbs {
+			background: $darker-gray;
+			border: 0;
+			border-bottom: solid 1px #282828;
+			border-radius: 10px 10px 0 0;
+			padding: .25rem .8rem;
+		}
+
+		.main-container {
+			background: rgba($black, 0.8);
+			border-radius: 10px 10px 0 0;
+			box-shadow: 0 0 5px $light-black;
+			padding-bottom: 20px;
+		}
+	}
+
+	@include breakpoint(medium) {
+		#content {
+			margin-bottom: 1.5em;
+		}
+		.footer .columns:not(:first-child) {
+			border-left: 1px solid #888;
+		}
+		.footer .columns:not(:last-child) {
+			border-right: 1px solid #888;
+		}
+		.panel-blurred .panel {
+			min-height: 11rem;
+		}
+	}
+
+	@include breakpoint(small down) {
+		.footer .columns:nth-child(n+2) {
+			border-top: 2px solid #888;
+			margin-top: 1em;
+			padding-top: 1em;
+		}
+		.footer .columns:last-child {
+			padding-bottom: 1em;
+		}
+		.footer {
+			position: relative;
+		}
+	}
+
+	.footer {
+		padding: 1em 2em 1em 2em;
+		width: 100%;
+		font-size: 0.9em;
+		background-color: $darker-gray;
+		color: $light-gray;
+		box-shadow: inset 0 40px 40px darken($darker-gray, 3), 0 2px 5px darken($darker-gray, 5);
+		border-top: solid 1px #282828;
+		border-radius: 0 0 10px 10px;
+
+		div {
+			text-align: left;
+		}
+
+		ol {
+			list-style-type: upper-roman;
+			margin-left: 1em;
+			margin-bottom: 0;
+		}
+	}
+}
+
+.nowrap {
+	 white-space: nowrap;
+	 overflow: hidden;
+	 text-overflow: ellipsis;
+}
+
+table:not(.table-condensed) tbody tr:hover {
+	background: lighten($table-background, 8%);
+}
+
+table tbody tr.highlighted, .highlighted {
+	background-color: rgb(107, 44, 38);
+}
+
+table:not(.table-condensed) tbody tr.highlighted:hover {
+	background-color: lighten(rgb(107, 44, 38), 8%);
+}
+
+tr.scroll-to {
+	background-color: smart-scale($table-background, $table-color-scale / 2);
+}
+
+@include breakpoint(medium down) {
+	table.scroll {
+		display: block;
+		width: 100%;
+		overflow-x: auto;
+	}
+}
+
+@include breakpoint(large up) {
+	table.scroll {
+		display: table;
+		width: 100%;
+		overflow-x: none;
+	}
+}
+
+.label.success {
+	background-color: $success-color;
+}
+.label.warning {
+	background-color: $warning-color;
+}
+.label.alert {
+	background-color: $alert-color;
+}
+.label.primary {
+	background-color: $primary-color;
+}
+
+.success {
+	color: lighten($success-color, 15%);
+}
+.warning {
+	color: lighten($warning-color, 15%);
+}
+.alert {
+	color: lighten($alert-color, 15%);
+}
+.primary {
+	color: lighten($primary-color, 15%);
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.unclickable {
+	cursor: default;
+}
+
+.flag {
+	margin-top: -10px;
+	margin-bottom: -6px;
+	height: 24px;
+	width: 24px;
+}
+
+.small-icon {
+	min-width: 24px;
+	height: 24px;
+}
+
+.reveal {
+	color: $white;
+}
+
+.middle {
+	margin-top: -5px !important;
+}
+
+.panel-blurred {
+	position: relative;
+	width: 100%;
+	padding: 1em 1em;
+	color: $body-font-color;
+	margin-bottom: 20px;
+	min-height: 33em;
+	margin-top: -0.87rem;
+	padding-top: 3rem;
+	background-color: rgba(0, 0, 0, 0.4);
+	box-shadow: 0 2px 2px #555;
+
+	h2, h3 {
+		text-align: center;
+		font-family: 'Raleway', sans-serif;
+		font-weight: 900;
+		color: $body-font-color;
+	}
+
+	h2 {
+		text-shadow: 2px 2px 5px #000000;
+	}
+
+	h3 {
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		text-shadow: 2px 2px 2px #000000;
+	}
+
+	h4 {
+		text-transform: uppercase;
+		font-size: 1.3rem;
+		font-weight: 700;
+		color: #E9E9E9;
+	}
+
+	.row {
+		margin-top: 4em;
+	}
+
+	.panel {
+		background-color: rgba(0, 0, 0, 0.3);
+		border-style: none;
+		border-radius: 8px;
+		transition: background-color .5s;
+		padding: 1em;
+		margin-top: 2em;
+
+		p {
+			color: $body-font-color;
+		}
+	}
+
+	.panel:hover {
+		background-color: rgba(136, 106, 66, 0.5);
+	}
+}
+
+ul.tabs, .tabs-content {
+	border: none !important;
+}
+
+.disable-default-active {
+	color: $body-font-color;
+}
+.disable-default-active:hover {
+	color: $body-font-color;
+}
+.disable-default-active:visited {
+	color: $body-font-color;
+}
+
+.twitter-typeahead {
+	width: 100%;
+
+	.typeahead,
+	.tt-hint {
+		width: 100%;
+	}
+	.tt-hint {
+		color: #999
+	}
+	.tt-menu {
+		width: 100%;
+		top: 70% !important;
+		background-color: #333;
+		border: 1px solid #ccc;
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		box-shadow: 0 5px 10px rgba(0,0,0,.2);
+
+		.tt-suggestion {
+			padding: 5px 10px;
+		}
+		.tt-suggestion:hover {
+			cursor: pointer;
+			color: #fff;
+			background-color: #0097cf;
+		}
+		.tt-suggestion.tt-cursor {
+			color: #fff;
+			background-color: #0097cf;
+		}
+		.tt-suggestion p {
+			margin: 0;
+		}
+	}
+}
+
+.date-active {
+	min-width: 10em;
+	display: inline-block;
+}
+
+#server-info {
+	margin-bottom: 1em;
+	border: 1px solid $darker-gray;
+	display: block;
+	overflow-y: auto;
+	position: relative;
+	padding-bottom: 1em;
+}
+
+#server-info-content {
+	padding-bottom: 1em;
+}
+
+.hollow.button.secondary {
+	color: $body-font-color;
+}
+
+.maximize-button {
+	right: 2.2em;
+	font-size: 1.4em;
+	top: 0.6em;
+}

@@ -1,0 +1,51 @@
+extends ./_layout.jade
+
+block vars
+    - section = "servers";
+    - title = "Servers";
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li.current Servers
+        .medium-12.columns
+            .client-side
+                .medium-3.large-2.columns
+                    label.big.nowrap Total players: 
+                        span#total-players(style="color: lightgreen") #{totalPlayers}
+                .medium-3.large-2.columns
+                    label.big.nowrap Total servers: 
+                        span#total-servers(style="color: lightgreen") #{totalServers}
+                .medium-3.large-2.columns
+                    label.big
+                        input#hide-empty(type="checkbox", onchange="hideEmptyChanged()", checked)
+                        | Hide empty servers
+                .medium-3.large-2.columns
+                    label.big
+                        input#pause-update(type="checkbox", onchange="pauseUpdateChanged()")
+                        | Pause update
+                .medium-12.large-4.columns
+                    input.typeahead#find-player(type="text", onkeyup="findPlayer()", onKeyPress="findPlayer()", onPaste="findPlayer()", onInput="findPlayer()", onChange="findPlayer()", placeholder="Find player...")
+                .medium-12.large-8.columns#clans-online(style="margin-top: -5px; margin-botton: 5px;")
+                .medium-12.large-4.columns
+                    input#find-server(type="text", onkeyup="findServer()", onKeyPress="findServer()", onPaste="findServer()", onInput="findServer()", onChange="findServer()", placeholder="Filter servers...")
+                        
+            .medium-12.columns#server-info(style="display: none; height: 0px;")
+                #server-info-content
+                button.close-button(type="button", onclick="hideServer()") &times;
+                button.close-button.maximize-button(type="button", onclick="expandServer()") <i class="fa fa-expand"></i>
+                                
+
+            #server-list
+                include ./_partials/server-list.jade
+    .reveal#connect-info(data-reveal)
+        | Copy the following line, paste it in the game, and press Enter to connect to the server:
+        br
+        br
+        input#connect-command(type="text", value="/connect", onfocus="$(this).select()")
+        
+    script#servers-json(type="application/json")
+        | !{JSON.stringify(servers)}
+
+block scripts
+    script(src="/js/servers.js")

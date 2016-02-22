@@ -1,0 +1,7 @@
+website/bower_components/
+website/node_modules/
+build/
+node_modules/
+tmp/
+coverage/
+esdoc/

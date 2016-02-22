@@ -1,0 +1,42 @@
+mixin sortable(name, value)
+    a(onclick="sortBy('#{value}')") #{name} 
+        if sortedBy == value
+            span.fa(class=("fa-caret-"+(sortOrder=="asc"? "up": "down")))
+
+table.scroll#table-contents(width="100%")
+    thead
+        tr
+            td.nowrap(width="18%")
+                +sortable("Description", "description")
+            td.nowrap(width="8%")
+                +sortable("Players", "clients")
+            td.nowrap(width="10%")
+                +sortable("Mode", "gameMode")
+            td.nowrap(width="11%")
+                +sortable("Map", "mapName")
+            td.nowrap(width="9%")
+                +sortable("Time left", "timeLeft")
+            td.nowrap(width="10%")
+                +sortable("Master mode", "masterMode")
+            td.nowrap(width="11%")
+                +sortable("Country", "country")
+            td.nowrap(width="22%")
+                +sortable("Host", "host")
+                |  :  
+                +sortable("Port", "port")
+    tbody
+        for server in servers
+            if (!hideEmpty || server.clients > 0)
+                tr.unclickable(class=(server.highlight? "highlighted": undefined))
+                    td.nowrap.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")): a.disable-default(href="/server/"+server.host+"/"+server.port) !{server.description? server.descriptionStyled: server.host+":"+server.port}
+                    td.clickable(style=(server.isFull? "color: yellow;": ""), onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.clients}/#{server.maxClients}
+                    td.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.gameMode}
+                    td.nowrap.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.mapName}
+                    td.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.timeLeftS}
+                    td.clickable(onclick=("showServer('"+server.host+"', "+server.port+")"))
+                        span(style=("color: "+vars.materModeColors[server.masterMode])) #{server.masterMode}
+                    td.clickable.nowrap(onclick=("showServer('"+server.host+"', "+server.port+")"))
+                        if server.country
+                            img.flag(src="/images/flags/#{server.country}.png")
+                        |  #{server.countryName}
+                    td.clickable(onclick="showConnect('#{server.host}', #{server.port})") #{server.host}:#{server.port}

@@ -1,0 +1,103 @@
+extends ./_layout.jade
+
+block vars
+    - section = "players";
+    - title = error? "Error": player.name;
+    
+mixin fixedAcc(accuracy)
+    = _.padStart(parseInt(accuracy).toString(), 2, "0")+"%"
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li Players
+            li.current= playerName||player.name
+        .medium-12.columns
+            if error
+                label.big #{error}
+            else
+                //- include ./_partials/game.jade
+                h2#player-name= player.name
+                span
+                    if (!player.country || player.countryName == "Unknown")
+                        | Country unknown
+                    else
+                        img.flag(src="/images/flags/"+player.country+".png")
+                        |  #{player.countryName}
+                br
+                br
+                label.big Games played: #{totalGames}
+                label.big ELO: #{player.elo}
+                
+                br
+                .row.medium-10.large-6.columns: table(width="100%")
+                    thead
+                        tr
+                            td(width="20%") Stats
+                            td.text-center(width="27%") Total
+                            td.text-center(width="27%") Insta modes
+                            td.text-center(width="27%") Effic modes
+                    tbody
+                        tr
+                            td Frags
+                            td.text-center= player.frags
+                            td.text-center= player.instastats[0]
+                            td.text-center= player.efficstats[0]
+                        tr
+                            td Flags
+                            td.text-center= player.flags
+                            td.text-center= player.instastats[1]
+                            td.text-center= player.efficstats[1]
+                        tr
+                            td Deaths
+                            td.text-center= player.deaths
+                            td.text-center= player.instastats[2]
+                            td.text-center= player.efficstats[2]
+                        tr
+                            td Teamkills
+                            td.text-center= player.tks
+                            td.text-center= player.instastats[3]
+                            td.text-center= player.efficstats[3]
+                        tr
+                            td K/D
+                            td.text-center= player.kpd
+                            td.text-center= player.instastats[4]
+                            td.text-center= player.efficstats[4]
+                        tr
+                            td Accuracy
+                            td.text-center: +fixedAcc(player.acc)
+                            td.text-center: +fixedAcc(player.instastats[5])
+                            td.text-center: +fixedAcc(player.efficstats[5])
+                
+                if games
+                    br
+                    label.big Last 10 games (
+                        a(href=("/games/find?exact=on&players="+encodeURIComponent(player.name))) find more
+                        | ):
+                    table.scroll(width="100%")
+                        thead
+                            tr
+                                td(width="25%") Server
+                                td(width="25%") Mode / Map
+                                td(width="25%") Type
+                                td(width="25%") End time
+                        tbody
+                            for game in games
+                                tr
+                                    td: a(href=("/game/"+game.id))
+                                        if game.serverdesc
+                                            = game.serverdesc
+                                        else
+                                            = game.host+":"+game.port
+                                    td= game.gamemode+" "+game.map
+                                    td= game.gametype
+                                    td: span.date= (game.timestamp instanceof Date)? game.timestamp.toJSON(): game.timestamp
+                                    
+                .row.columns.client-side(style="margin-top: 1em")
+                    br
+                    label.big Player activity for the last 15 days (# of games played):
+                    div(style="width: 100%; margin-right: 50px;")
+                        canvas#player-activity-month(style="width: 100%; height: 300px;")
+
+block scripts
+    script(src="/js/player.js")

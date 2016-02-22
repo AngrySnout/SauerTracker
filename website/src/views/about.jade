@@ -1,0 +1,89 @@
+extends ./_layout.jade
+
+block vars
+    - section = "about";
+    link(href='//fonts.googleapis.com/css?family=Raleway:900', rel='stylesheet', type='text/css')
+
+block content
+    .panel-blurred
+        h2 !mpressive Sauer Tracker
+        h3 Global server and player stats tracking for Cube 2: Sauerbraten
+
+        .row
+            .small-12.medium-6.large-4.columns
+                a(href="/faq")
+                    .panel
+                        h4 FAQ
+                        p.subtitle Got any questions about the Tracker? Check out the FAQ page and see if your answer's in there.
+            .small-12.medium-6.large-4.columns
+                a(href="/")
+                    .panel
+                        h4 Browse servers
+                        p.subtitle Browse servers like you would in-game. Track on-going games, live. See game mode, map, teams, and players. Find server websites and demo pages.
+            .small-12.medium-6.large-4.columns
+                a(href="/api")
+                    .panel
+                        h4 API
+                        p.subtitle Looking to access the tracker programatically? Click here to read the API's documentation.
+            .small-12.medium-6.large-4.columns
+                a(href="/games")
+                    .panel
+                        h4 Find games
+                        p.subtitle Search for games by server description, host, game mode, game type, map, date, and players. See end-game stats for all games.
+            .small-12.medium-6.large-4.columns
+                a(href="/players")
+                    .panel
+                        h4 Find players
+                        p.subtitle Search for players by name. See player stats and what games they played.
+            .small-12.medium-6.large-4.columns
+                a(href="/profile")
+                    .panel
+                        h4 Track your stats
+                        p.subtitle Player stats are saved on all servers. Track your frags, deaths, games, and more, on all servers, all the time.
+            
+    .row.main-container
+        ul.breadcrumbs
+            li.current Top 10s
+        .large-4.columns
+            if topPlayers
+                label.big Top players
+                table(width="100%")
+                    thead
+                        tr
+                            td(width="50%") Player
+                            td(width="50%") Frags
+                    tbody
+                        for player in topPlayers
+                            tr
+                                td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
+                                td= player.frags
+        .large-4.columns
+            label.big Top countries
+            if topCountries
+                table(width="100%")
+                    thead
+                        tr
+                            td(width="50%") Country
+                            td(width="50%") Frags
+                    tbody
+                        for country in topCountries
+                            tr
+                                td
+                                    if country.country && country.country != "unknown"
+                                        img.flag(src=("/images/flags/"+country.country+".png"))
+                                        |  
+                                    = country.name
+                                td= country["frags"]
+        .large-4.columns
+            label.big Top servers
+            if topServers
+                table(width="100%")
+                    thead
+                        tr
+                            td(width="50%") Server
+                            td(width="50%") # of games
+                    tbody
+                        for server in topServers
+                            tr
+                                td: a(href=("/server/"+server.host+"/"+server.port))= server.serverdesc
+                                td= server.count

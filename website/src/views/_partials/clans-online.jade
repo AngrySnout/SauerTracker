@@ -1,0 +1,7 @@
+if clansOnline && clansOnline.length
+    label.big Clans online: 
+        for clan in clansOnline
+            a(title=(clan.players.join(" \n")), onclick=("findPlayer('"+clan.name.replace(/\'/g, "\\'")+"')")) #{clan.name}
+            |  
+            span.label.secondary(style="margin-top: -5px;")  #{clan.count} 
+            |  

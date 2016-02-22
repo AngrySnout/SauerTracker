@@ -1,0 +1,67 @@
+extends ./_layout.jade
+
+block vars
+    - section = "clans";
+    - title = clan.name;
+    
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li Clans
+            li.current= clan.name
+        .medium-12.columns.end
+            if error
+                label.big= error
+            else
+                h2(style="display: inline-block")= clan.name
+                h3(style="display: inline-block; margin-left: 0.5em")= info.title
+                br
+                label.big Rank: #{clan.rank}
+                label.big Wins: #{clan.wins}
+                label.big Losses: #{clan.losses}
+                label.big Win rate: #{parseInt(clan.rate*100)}%
+                
+                if info.website
+                    br
+                    label.big Website: <a href=#{info.website}>#{info.website}</a>
+                
+                if members
+                    br
+                    label.big Last 10 members seen (
+                        a(href=("/players/find?name="+encodeURIComponent(clan.name))) find more
+                        |):
+                        for member, i in members
+                            if (i !== 0)
+                                | ,
+                            a(href=("/player/"+encodeURIComponent(member.name)))= " "+member.name
+                
+                if games
+                    br
+                    label.big Last 10 clanwars (
+                        a(href=("/games/find?gametype=clanwar&players="+encodeURIComponent(clan.name))) find more
+                        |):
+                    table.scroll(width="100%")
+                        thead
+                            tr
+                                td(width="20%") Server
+                                td(width="20%") Mode / Map
+                                td.text-center(width="30%") Results
+                                td(width="10%") Clients
+                                td(width="20%") End time
+                        tbody
+                            for game in games
+                                tr
+                                    td: a(href=("/game/"+game.id))= game.serverdesc
+                                    td #{game.gamemode} #{game.map}
+                                    td
+                                        .row
+                                            .small-6.columns(style="text-align: right; padding-right: 10;")
+                                                = game.meta[2]+" "
+                                                span.label(class=(game.draw? "warning": "success"))
+                                                    = game.meta[3]
+                                            .small-6.columns(style="text-align: left; padding-right: 10;")
+                                                span.label(class=(game.draw? "warning": "alert"))
+                                                    = game.meta[1]
+                                                = " "+game.meta[0]
+                                    td #{game.numplayers}
+                                    td: span.date= (game.timestamp instanceof Date)? game.timestamp.toJSON(): game.timestamp

@@ -1,0 +1,30 @@
+{
+	"debug": true,
+	"pollingInterval": 10,
+	"extInfoPollingInt": 5,
+	"endGamePollingInt": 2,
+	"masterPollingInt": 600,
+	"savePlayersInt": 600,
+	"cachePurgeInt": 1800,
+	"master": {
+		"update": true,
+		"name": "sauerbraten.org",
+		"port": 28787
+	},
+	"irc": {
+		"server": "irc.gamesurge.net",
+		"port": 6667,
+		"nick": "MyTracker",
+		"chan": "#mychannel",
+		"autoReconnect": 15000,
+		"prefix": "."
+	},
+	"serverPort": 80,
+	"secureServerPort": 443,
+	"baseElo": 1200,
+	"database": {
+		"client": "pg",
+		"connection": "postgres://user:password@server/database",
+		"searchPath": "knex,public"
+	}
+}

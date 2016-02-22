@@ -1,0 +1,67 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+        
+        block vars
+        if title
+            title #{title} - !mpressive Sauer Tracker
+        else
+            title !mpressive Sauer Tracker
+        
+        link(rel="shortcut icon", type="image/x-icon", href="/images/213425634sad.png")
+        link(rel="stylesheet", href="/styles/styles.css", type="text/css")
+        link(href='//fonts.googleapis.com/css?family=Roboto:400,900', rel='stylesheet', type='text/css')
+    body
+        #wrapper
+            .title-bar(data-responsive-toggle="top-menu", data-hide-for="medium")
+                button.menu-icon(type="button", data-toggle)
+                .title-bar-title ! Sauer Tracker
+                
+            .top-bar(id="top-menu")
+                .column.row
+                    .top-bar-left
+                        ul.menu
+                            li: a.menu-text(href="/")
+                                img.logo(src="/images/213425634sad.png")
+                                | ! Sauer Tracker
+                    .top-bar-right
+                        ul.menu
+                            li(class=(section=="servers"? "active": undefined)): a(href="/") Servers
+                            li(class=(section=="games"? "active": undefined)): a(href="/games") Games
+                            li(class=(section=="players"? "active": undefined)): a(href="/players") Players
+                            li(class=(section=="clans"? "active": undefined)): a(href="/clans") Clans
+                            li(class=(section=="about"? "active": undefined)): a(href="/about") About
+            #content
+                block content
+                footer.footer.row
+                    .row(data-equalizer, data-equalize-on="medium")
+                        .medium-5.columns(data-equalizer-watch)
+                            strong !mpressive Sauer Tracker &copy; 2015 - !mpressive Squad
+                            br
+                            | If you have questions, suggestions, or bug reports, post them on <a href="http://impressivesquad.eu/index.php?site=forum&board=15">the Tracker's forum board</a>, or hit "Origin" up on <a href="https://mibbit.com/?channel=%23impressivesquad&server=irc.gamesurge.net">IRC</a> (you can find us on irc.gamesurge.net, #impressivesquad).
+                        .medium-2.columns(data-equalizer-watch)
+                            i.fa.fa-user
+                            |  Clan links:
+                            ol
+                                li: a(href="http://impressivesquad.eu") Website
+                                li: a(href="http://impressivesquad.eu/index.php?site=forum") Forums
+                                li: a(href="https://mibbit.com/?channel=%23impressivesquad&server=irc.gamesurge.net") IRC
+                        .medium-2.columns(data-equalizer-watch)
+                            i.fa.fa-bars
+                            |  Quick Links:
+                            ol
+                                li: a(href="/profile") My Profile
+                                li: a(href="/faq") FAQ
+                                li: a(href="/api") API
+                        .medium-3.columns(data-equalizer-watch)
+                            i.fa.fa-external-link-square
+                            |  External Links:
+                            ol
+                                li: a(href="http://sauerbraten.org/") Sauerbraten official website
+                                li: a(href="http://sauerworld.org/") SauerWorld
+                                
+        script(src="/js/main.js")
+        block scripts

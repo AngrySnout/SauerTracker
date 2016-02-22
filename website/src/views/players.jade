@@ -1,0 +1,97 @@
+extends ./_layout.jade
+
+block vars
+    - section = "players";
+    - title = "Find Players";
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            if name
+                li Players
+                li.current= name
+            else
+                li.current Players
+        .medium-12.columns
+            form#search-form(action="/players/find", method="get")
+                .row
+                    .small-4.medium-3.large-2.columns
+                        label.big.text-right.middle(for="name") Name:
+                    .small-8.medium-7.large-8.columns
+                        input#name(type="text", name="name", placeholder="Name...", value=(name))
+                    .small-4.small-pull-4.medium-2.medium-pull-0.columns.small-centered
+                        button.button.expanded.secondary#submit(type="submit") Search
+                .row
+                    .small-4.medium-3.large-2.columns
+                        label.big.text-right.middle(for="country") Country:
+                    .small-8.medium-9.large-10.columns
+                        select#country(name="country")
+                            option(value="")
+                            for country in countries
+                                option(value=country.country, style=("background: url('/images/flags/"+country.country+".png') no-repeat; padding-left: 28px;"))= country.name+" ("+country.count+" players)"
+                        
+            #search-result-container
+                if error
+                    = error
+                else if typeof(results)!="undefined"
+                        include ./_partials/player-search-results.jade
+                else
+                    - var categoriesA = ["Today", "This week", "This month"];
+                    - var categoriesB = ["Of all time", "This week", "This month"];
+                    
+                    br
+                    h4.text-center Top duelists:
+                    .row
+                        for category in categoriesB
+                            .medium-4.columns
+                                label.big= category
+                                table(width="100%")
+                                    thead
+                                        tr
+                                            td(width="34%") Name
+                                            td(width="33%") Wins
+                                            td(width="33%") Win rate
+                                    tbody
+                                        for player in topDuelists[category]
+                                            tr
+                                                td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
+                                                td= player.wins
+                                                td= ""+parseInt(player.wins/player.games*100)+"%"
+                                                
+                    br
+                    h4.text-center Top fraggers:
+                    .row
+                        for category in categoriesA
+                            .medium-4.columns
+                                label.big= category
+                                table(width="100%")
+                                    thead
+                                        tr
+                                            td(width="50%") Name
+                                            td(width="50%") Frags
+                                    tbody
+                                        for player in topFraggers[category]
+                                            tr
+                                                td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
+                                                td= player.frags
+                                                
+                    br
+                    h4.text-center Top flagrunners:
+                    .row
+                        for category in categoriesA
+                            .medium-4.columns
+                                label.big= category
+                                table(width="100%")
+                                    thead
+                                        tr
+                                            td(width="50%") Name
+                                            td(width="50%") Flags
+                                    tbody
+                                        for player in topRunners[category]
+                                            tr
+                                                td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
+                                                td= player.flags
+
+block scripts
+    script(src="/js/players.js")
+players

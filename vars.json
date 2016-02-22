@@ -1,0 +1,106 @@
+{
+	"clans": [
+		{ "tag": "!s]", "title": "!mpressive Squad", "website": "http://impressivesquad.eu" },
+		{ "tag": "|RB|", "title": "Red Butchers", "website": "http://butchers.su" },
+		{ "tag": ".cS|", "title": "Cube Strikers" },
+		{ "tag": ".rC|", "title": "Rising Cubers", "website": "http://rising-cubers.eu" },
+		{ "tag": "GC1/", "title": "Gamer Class 1"},
+		{ "tag": "vaQ'", "title": "Volture Attack Squad", "website": "http://vaq-clan.de" },
+		{ "tag": "sp4nk", "title": "sp4nk", "website": "http://sp4nk.net" },
+		{ "tag": "[tBMC]", "title": "The Blue Monkey Cult", "website": "http://thebluemonkeycult.webs.com" },
+		{ "tag": "oo|", "title": "Ogros", "website": "http://ogros.org" },
+		{ "tag": "w00p|", "title": "w00p", "website": "http://woop.us" },
+		{ "tag": "|DM|", "title": "Dangerous Monkeys", "website": "http://dangerousmonkeys.forumcommunity.net" },
+		{ "tag": "|noVI:", "title": "No Violence", "website": "http://noviteam.de" },
+		{ "tag": "[FD]", "title": "Forgotten Dream", "website": "http://forgottendream.org" },
+		{ "tag": "=DK=", "title": "Dark Keepers", "website": "http://darkkeepers.dk" },
+		{ "tag": "eXc|", "title": "Excellence" },
+		{ "tag": "Crowd>", "title": "Crowd", "website": "http://crowd.gg" },
+		{ "tag": "|HD|", "title": "High Definition" },
+		{ "tag": "<sAs/", "title": "sAs" },
+		{ "tag": "cm|", "title": "Cubic Matter", "website": "http://cubicmatter.net" },
+		{ "tag": "glory|", "title": "Glory" },
+		{ "tag": "|ORK|", "title": "ORK" },
+		{ "tag": "[GLX]", "title": "GLX" },
+		{ "tag": "eC.", "title": "Enigmatic Crew", "website": "http://enicrew.tk" },
+		{ "tag": "<pWn>", "title": "pWn" },
+		{ "tag": ".c2|", "title": "C2", "website": "http://c2clan.tk" },
+		{ "tag": "(ESP)", "title": "Especial Super Paragons", "website": "http://espclan.ru" }
+	],
+	"materModeColors": {
+	  "auth": "lightgray",
+	  "open": "lightgreen",
+	  "veto": "yellow",
+	  "locked": "yellow",
+	  "private": "red",
+	  "password": "red"
+	},
+	"gameModes": {
+		"ffa": {},
+		"coop": {},
+		"teamplay": { "teamMode": true },
+		"insta": { "instaMode": true },
+		"instateam": { "teamMode": true, "instaMode": true },
+		"effic": { "efficMode": true },
+		"efficteam": { "teamMode": true, "efficMode": true },
+		"tac": {},
+		"tacteam": { "teamMode": true },
+		"capture": { "teamMode": true, "flagMode": true },
+		"rcapture": { "teamMode": true, "flagMode": true },
+		"ctf": { "teamMode": true, "flagMode": true },
+		"ictf": { "teamMode": true, "instaMode": true, "flagMode": true },
+		"protect": { "teamMode": true, "flagMode": true },
+		"iprotect": { "teamMode": true, "instaMode": true, "flagMode": true },
+		"hold": { "teamMode": true, "flagMode": true },
+		"ihold": { "teamMode": true, "instaMode": true, "flagMode": true },
+		"ectf": { "teamMode": true, "efficMode": true, "flagMode": true },
+		"eprotect": { "teamMode": true, "efficMode": true, "flagMode": true },
+		"ehold": { "teamMode": true, "efficMode": true, "flagMode": true },
+		"collect": { "teamMode": true, "flagMode": true },
+		"icollect": { "teamMode": true, "instaMode": true, "flagMode": true },
+		"ecollect": { "teamMode": true, "efficMode": true, "flagMode": true }
+	},
+	"gameModeGroups": [
+		{ "name": "Classic", "modes": [
+				{ "title": "Coop-edit", "name": "coop" },
+				{ "title": "Free For All", "name": "ffa" },
+				{ "title": "Insta", "name": "insta" },
+				{ "title": "Efficiency", "name": "effic" },
+				{ "title": "Tactics", "name": "tac" }
+			] },
+		{ "name": "Team", "modes": [
+				{ "title": "Teamplay", "name": "teamplay" },
+				{ "title": "Insta team", "name": "instateam" },
+				{ "title": "Effic team", "name": "efficteam" },
+				{ "title": "Tac team", "name": "tacteam" }
+			] },
+		{ "name": "Capture The Flag", "modes": [
+				{ "title": "CTF", "name": "ctf" },
+				{ "title": "Insta CTF", "name": "ictf" },
+				{ "title": "Effic CTF", "name": "ectf" }
+			] },
+		{ "name": "Hold", "modes": [
+				{ "title": "Hold", "name": "hold" },
+				{ "title": "Insta hold", "name": "ihold" },
+				{ "title": "Effic hold", "name": "ehold" }
+			] },
+		{ "name": "Protect", "modes": [
+				{ "title": "Protect", "name": "protect" },
+				{ "title": "Insta protect", "name": "iprotect" },
+				{ "title": "Effic protect", "name": "eprotect" }
+			] },
+		{ "name": "Capture", "modes": [
+				{ "title": "Capture", "name": "capture" },
+				{ "title": "Regen capture", "name": "rcapture" }
+			] },
+		{ "name": "Collect", "modes": [
+				{ "title": "Collect", "name": "collect" },
+				{ "title": "Insta collect", "name": "icollect" },
+				{ "title": "Effic collect", "name": "ecollect" }
+			] }
+	],
+	"duelModes": [ "insta", "instateam", "effic", "efficteam", "tac", "tacteam", "ffa", "teamplay" ],
+	"mixModes": [ "teamplay", "instateam", "efficteam", "capture", "rcapture", "ctf", "ictf", "protect", "iprotect", "hold", "ihold", "ectf", "eprotect", "ehold", "collect", "icollect", "icollect" ],
+	"lockedMModes": [ "locked", "private", "password" ],
+	"duelThresholds": { "insta": 20, "instateam": 20, "effic": 20, "efficteam": 20, "tac": 10, "tacteam": 10, "ffa": 0, "teamplay": 0 }
+}

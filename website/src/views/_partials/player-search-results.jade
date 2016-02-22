@@ -1,0 +1,39 @@
+if results.length
+    table.scroll#search-results(width="100%")
+        thead
+            tr
+                td(width="20%") Name
+                td(width="10%") Frags
+                td(width="10%") Flags
+                td(width="10%") Deaths
+                td(width="10%") TKs
+                td(width="10%") K/D
+                td(width="10%") Accuracy
+                td(width="20%") Country
+        tbody
+            for player in results
+                tr.unclickable
+                    td
+                        a(href=("/player/"+encodeURIComponent(player.name)))= player.name
+                        if player.online
+                            |  
+                            span.label.success online
+                    td= player.frags
+                    td= player.flags
+                    td= player.deaths
+                    td= player.tks
+                    td= player.kpd
+                    td= _.padStart(parseInt(player.acc).toString(), 2, "0")+"%"
+                    td
+                        if player.country
+                            img.flag(src=("/images/flags/"+player.country+".png"))
+                            |  
+                            = player.countryName
+                        else
+                            | Unknown
+    
+    if (results.length == 200)
+        | Results are too big to show. You should narrow down your search query.
+        
+else
+    | No results.
