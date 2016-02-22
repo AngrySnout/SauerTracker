@@ -1,7 +1,6 @@
 # Sauer Tracker 2
 Global server and player stats tracking for Cube 2: Sauerbraten.
 
-## About
 This is the second iteration of [sauertracker.net](http://sauertracker.net/). It has many improvements over the original Tracker.   
 
 Written in ECMAScript 6, the new version of JavaScript, and transpiled to ECMAScript 5 using Babel.  
@@ -25,7 +24,8 @@ npm install
 npm run-script build
 # And start it
 npm start
-# This starts it using *forever*, so it restarts automatically when it crashes. You can manually restart it with
+# This starts it using *forever*, so it restarts automatically when it crashes.
+# You can manually restart it
 npm restart
 # Or shut it down
 npm stop
