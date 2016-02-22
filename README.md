@@ -62,7 +62,7 @@ This will create a new file in */migrations*, in which you should put all the ch
 knex migrate:latest
 ```
 
-### Documentation:
+## Documentation:
 You can use [ESDoc](https://esdoc.org/) to generate documentation. The Tracker's documentation is poor, but should give you an overview of some of the functionality. To generate the docs run the following commands:
 ```bash
 npm install esdoc -g
