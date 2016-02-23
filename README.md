@@ -9,7 +9,9 @@ Powered by NodeJS, Jade, Sass, and PostgreSQL.
 
 ## Configuration
 There are 2 config files: *tracker.json* and *vars.json*.   
-*tracker.json* contains server-side only options, whereas *vars.json* is shared between the client and the server.
+*tracker.json* contains server-side only options, whereas *vars.json* is shared between the client and the server.   
+An example configuration is included in *tracker.default.json*. You must rename it to *tracker.json* before proceeding.
+
 
 ## Installation
 Before installation you will need an empty PostgreSQL database. You can configure the connection URL in *tracker.json*.
