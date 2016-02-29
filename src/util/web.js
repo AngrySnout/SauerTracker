@@ -14,6 +14,8 @@ var config = require('../../tracker.json');
 
 export var app = express();
 
+app.set('trust proxy', 'loopback');
+
 app.use(compression());
 
 app.use(bodyParser.json());
@@ -61,6 +63,7 @@ if (fs.existsSync('ssl/key.pem')) {
 	var options = {
 		key: fs.readFileSync('ssl/key.pem'),
 		cert: fs.readFileSync('ssl/cert.pem'),
+		ca: fs.readFileSync('ssl/ca.pem')
 	};
 
 	var secureserver = https.createServer(options, app.handle.bind(app)).listen(config.secureServerPort, function(){

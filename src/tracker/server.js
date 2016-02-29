@@ -316,6 +316,7 @@ export default class Server {
 			timeLeft: this.game.timeLeft,
 			timeLeftS: this.game.timeLeftS
 		};
+		// TODO: replace _.keys(...).length with something faster
 		if (withPlayers && this.game.players && _.keys(this.game.players).length) {
 			ret.players = _.map(this.game.players, pl => pl.name);
 		}

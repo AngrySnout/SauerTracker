@@ -55,7 +55,7 @@ var uni2cubechars =
 var cube2colors = [ 'green', 'blue', 'yellow', 'red', 'grey', 'magenta', 'orange', 'white', 'black', 'cyan' ];
 
 /**
- *  Maps Cube 2 string to its UTF8 equivalent.
+ *  Convert Cube 2 string to its UTF8 equivalent.
  *  @param {string} str - The Cube 2 string to process.
  *  @returns {string} The UTF8 string.
  */
@@ -66,7 +66,7 @@ function cube2uni(str) {
 }
 
 /**
- *  Maps UTF8 string to its Cube 2 equivalent.
+ *  Convert UTF8 string to its Cube 2 equivalent.
  *  @param {string} str - The UTF8 string to process.
  *  @returns {string} The Cube 2 string.
  */
@@ -148,7 +148,8 @@ export class Stream {
      *  @constructor
      *  @param {buffer} buffer - The buffer object to use.
      *  @param {number} offset - Offset of the buffer.
-     */
+	 *  @memberof Stream
+    */
     constructor(buffer, offset) {
     	this.buffer = buffer;
     	this.offset = offset||0;
