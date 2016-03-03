@@ -59,7 +59,7 @@ The Tracker use [Knex](http://knexjs.org) for building queries and handling data
 ```bash
 knex migrate:make migration_name
 ```
-This will create a new file in */migrations*, in which you should put all the changes to the schema ([more about migrations](http://knexjs.org/#Migrations)). When you're done run:
+This will create a new file in */migrations*, in which you should put all changes to the schema ([more about migrations](http://knexjs.org/#Migrations)). When you're done run:
 ```bash
 knex migrate:latest
 ```

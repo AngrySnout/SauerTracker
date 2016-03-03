@@ -245,7 +245,7 @@ export default class Server {
 						player.ip = geoip.pretty(ip);
 						let gipl = geoip.lookup(ip);
 
-						// work around for pisto's servers falsely giving US player's an IP from Singapore
+						// work-around for spaghettimod falsely giving US player's an IP from Singapore
 						player.country = gipl? ((player.ip == "220.232.59.0")? "US": gipl.country): "";
 						player.countryName = gipl? countries.getName(player.country, "en"): "Unknown";
 

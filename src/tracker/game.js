@@ -60,7 +60,7 @@ function setPlayersElo(players, elos) {
 }
 
 function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
-	if (fragsSelf <= 10 || fragsOther <= 10) return 0;
+	if (fragsSelf < 1 || fragsOther < 1) return 0;
 	return Math.round(10 * (Math.log(fragsSelf/fragsOther) + Math.log(eloOther/eloSelf)) * (eloSelf / config.baseElo));
 }
 
