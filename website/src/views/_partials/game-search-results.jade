@@ -7,7 +7,8 @@ mixin results()
             td(onclick=("showGame("+game.id+")"))= game.gametype
             td.nowrap(onclick=("showGame("+game.id+")"))
                 if game.isintern
-                    = game.meta[0]
+                    .text-center
+                        = game.meta[0]
                 else if game.iswar
                     .row
                         .small-6.columns(style="text-align: right; padding-right: 10;")
