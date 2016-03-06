@@ -59,7 +59,10 @@ else
     -     teams = [{players: players}];
     - } else {
     -     var teams = _.groupBy(players, "team");
-    -     teams = _.orderBy(_.map(server.teams, function (val, key) { return {name: key, score: val, players: teams[key]}; }), "score", "desc");
+    -     teams = _.orderBy(_.map(server.teams, function (val, key) {
+    -         if (server.gameMode.indexOf("team") >= 0 && val === 0) val = _.sumBy(teams[key], "frags");
+    -         return {name: key, score: val, players: teams[key]};
+    -     }), "score", "desc");
     - }
     - _.each(teams, function (team) { team.players = _.orderBy(team.players, ["flags", "frags", "deaths"], ["desc", "desc", "asc"]); });
     - var pings = server.players[0]&&(server.players[0].ping!==undefined);
