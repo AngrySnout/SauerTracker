@@ -30,5 +30,8 @@
   },
   "devDependencies": {
     "motion-ui": "^1.1.1"
+  },
+  "resolutions": {
+    "jquery": "~2.1.0"
   }
 }

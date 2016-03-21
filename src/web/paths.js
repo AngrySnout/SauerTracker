@@ -34,7 +34,7 @@ export var apiPaths = [
         "name": "games-players",
         "title": "/games/players",
         "route": "/api/games/players?...",
-        "desc": "Shorthand for calling '/games/find' multiple times, once for each space-separated name in the query parameter 'players'. Accepts the same arguments as '/games/find'. Returns an array of object, each of which has the same properties as the one returned from '/games/find', in the same order as the input.",
+        "desc": "Shorthand for calling '/games/find' multiple times, once for each space-separated name in the query parameter 'players'. Accepts the same arguments as '/games/find'. Returns an array of objects, each of which has the same properties as the one returned from '/games/find', in the same order as the input.",
         "example": "/api/games/players?fromdate=2015-09-25&exact=on&limit=2&players=MTH named"
     },
     {

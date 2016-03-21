@@ -8,18 +8,10 @@ var config = require('../../tracker.json');
 
 web.app.get("/stats", function(req, res) {
 	var weekAgo = moment().endOf("day").subtract(7, "days").format("YYYY-MM-DD");
-	let queries;
-	if (config.database.client == "pg") {
-		queries = [
-			db.db.raw("SELECT to_char(timestamp, 'MM-DD') AS date, COUNT(DISTINCT trim(trailing '0123456789' from ip)) AS visitors, COUNT(url) AS requests FROM requests WHERE timestamp > '"+weekAgo+"' GROUP BY date ORDER BY date DESC").then(result => result.rows),
-			db.db.raw("SELECT to_char(timestamp, 'MM-DD') AS date, COUNT(*) AS games FROM games WHERE timestamp > '"+weekAgo+"' GROUP BY date ORDER BY date DESC").then(result => result.rows)
-		];
-	} else {
-		queries = [
-			db.db.raw("SELECT strftime('%m-%d', timestamp) AS date, count(DISTINCT rtrim(ip, '0123456789')) AS visitors, count(url) AS requests FROM requests WHERE timestamp > '"+weekAgo+"' GROUP BY strftime('%m-%d', timestamp) ORDER BY strftime('%Y-%m-%d', timestamp) DESC"),
-			db.db.raw("SELECT strftime('%m-%d', timestamp) AS date, count(*) AS games FROM games WHERE timestamp > '"+weekAgo+"' GROUP BY strftime('%m-%d', timestamp) ORDER BY strftime('%Y-%m-%d', timestamp) DESC")
-		];
-	}
+	let queries = [
+		db.db.raw("SELECT to_char(timestamp, 'MM-DD') AS date, COUNT(DISTINCT trim(trailing '0123456789' from ip)) AS visitors, COUNT(url) AS requests FROM requests WHERE timestamp > '"+weekAgo+"' GROUP BY date ORDER BY date DESC").then(result => result.rows),
+		db.db.raw("SELECT to_char(timestamp, 'MM-DD') AS date, COUNT(*) AS games FROM games WHERE timestamp > '"+weekAgo+"' GROUP BY date ORDER BY date DESC").then(result => result.rows)
+	];
 	Promise.all(queries).spread((visits, games) => {
 			let stats = _.keyBy(visits, "date");
 			_.each(games, game => {
