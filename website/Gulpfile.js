@@ -15,9 +15,6 @@ var sourcemaps = require('gulp-sourcemaps');
 var browserSync = require('browser-sync').create();
 var gulpif = require('gulp-if');
 
-var jade = require('gulp-jade');
-var htmlmin = require('gulp-htmlmin');
-
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 var minifyCss = require('gulp-minify-css');
@@ -110,3 +107,4 @@ gulp.task('watch', ['watchify'], function() {
 gulp.task('build', ['sass', 'js']);
 
 gulp.task('default', ['sass', 'watch']);
+
