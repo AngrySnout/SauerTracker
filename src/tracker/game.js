@@ -34,6 +34,11 @@ function saveGame(server, type) {
 	return db.db("games").insert(data).returning("id").then(gameID => {
 		let promises = [];
 		if (server.game.teams) {
+			if (server.game.gameMode.indexOf("team") >= 0 && server.game.teams.length == 2 && server.game.teams.good === 0 && server.game.teams.evil === 0) {
+				_.each(server.game.players, player => {
+					if (player.state !== 5) server.game.teams[player.team] += player.frags;
+				});
+			}
 			_.each(server.game.teams, function (score, team) {
 				promises.push(saveTeamStats(gameID[0], team, score));
 			});
