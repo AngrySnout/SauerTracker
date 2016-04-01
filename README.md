@@ -11,12 +11,12 @@ Powered by NodeJS, Jade, Sass, and PostgreSQL.
 There are 2 config files: *tracker.json* and *vars.json*.   
 *tracker.json* contains server-side only options, whereas *vars.json* is shared between the client and the server.   
 An example configuration is included in *tracker.default.json*. You must rename it to *tracker.json* before proceeding.   
-You will also need an (empty) PostgreSQL database. You can configure the connection URL *tracker.json*.
+You will also need an (empty) PostgreSQL database. You can configure the connection URL in *tracker.json*.
 
 
 ## Installation
 ```bash
-# We will clone the repository
+# Clone the repository
 git clone https://github.com/AngrySnout/SauerTracker
 cd SauerTracker
 # Then install the dependencies
@@ -25,7 +25,7 @@ npm install
 npm run-script build
 # And start it
 npm start
-# This starts it using *forever*, so it restarts automatically when it crashes.
+# This starts it using forever, so it restarts automatically when it crashes.
 # You can manually restart it
 npm restart
 # Or shut it down
@@ -54,7 +54,7 @@ Note that for production you should always use `npm run-script build`, which wil
 
 #### The database
 
-The Tracker use [Knex](http://knexjs.org) for building queries and handling database interaction. If you wish to make changes to the database schema, you have to create a new migration using:
+The Tracker uses [Knex](http://knexjs.org) for building queries and handling database interaction. If you wish to make changes to the database schema, you have to create a new migration using:
 ```bash
 knex migrate:make migration_name
 ```

@@ -62,7 +62,7 @@ export var apiPaths = [
         "name"   : "player-activity",
         "title"  : "/player/activity",
         "route"  : "/api/player/activity/:name",
-        "desc"   : "Returns a list of average number of games player by player with the given name in the last 15 days. Days with 0 games are skipped.",
+        "desc"   : "Returns a list of number of games played by player with the given name in the last 15 days. Days with 0 games are skipped.",
         "example": "/api/player/activity/Nix"
     },
     {
