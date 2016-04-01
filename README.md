@@ -12,7 +12,7 @@ There are 2 config files: *tracker.json* and *vars.json*.
 *tracker.json* contains server-side only options, whereas *vars.json* is shared between the client and the server.   
 An example configuration is included in *tracker.default.json*. You must rename it to *tracker.json* before proceeding.   
 You will also need an (empty) PostgreSQL database. You can configure the connection URL in *tracker.json*.   
-To learn more read, the [configuration file's wiki page](https://github.com/AngrySnout/SauerTracker/wiki/Configuration-file).
+To learn more, read the [configuration file's wiki page](https://github.com/AngrySnout/SauerTracker/wiki/Configuration-file).
 
 
 ## Installation
