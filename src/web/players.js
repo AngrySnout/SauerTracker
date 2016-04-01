@@ -18,12 +18,12 @@ cache.set("top-players-daily", 60*60*1000, function() {
 });
 
 cache.set("top-players-weekly", 2*60*60*1000, function() {
-	var start = moment().startOf('week').format("YYYY-MM-DD HH:mm:ss");
+	var start = moment().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
 	return db.db.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
 });
 
 cache.set("top-players-monthly", 2*60*60*1000, function() {
-	var start = moment().startOf('month').format("YYYY-MM-DD HH:mm:ss");
+	var start = moment().subtract(30, "days").format("YYYY-MM-DD HH:mm:ss");
 	return db.db.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
 });
 
@@ -33,12 +33,12 @@ cache.set("top-runners-daily", 60*60*1000, function() {
 });
 
 cache.set("top-runners-weekly", 2*60*60*1000, function() {
-	var start = moment().startOf('week').format("YYYY-MM-DD HH:mm:ss");
+	var start = moment().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
 	return db.db.select("stats.name as name").sum("stats.flags as flags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("flags", "desc").limit(10);
 });
 
 cache.set("top-runners-monthly", 2*60*60*1000, function() {
-	var start = moment().startOf('month').format("YYYY-MM-DD HH:mm:ss");
+	var start = moment().subtract(30, "days").format("YYYY-MM-DD HH:mm:ss");
 	return db.db.select("stats.name as name").sum("stats.flags as flags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("flags", "desc").limit(10);
 });
 
@@ -72,11 +72,11 @@ cache.set("top-duelists", 60*60*1000, function() {
 });
 
 cache.set("top-duelists-weekly", 2*60*60*1000, function() {
-	return duelsSince(moment().startOf('week').format("YYYY-MM-DD"));
+	return duelsSince(moment().subtract(7, "days").format("YYYY-MM-DD"));
 });
 
 cache.set("top-duelists-monthly", 2*60*60*1000, function() {
-	return duelsSince(moment().startOf('month').format("YYYY-MM-DD"));
+	return duelsSince(moment().subtract(30, "days").format("YYYY-MM-DD"));
 });
 
 cache.set("player-countries", 2*60*60*1000, function() {
@@ -122,18 +122,18 @@ web.app.get("/players", function(req, res) {
 			res.render("players", {
 				topFraggers: {
 					"Today": results[0],
-					"This week": results[1],
-					"This month": results[2]
+					"Last 7 days": results[1],
+					"Last 30 days": results[2]
 				},
 				topRunners: {
 					"Today": results[3],
-					"This week": results[4],
-					"This month": results[5]
+					"Last 7 days": results[4],
+					"Last 30 days": results[5]
 				},
 				topDuelists: {
 					"Of all time": results[6],
-					"This week": results[7],
-					"This month": results[8]
+					"Last 7 days": results[7],
+					"Last 30 days": results[8]
 				},
 				countries: results[9]
 			});

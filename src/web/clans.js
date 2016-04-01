@@ -81,11 +81,11 @@ function clanwarsSince(date) {
 }
 
 cache.set("clans-weekly", 60*60*1000, function() {
-	return clanwarsSince(moment().utc().startOf("week").format("YYYY-MM-DD"));
+	return clanwarsSince(moment().utc().subtract(7, "days").format("YYYY-MM-DD"));
 });
 
 cache.set("clans-monthly", 60*60*1000, function() {
-	return clanwarsSince(moment().utc().startOf("month").format("YYYY-MM-DD"));
+	return clanwarsSince(moment().utc().subtract(30, "days").format("YYYY-MM-DD"));
 });
 
 web.app.get("/clans", function(req, res) {

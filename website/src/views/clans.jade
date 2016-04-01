@@ -31,7 +31,7 @@ block content
                                 
         .medium-12.large-6.columns.end
             if weeklyClans
-                label.big Top clans this week:
+                label.big Top clans last 7 days:
                 table(width="100%")
                     thead
                         tr
@@ -46,7 +46,7 @@ block content
                                 td= ""+parseInt(clan.rate*100)+"%"
                             
             if monthlyClans
-                label.big Top clans this month:
+                label.big Top clans last 30 days:
                 table(width="100%")
                     thead
                         tr
