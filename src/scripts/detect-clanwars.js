@@ -35,4 +35,5 @@ db.db.raw(`
     }
 }).then(() => {
     console.log(count);
+    process.exit();
 });
