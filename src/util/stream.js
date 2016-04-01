@@ -140,7 +140,7 @@ export function cube2colorHTML(str) {
 }
 
 /**
- *  Provides utility functions for working with Cube 2 streams.
+ *  Provides utility functions for working with Cube 2 packets.
  *  @class Stream
  */
 export class Stream {
