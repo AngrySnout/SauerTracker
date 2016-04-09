@@ -27,7 +27,8 @@
 		{ "tag": ".c2|", "title": "C2", "website": "http://c2clan.tk" },
 		{ "tag": "(ESP)", "title": "Especial Super Paragons", "website": "http://espclan.ru" },
 		{ "tag": "[RUSS]", "title": "RUSS" },
-		{ "tag": "RED|", "title": "RED" }
+		{ "tag": "RED|", "title": "RED" },
+		{ "tag": "#TJS.", "title": "TJS" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
