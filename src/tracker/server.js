@@ -308,7 +308,7 @@ export default class Server {
 			gameMode: this.game.gameMode,
 			mapName: this.game.mapName,
 			masterMode: this.game.masterMode,
-			isFull: (this.game.clients == this.game.maxClients),
+			isFull: (this.game.clients >= this.game.maxClients),
 			country: this.country,
 			countryName: this.countryName,
 			host: this.host,
