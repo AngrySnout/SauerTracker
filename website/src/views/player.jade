@@ -28,6 +28,8 @@ block content
                 br
                 label.big Games played: #{totalGames}
                 label.big ELO: #{player.elo}
+                if player.clan
+                    label.big Clan: <a href='/clan/#{player.clanTag}'>#{player.clan}</a>
                 
                 br
                 .row.medium-10.large-6.columns: table(width="100%")

@@ -7,6 +7,7 @@ var db = require("../util/database");
 var util = require("../util/util");
 var player = require("../tracker/player");
 var config = require('../../tracker.json');
+var vars = require('../../vars.json');
 
 function getTotalGames(name) {
 	return db.db.count("* as count").from("stats").join("games", "games.id", "stats.game").where("stats.name", name).whereNot("stats.state", 5).then(rows => {
@@ -36,6 +37,11 @@ function getPlayer(name, callback) {
 				}
 				if (!row.efficstats) row.efficstats = [0, 0, 0, 0, 0, 0];
 				if (!row.instastats) row.instastats = [0, 0, 0, 0, 0, 0];
+				let pclan = _.find(vars.clans, { "tag": util.getClan(row.name) });
+				if (pclan) {
+					row.clan = pclan.title;
+					row.clanTag = pclan.tag;
+				}
 				Promise.all([getTotalGames(name), getLastGames(name)])
 					.then(results => {
 						callback({ player: row, totalGames: results[0], games: results[1] });
