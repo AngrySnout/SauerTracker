@@ -28,7 +28,8 @@
 		{ "tag": "(ESP)", "title": "Especial Super Paragons", "website": "http://espclan.ru" },
 		{ "tag": "[RUSS]", "title": "RUSS" },
 		{ "tag": "RED|", "title": "RED" },
-		{ "tag": "#TJS.", "title": "TJS" }
+		{ "tag": "#TJS.", "title": "TJS" },
+		{ "tag": "va|", "title": "VoxelArmy" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
