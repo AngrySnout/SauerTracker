@@ -14,11 +14,11 @@ window.url = url;
 window.dateReflow = function() {
     $(".date").each(function (ind, elem) {
         var cd = moment($(this).text()+" +0000"); //, "YYYY-MM-DD HH:mm:ss Z"
-        $(this).attr("title", cd.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+        $(this).attr("title", cd.format("dddd, MMMM Do YYYY, HH:mm:ss"));
         if (cd.diff(moment(), 'hours') >= -22) $(this).text(cd.fromNow());
-        else if (cd.diff(moment(), 'days') >= -7) $(this).text(cd.fromNow()+cd.format(", h:mm a"));
-        else if (!cd.isSame(moment(), 'year')) $(this).text(cd.format("MMMM Do YYYY, h:mm a"));
-        else if (cd.diff(moment(), 'days') < -7) $(this).text(cd.format("MMMM Do, h:mm a"));
+        else if (cd.diff(moment(), 'days') >= -7) $(this).text(cd.fromNow()+cd.format(", HH:mm"));
+        else if (!cd.isSame(moment(), 'year')) $(this).text(cd.format("MMMM Do YYYY, HH:mm"));
+        else if (cd.diff(moment(), 'days') < -7) $(this).text(cd.format("MMMM Do, HH:mm"));
     });
     $(".date").addClass("date-active");
     $(".date").removeClass("date");
