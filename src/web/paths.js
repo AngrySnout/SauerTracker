@@ -47,7 +47,7 @@ export var apiPaths = [
     {
         "name"   : "players-find",
         "title"  : "/players/find",
-        "route"  : "/api/players/find?name=...",
+        "route"  : "/api/players/find?...",
         "desc"   : "Returns a list of up to 200 players matching a given name and country, sorted descendingly by frags. Parameters left empty will be ignored. Set country to __ (2 underscores) for Unknown.",
         "example": "/api/players/find?name=named&country=US"
     },
