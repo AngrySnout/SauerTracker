@@ -1,6 +1,6 @@
 {
   "name": "sauer-tracker",
-  "version": "2.0.1",
+  "version": "2.1.2",
   "description": "Website for SauerTracker.",
   "scripts": {
     "test": "echo No test script yet",
