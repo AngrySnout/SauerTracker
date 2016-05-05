@@ -8,7 +8,6 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var rename = require("gulp-rename");
 var glob = require('glob');
 var del = require('del');
 var sourcemaps = require('gulp-sourcemaps');
@@ -17,7 +16,7 @@ var gulpif = require('gulp-if');
 
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
-var minifyCss = require('gulp-minify-css');
+var cleanCSS = require('gulp-clean-css');
 
 var browserify = require('browserify');
 var watchify = require('watchify');
@@ -34,7 +33,7 @@ gulp.task('sass', function() {
 				browsers: ['last 2 versions'],
 				cascade: false
 			}))
-			.pipe(gulpif(!dev, minifyCss()))
+			.pipe(gulpif(!dev, cleanCSS()))
 		.pipe(gulpif(dev, sourcemaps.write('./')))
 		.pipe(gulp.dest('./build/styles'));
 });
