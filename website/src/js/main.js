@@ -48,7 +48,7 @@ window.tryLoadBackground = function (name) {
 };
 
 $(window.document).ready(function(){
-    $(".client-side").css("display", "inherit");
+    $(".client-side").css("display", "inline-block");
     $(document).foundation();
     window.dateReflow();
     window.disableDefault();
