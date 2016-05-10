@@ -1,18 +1,19 @@
-var express = require('express');
-var fs = require('fs');
-var http = require('http');
-var https = require('https');
-var compression = require('compression');
-var url = require('url');
-var bodyParser = require('body-parser');
-var _ = require('lodash');
-var moment = require('moment');
-var responseTime = require('response-time');
+import express from 'express';
+import fs from 'fs';
+import http from 'http';
+import https from 'https';
+import compression from 'compression';
+import bodyParser from 'body-parser';
+import _ from 'lodash';
+import responseTime from 'response-time';
 
-var db = require('./database');
-var config = require('../../tracker.json');
+import config from '../../tracker.json';
 
-export var app = express();
+import {log} from '../util/util';
+import database from '../util/database';
+
+var app = express();
+export default app;
 
 app.set('trust proxy', 'loopback');
 
@@ -48,25 +49,25 @@ app.use(function(req, res, next) {
 });
 
 app.use(responseTime(function (req, res, time) {
-	db.db("requests").insert(_.assign(_.pick(req, [ "method", "ip", "url" ]), { time: time })).then();
+	database("requests").insert(_.assign(_.pick(req, [ "method", "ip", "url" ]), { time: time })).then();
 }));
 
 app.use('/', express.static('./website/assets', { maxAge: 7*24*60*60*1000 }));
 app.use('/', express.static('./website/build', { maxAge: 24*60*60*1000 }));
 
 var server = http.createServer(app.handle.bind(app)).listen(config.serverPort, function(){
-	console.log("Server listening on port "+config.serverPort);
+	log("Server listening on port "+config.serverPort);
 });
 
-// Run SSL server only if a certificate is available
+// Run HTTPS server only if a certificate is available
 if (fs.existsSync('ssl/key.pem')) {
-	var options = {
+	let options = {
 		key: fs.readFileSync('ssl/key.pem'),
 		cert: fs.readFileSync('ssl/cert.pem'),
 		ca: fs.readFileSync('ssl/ca.pem')
 	};
 
-	var secureserver = https.createServer(options, app.handle.bind(app)).listen(config.secureServerPort, function(){
-		console.log("Secure server listening on port "+config.secureServerPort);
+	https.createServer(options, app.handle.bind(app)).listen(config.secureServerPort, function(){
+		log("Secure server listening on port "+config.secureServerPort);
 	});
 }

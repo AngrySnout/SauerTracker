@@ -1,42 +1,29 @@
-var dgram = require('dgram');
-var _ = require('lodash');
-var geoip = require('geoip-lite');
-var countries = require("i18n-iso-countries");
-var moment = require('moment');
+import dgram from 'dgram';
+import _ from 'lodash';
+import geoip from 'geoip-lite';
+import countries from "i18n-iso-countries";
+import moment from 'moment';
 
-var protocol = require('../util/protocol');
-var stream = require('../util/stream');
+import config from '../../tracker.json';
+
+import {isValidIP, isValidPort, log, debug, round2} from '../util/util';
+import {getGameMode, getMasterMode} from '../util/protocol';
+import Packet, {filterString, cube2colorHTML} from '../util/packet';
 import Game from './game';
-var util = require('../util/util');
-var player_ = require('./player');
-var config = require('../../tracker.json');
-var db = require('../util/database');
-var metrics = require('../util/metrics');
+import playerManager from '../tracker/player-manager';
+import metrics from '../util/metrics';
 
-var typeBuffers = [];
-{
-	let st = new Buffer(2);
-	st.writeUInt8(0x80, 0);
-	st.writeUInt8(0x01, 1);
-	typeBuffers.push(st);
-
-	st = new stream.Stream(new Buffer(10));
-	st.putInt(0);
-	st.putInt(1);
-	st.putInt(-1);
-	typeBuffers.push(st.finalize());
-
-	st = new stream.Stream(new Buffer(10));
-	st.putInt(0);
-	st.putInt(2);
-	typeBuffers.push(st.finalize());
-}
+var typeBuffers = [
+		new Buffer("8001", "hex"),
+		new Buffer("0001ff", "hex"), // EXT_PLAYERSTATS -1
+		new Buffer("0002", "hex") // EXT_TEAMSCORE
+	];
 
 export default class Server {
-	constructor(host, port, fromDB, info, keep) {
-		if (!util.isValidIP(host)) throw new Error("Invalid host ("+host+") provided to Server().");
+	constructor(host, port, info) {
+		if (!isValidIP(host)) throw new Error("Invalid host ("+host+") provided to Server().");
 		port = parseInt(port);
-		if (!util.isValidPort(port)) throw new Error("Invalid port ("+port+") provided to Server().");
+		if (!isValidPort(port)) throw new Error("Invalid port ("+port+") provided to Server().");
 
 		this.host = host;
 		this.port = port;
@@ -54,17 +41,12 @@ export default class Server {
 			this.info.website = info.website;
 			this.info.demourl = info.demourl;
 			this.info.banned = info.banned;
-			this.info.keep = info.keep;
+			this.info.keep = true;
 		}
-
-		if (!fromDB) db.servers.add(host, port, keep);
 	}
 
 	setInfo(key, value) {
-		try {
-			db.servers.setInfo(this.host, this.port, key, value);
-			this.info[key] = value;
-		} catch(e) { throw e; }
+		this.info[key] = value;
 	}
 
 	poll(type, time) {
@@ -92,8 +74,8 @@ export default class Server {
 				}
 			}, 2000);
 		} catch(err) {
-			util.debug('Error: Server query failed with uncaught error: ', err);
-			util.debug(err.stack);
+			debug('Error: Server query failed with uncaught error: ', err);
+			debug(err.stack);
 			if (socket !== null) {
 				socket.close();
 				socket = null;
@@ -148,7 +130,7 @@ export default class Server {
 
 	parseReply(data, type, time) {
 		try {
-			let st = new stream.Stream(data, (type==1)? 3: 2);
+			let st = new Packet(data, (type==1)? 3: 2);
 
 			switch (type) {
 				case 0: { // game info
@@ -171,13 +153,13 @@ export default class Server {
 
 					this.lastReply = time;
 
-					this.game.gameMode = protocol.getGameMode(st.getInt());
+					this.game.gameMode = getGameMode(st.getInt());
 					this.game.timeLeft = st.getInt();
 					if (this.game.gameMode == "coop" && this.game.timeLeft <= 0) this.game.timeLeftS = "";
 					else if (this.game.timeLeft <= 0) this.game.timeLeftS = "intermission";
 					else this.game.timeLeftS = _.padStart(Math.floor(this.game.timeLeft/60), 2, "0")+":"+_.padStart(this.game.timeLeft%60, 2, "0");
 					this.game.maxClients = st.getInt();
-					this.game.masterMode = protocol.getMasterMode(st.getInt());
+					this.game.masterMode = getMasterMode(st.getInt());
 
 					if (nattr == 7) {
 						this.game.paused = st.getInt();
@@ -191,8 +173,8 @@ export default class Server {
 					if (this.game.mapName.length > 20) this.game.mapName = this.game.mapName.slice(0, 20)+"...";
 
 					let description = st.getString();
-					this.description = stream.filterString(description);
-					this.descriptionStyled = stream.cube2colorHTML(description);
+					this.description = filterString(description);
+					this.descriptionStyled = cube2colorHTML(description);
 
 					if (this.game.timeLeft > 0) {
 						this.game.intermission = false;
@@ -216,18 +198,18 @@ export default class Server {
 						player.ping = st.getInt();
 						player.name = st.getString();
 						if (player.name.length > 15) {
-							console.log("Warning: player name longer than 15 characters. Truncating. name:", player.name, "server:", this.host, this.port);
+							log("Warning: player name longer than 15 characters. Truncating. name:", player.name, "server:", this.host, this.port);
 							player.name = player.name.substring(0, 15);
 						}
 						player.team = st.getString();
 						if (player.team.length > 4) {
-							console.log("Warning: team name longer than 4 characters. Truncating. name:", player.team, "server:", this.host, this.port);
+							log("Warning: team name longer than 4 characters. Truncating. name:", player.team, "server:", this.host, this.port);
 							player.team = player.team.substring(0, 15);
 						}
 						player.frags = st.getInt();
 						player.flags = st.getInt();
 						player.deaths = st.getInt();
-						player.kpd = util.round2(player.frags/Math.max(player.deaths, 1));
+						player.kpd = round2(player.frags/Math.max(player.deaths, 1));
 						player.tks = st.getInt();
 						player.acc = st.getInt();
 						st.getInt(); st.getInt(); st.getInt();
@@ -255,7 +237,7 @@ export default class Server {
 						// save player info and stats
 						let curtime = moment().format("YYYY-MM-DD HH:mm:ss");
 						if (oldPlayer && oldPlayer.name == player.name && oldPlayer.ip == player.ip) {
-							player_.updatePlayer(this, player, oldPlayer, curtime);
+							playerManager.updatePlayer(this, player, oldPlayer, curtime);
 						}
 					} else if (respType == -10) { // EXT_PLAYERSTATS_RESP_IDS
 						let newCNs = [];
@@ -281,7 +263,7 @@ export default class Server {
 					while (st.remaining() > 0) {
 						let name = st.getString();
 						if (name.length > 4) {
-							console.log("Warning: team name longer than 4 characters. Truncating. name:", name, "server:", this.host, this.port);
+							log("Warning: team name longer than 4 characters. Truncating. name:", name, "server:", this.host, this.port);
 							name = name.substring(0, 15);
 						}
 						let score = st.getInt();
@@ -293,8 +275,8 @@ export default class Server {
 				}
 			}
 		} catch(err) {
-			util.debug('Error: Server response parsing failed:', err, this.description, this.host, this.port, type, data);
-			util.debug(err.stack);
+			debug('Error: Server response parsing failed:', err, this.description, this.host, this.port, type, data);
+			debug(err.stack);
 		}
 	}
 
@@ -316,14 +298,10 @@ export default class Server {
 			timeLeft: this.game.timeLeft,
 			timeLeftS: this.game.timeLeftS
 		};
-		// TODO: replace _.keys(...).length with something faster
+
 		if (withPlayers && this.game.players && _.keys(this.game.players).length) {
 			ret.players = _.map(this.game.players, pl => pl.name);
 		}
 		return ret;
-	}
-
-	dispose(permanently, noKeep) {
-		if (permanently) db.servers.remove(this.host, this.port, noKeep);
 	}
 }

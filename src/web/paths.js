@@ -1,5 +1,6 @@
-var _ = require('lodash');
-var vars = require("../../vars.json");
+import _ from 'lodash';
+
+import vars from "../../vars.json";
 
 export var apiPaths = [
     {

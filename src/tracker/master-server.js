@@ -1,16 +1,15 @@
-var net = require('net');
-var Promise = require("bluebird");
-var _ = require('lodash');
+import net from 'net';
+import _ from 'lodash';
+import Promise from "bluebird";
 
-var util = require('../util/util');
-var config = require('../../tracker.json');
+import config from '../../tracker.json';
 
 /**
  *	Poll the master server.
  *	@param {function} resolve - Called with the new list. The list is an array of objects containing members 'host' and 'port'.
  *	@param {function} reject - Called with either an error message, or an array of errors, in case of an error.
  */
-export function getList(resolve, reject) {
+export default function getServerList(resolve, reject) {
 	let self = this;
 	try {
 		var agg = "";

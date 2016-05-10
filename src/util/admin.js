@@ -1,10 +1,11 @@
-var _ = require('lodash');
-var IRC = require('internet-relay-chat');
+import _ from 'lodash';
+import IRC from 'internet-relay-chat';
 
-var config = require('../../tracker.json');
-var servers = require('../tracker/server-list');
-var player = require('../tracker/player');
-var util = require('../util/util');
+var playersAdmin = require('../admin/players');
+var serversAdmin = require('../admin/servers');
+
+import config from '../../tracker.json';
+import {log} from '../util/util';
 
 function splitArgs(text) {
 	return text.replace(/[\n\r]/g, "").split(" ");
@@ -18,7 +19,7 @@ if (config.irc.server) {
 	bot.connect();
 
 	bot.on('connect', function() {
-		console.log('IRC Bot connected');
+		log('IRC Bot connected');
 	});
 
 	bot.on('registered', function() {
@@ -51,9 +52,9 @@ if (config.irc.server) {
 		}
 	});
 
-	bot.on('error', console.log);
+	bot.on('error', log);
 } else {
-	bot = { message: function () { console.log.apply(this, _.map(arguments, function (arg) { return arg; }).slice(1)); } };
+	bot = { message: function () { log.apply(this, _.map(arguments, function (arg) { return arg; }).slice(1)); } };
 
 	var stdin = process.openStdin();
 
@@ -71,71 +72,75 @@ function addhandler(command, help, modereq, handler) {
 	handlers[command] = { handler: handler, help: help, modereq: modereq };
 }
 
+function commandList() {
+	return config.irc.prefix+_.reduce(_.keys(handlers), function (memo, cname) { return memo+", "+config.irc.prefix+cname; });
+}
+
 addhandler("commands", config.irc.prefix+"commands: lists all commands.", "", function(sendTo) {
-	bot.message(sendTo, config.irc.prefix+_.reduce(_.keys(handlers), function (memo, cname) { return memo+", "+config.irc.prefix+cname; }));
+	bot.message(sendTo, commandList());
 });
 
 addhandler("help", config.irc.prefix+"help [command]: prints help message for [command].", "", function(sendTo, command) {
-	if (!command) bot.message(sendTo, config.irc.prefix+"help [command]: prints help message for [command]. Type `"+config.irc.prefix+"commands` to list all commands.");
+	if (!command) bot.message(sendTo, commandList());
 	else bot.message(sendTo, handlers[command]? handlers[command].help: "Command `" + command + "` not found.");
 });
 
 addhandler("numservs", config.irc.prefix+"numservs: prints the total number of servers.", "", function(sendTo) {
-	bot.message(sendTo, "Number of servers: " + servers.servers.list.length);
+	bot.message(sendTo, "Number of servers: " + serverList.countServers());
 });
 
 addhandler("setservinfo", config.irc.prefix+"setservinfo [ip] [port] [info] [value]: sets [info] of server to [value]. Pass and empty [value] to clear. [info] is one of 'website', 'demourl', and 'banned' (where [value] is the ban reason).", "o", function(sendTo, host, port, info, value) {
-	bot.message(sendTo, servers.setInfo(host, Number(port), info, _.values(arguments).slice(4).join(" ")));
+	bot.message(sendTo, serversAdmin.setInfo(host, Number(port), info, _.values(arguments).slice(4).join(" ")));
 });
 
 addhandler("addserv", config.irc.prefix+"addserv [ip] [port]: adds a new server to the tracker.", "o", function(sendTo, host, port) {
-	bot.message(sendTo, servers.addServer(host, Number(port)));
+	bot.message(sendTo, serversAdmin.addServer(host, Number(port)));
 });
 
 addhandler("delserv", config.irc.prefix+"delserv [ip] [port]: removes a server from the tracker.", "o", function(sendTo, host, port) {
-	bot.message(sendTo, servers.delServer(host, Number(port)));
+	bot.message(sendTo, serversAdmin.delServer(host, Number(port)));
 });
 
 addhandler("lastseen", config.irc.prefix+"lastseen [name]: prints when and where [name] was last seen.", "v", function(sendTo, name) {
-	player.lastSeen(name, function (text) { bot.message(sendTo, text); });
+	playersAdmin.lastSeen(name, function (text) { bot.message(sendTo, text); });
 });
 
 addhandler("lastseenip", config.irc.prefix+"lastseenip [ip]: prints when and where [ip] was last seen.", "v", function(sendTo, ip) {
-	player.lastSeenIP(ip, function (text) { bot.message(sendTo, text); });
+	playersAdmin.lastSeenIP(ip, function (text) { bot.message(sendTo, text); });
 });
 
 addhandler("nameips", config.irc.prefix+"nameips [name]: lists most recent ips for [name].", "v", function(sendTo, name) {
-	player.nameIPs(name, function (text) { bot.message(sendTo, text); });
+	playersAdmin.nameIPs(name, function (text) { bot.message(sendTo, text); });
 });
 
 addhandler("ipnames", config.irc.prefix+"ipnames [ip]: lists most recent names for [ip].", "v", function(sendTo, ip) {
-	player.ipNames(ip, function (text) { bot.message(sendTo, text); });
+	playersAdmin.ipNames(ip, function (text) { bot.message(sendTo, text); });
 });
 
 addhandler("namesfor", config.irc.prefix+"namesfor [string]: prints other names for [name].", "v", function(sendTo, str) {
-	player.namesFor(str, function (text) { bot.message(sendTo, text); });
+	playersAdmin.namesFor(str, function (text) { bot.message(sendTo, text); });
 });
 
 addhandler("findname", config.irc.prefix+"findname [string]: prints names for players with [string] in their name.", "v", function(sendTo, str) {
-	player.findName(str, function (text) { bot.message(sendTo, text); });
+	playersAdmin.findName(str, function (text) { bot.message(sendTo, text); });
 });
 
-addhandler("banip", config.irc.prefix+"banip [ip]: ban player with ip [ip] from stats tracking.", "v", function(sendTo, ip) {
-	player.banIP(ip, function (text) { bot.message(sendTo, text); });
+addhandler("banip", config.irc.prefix+"banip [ip]: ban player with ip [ip] from stats tracking.", "o", function(sendTo, ip) {
+	playersAdmin.banIP(ip, function (text) { bot.message(sendTo, text); });
 });
 
-addhandler("unbanip", config.irc.prefix+"unbanip [ip]: unban player with ip [ip] from stats tracking.", "v", function(sendTo, ip) {
-	player.unbanIP(ip, function (text) { bot.message(sendTo, text); });
+addhandler("unbanip", config.irc.prefix+"unbanip [ip]: unban player with ip [ip] from stats tracking.", "o", function(sendTo, ip) {
+	playersAdmin.unbanIP(ip, function (text) { bot.message(sendTo, text); });
 });
 
-addhandler("banname", config.irc.prefix+"banname [name]: ban player with name [name] from stats tracking and delete their stats.", "v", function(sendTo, name) {
-	player.banName(name, function (text) { bot.message(sendTo, text); });
+addhandler("banname", config.irc.prefix+"banname [name]: ban player with name [name] from stats tracking and delete their stats.", "o", function(sendTo, name) {
+	playersAdmin.banName(name, function (text) { bot.message(sendTo, text); });
 });
 
-addhandler("unbanname", config.irc.prefix+"unbanname [name]: unban player with name [name] from stats tracking and delete their stats.", "v", function(sendTo, name) {
-	player.unbanName(name, function (text) { bot.message(sendTo, text); });
+addhandler("unbanname", config.irc.prefix+"unbanname [name]: unban player with name [name] from stats tracking and delete their stats.", "o", function(sendTo, name) {
+	playersAdmin.unbanName(name, function (text) { bot.message(sendTo, text); });
 });
 
 addhandler("banlist", config.irc.prefix+"banlist: prints a list of all banned IPs.", "v", function(sendTo) {
-	bot.message(sendTo, _.keys(player.bans).join(" "));
+	bot.message(sendTo, _.keys(playersAdmin.bans).join(" "));
 });

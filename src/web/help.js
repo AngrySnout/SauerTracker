@@ -1,10 +1,10 @@
-var web = require('../util/web');
+import app from '../util/web';
 import {apiPaths} from "./paths";
 
-web.app.get("/faq", function(req, res) {
+app.get("/faq", function(req, res) {
     res.render("faq");
 });
 
-web.app.get("/api", function(req, res) {
+app.get("/api", function(req, res) {
     res.render("api", { paths: apiPaths });
 });

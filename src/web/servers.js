@@ -1,18 +1,19 @@
-var _ = require('lodash');
-var Promise = require('bluebird');
+import _ from 'lodash';
+import Promise from "bluebird";
 
-var web = require('../util/web');
-var cache = require('../util/cache');
-var vars = require("../../vars.json");
-import {servers} from '../tracker/server-list';
+import vars from "../../vars.json";
+
+import app from '../util/web';
+import cache from '../util/cache';
+import serverManager from '../tracker/server-manager';
 
 cache.set("server-list", 1000, (callback) => {
     return new Promise((resolve, reject) => {
-        resolve(servers.serialize());
+        resolve(serverManager.serialize());
     });
 });
 
-web.app.get("/api/servers", (req, res) => {
+app.get("/api/servers", (req, res) => {
     cache.get("server-list").then(list => {
         res.send(list);
     }).catch(error => {
@@ -20,10 +21,14 @@ web.app.get("/api/servers", (req, res) => {
     });
 });
 
-web.app.get('/', function (req, res) {
-    res.render('servers', {servers: _.orderBy(servers.serialize(), "clients", "desc"), sortedBy: "clients", sortOrder: "desc", vars: vars});
+app.get('/', function (req, res) {
+    cache.get("server-list").then(list => {
+        res.render('servers', {servers: _.orderBy(list, "clients", "desc"), sortedBy: "clients", sortOrder: "desc", vars: vars});
+    }).catch(error => {
+        res.status(500).send({error: error});
+    });
 });
 
-web.app.get('/servers', function (req, res) {
+app.get('/servers', function (req, res) {
     res.redirect("/");
 });

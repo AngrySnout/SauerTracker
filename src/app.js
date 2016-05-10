@@ -1,12 +1,17 @@
 require('source-map-support').install();
-require('./util/database').start();
-require('./tracker/server-list').start();
+
+import database from './util/database';
+import serverManager from './tracker/server-manager';
+import cache from './util/cache';
+import playerManager from './tracker/player-manager';
+
+serverManager.start();
+cache.start();
+playerManager.start();
+
 require('./util/admin');
 require('./web/main');
-require('./util/cache').start();
-var player = require('./tracker/player');
-player.start();
 
 process.on('SIGINT', () => {
-	player.flushplayers().finally(process.exit);
+	playerManager.flushplayers().finally(process.exit);
 });

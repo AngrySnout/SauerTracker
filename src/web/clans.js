@@ -1,15 +1,15 @@
-var _ = require('lodash');
-var Promise = require("bluebird");
-var moment = require('moment');
+import _ from 'lodash';
+import Promise from "bluebird";
+import moment from 'moment';
 
-var web = require('../util/web');
-var cache = require('../util/cache');
-var util = require("../util/util");
-var db = require("../util/database");
-var vars = require("../../vars.json");
+import vars from "../../vars.json";
+import app from '../util/web';
+import cache from '../util/cache';
+import {debug, error} from '../util/util';
+import database from '../util/database';
 
 cache.set("clans", 60*60*1000, function() {
-	return db.db("games").where({ gametype: "clanwar" }).select("meta").then(rows => {
+	return database("games").where({ gametype: "clanwar" }).select("meta").then(rows => {
 		var clans = {};
 		_.each(rows, function (row) {
 			try {
@@ -22,7 +22,7 @@ cache.set("clans", 60*60*1000, function() {
 				clans[row.meta[2]] = clans[row.meta[2]]&&clans[row.meta[2]]+1||1;
 			} catch (e) {
 				row.meta = null;
-				util.debug(e);
+				debug(e);
 			}
 		});
 		var wins = _.countBy(rows, function (row) {
@@ -47,7 +47,7 @@ cache.set("clans", 60*60*1000, function() {
 });
 
 function clanwarsSince(date) {
-	return db.db("games").where({ gametype: "clanwar" }).where("timestamp", ">=", date).select("meta").then(rows => {
+	return database("games").where({ gametype: "clanwar" }).where("timestamp", ">=", date).select("meta").then(rows => {
 		var clans = {};
 		_.each(rows, function (row) {
 			try {
@@ -60,7 +60,7 @@ function clanwarsSince(date) {
 				clans[row.meta[2]] = clans[row.meta[2]]&&clans[row.meta[2]]+1||1;
 			} catch (e) {
 				row.meta = null;
-				util.debug(e);
+				debug(e);
 			}
 		});
 		var wins = _.countBy(rows, function (row) {
@@ -88,20 +88,20 @@ cache.set("clans-monthly", 60*60*1000, function() {
 	return clanwarsSince(moment().utc().subtract(30, "days").format("YYYY-MM-DD"));
 });
 
-web.app.get("/clans", function(req, res) {
+app.get("/clans", function(req, res) {
 	Promise.all([cache.get("clans"), cache.get("clans-weekly"), cache.get("clans-monthly")]).then().spread((clans, weekly, monthly) => {
 		res.render("clans", { clans: clans, weeklyClans: weekly, monthlyClans: monthly });
-	}).catch(error => {
-		util.error(error);
+	}).catch(err => {
+		error(err);
 		res.status(500).render("error", { status: 500, error: error });
 	});
 });
 
-web.app.get("/api/clans", function(req, res) {
+app.get("/api/clans", function(req, res) {
 	cache.get("clans").then(clans => {
 		res.send({ clans: clans });
-	}).catch(error => {
-		util.error(error);
+	}).catch(err => {
+		error(err);
 		res.status(500).send("clans", { error: error });
 	});
 });

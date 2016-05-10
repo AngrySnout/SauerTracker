@@ -22,9 +22,5 @@
 	"serverPort": 80,
 	"secureServerPort": 443,
 	"baseElo": 1200,
-	"database": {
-		"client": "pg",
-		"connection": "postgres://user:password@server/database",
-		"searchPath": "knex,public"
-	}
+	"databaseConnection": "postgres://user:password@server/database"
 }

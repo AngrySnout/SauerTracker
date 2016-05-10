@@ -141,14 +141,13 @@ export function cube2colorHTML(str) {
 
 /**
  *  Provides utility functions for working with Cube 2 packets.
- *  @class Stream
+ *  @class Packet
  */
-export class Stream {
+export default class Packet {
     /**
      *  @constructor
      *  @param {buffer} buffer - The buffer object to use.
      *  @param {number} offset - Offset of the buffer.
-	 *  @memberof Stream
     */
     constructor(buffer, offset) {
     	this.buffer = buffer;
@@ -158,7 +157,6 @@ export class Stream {
     /**
      *  Read next integer.
      *  @returns {number} The integer.
-     *  @memberof Stream
      */
     getInt() {
 		var ch = this.buffer.readInt8(this.offset);
@@ -179,7 +177,6 @@ export class Stream {
     /**
      *  Write an integer.
      *  @param {number} num - The number to write.
-     *  @memberof Stream
      */
     putInt(num) {
 		num = parseInt(num);
@@ -205,7 +202,6 @@ export class Stream {
     /**
      *  Read next string.
      *  @returns {string} The string.
-     *  @memberof Stream
      */
     getString() {
 		var res = '';
@@ -219,7 +215,6 @@ export class Stream {
     /**
      *  Write a string.
      *  @param {string} str - The string to write.
-     *  @memberof Stream
      */
     putString(str) {
 		var lastoffset = this.offset;
@@ -235,7 +230,6 @@ export class Stream {
     /**
      *  Get number of remaining bytes in buffer.
      *  @returns {number}
-     *  @memberof Stream
      */
 	remaining () {
 		return this.buffer.length-this.offset;
@@ -244,7 +238,6 @@ export class Stream {
     /**
      *  Check whether the end of the buffer is reached.
      *  @returns {boolean}
-     *  @memberof Stream
      */
 	overread () {
 		return this.buffer.length<=this.offset;
@@ -253,7 +246,6 @@ export class Stream {
     /**
      *  Get a sliced/trimmed buffer, eg for sending over the network.
      *  @returns {buffer}
-     *  @memberof Stream
      */
 	finalize () {
 		return this.buffer.slice(0, this.offset);

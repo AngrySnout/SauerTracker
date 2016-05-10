@@ -1,49 +1,48 @@
-var _ = require('lodash');
-var Promise = require("bluebird");
-var geoip = require('geoip-lite');
-var countries = require("i18n-iso-countries");
-var moment = require("moment");
+import _ from 'lodash';
+import Promise from "bluebird";
+import geoip from 'geoip-lite';
+import countries from "i18n-iso-countries";
+import moment from 'moment';
 
-var web = require('../util/web');
-var cache = require('../util/cache');
-var util = require('../util/util');
-var db = require("../util/database");
-import {servers} from '../tracker/server-list';
-var player = require("../tracker/player");
-var config = require('../../tracker.json');
+import config from '../../tracker.json';
+
+import app from '../util/web';
+import cache from '../util/cache';
+import database from '../util/database';
+import playerManager from '../tracker/player-manager';
 
 cache.set("top-players-daily", 60*60*1000, function() {
 	let start = moment().startOf('day').format("YYYY-MM-DD HH:mm:ss");
-	return db.db.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
+	return database.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
 });
 
 cache.set("top-players-weekly", 2*60*60*1000, function() {
 	var start = moment().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
-	return db.db.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
+	return database.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
 });
 
 cache.set("top-players-monthly", 2*60*60*1000, function() {
 	var start = moment().subtract(30, "days").format("YYYY-MM-DD HH:mm:ss");
-	return db.db.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
+	return database.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
 });
 
 cache.set("top-runners-daily", 60*60*1000, function() {
 	var start = moment().startOf('day').format("YYYY-MM-DD HH:mm:ss");
-	return db.db.select("stats.name as name").sum("stats.flags as flags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("flags", "desc").limit(10);
+	return database.select("stats.name as name").sum("stats.flags as flags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("flags", "desc").limit(10);
 });
 
 cache.set("top-runners-weekly", 2*60*60*1000, function() {
 	var start = moment().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
-	return db.db.select("stats.name as name").sum("stats.flags as flags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("flags", "desc").limit(10);
+	return database.select("stats.name as name").sum("stats.flags as flags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("flags", "desc").limit(10);
 });
 
 cache.set("top-runners-monthly", 2*60*60*1000, function() {
 	var start = moment().subtract(30, "days").format("YYYY-MM-DD HH:mm:ss");
-	return db.db.select("stats.name as name").sum("stats.flags as flags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(player.banNames)).groupBy("name").orderBy("flags", "desc").limit(10);
+	return database.select("stats.name as name").sum("stats.flags as flags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("flags", "desc").limit(10);
 });
 
 function duelsSince(date) {
-	let query = db.db("games").where({ gametype: "duel" }).whereNotNull("meta");
+	let query = database("games").where({ gametype: "duel" }).whereNotNull("meta");
 	if (date) query = query.where("timestamp", ">=", date);
 	query = query.select("meta").then(rows => {
 		var duelists = {};
@@ -55,7 +54,6 @@ function duelsSince(date) {
 					duelists[row.meta[2]] = duelists[row.meta[2]]&&duelists[row.meta[2]]+1||1;
 				} catch (e) {
 					row.meta = null;
-					util.debug(e, row);
 				}
 			}
 		});
@@ -80,7 +78,7 @@ cache.set("top-duelists-monthly", 2*60*60*1000, function() {
 });
 
 cache.set("player-countries", 2*60*60*1000, function() {
-	return db.db("players").select("country").count("* as count").groupBy("country").then(rows => {
+	return database("players").select("country").count("* as count").groupBy("country").then(rows => {
 		let sumUnknown = 0;
 		let newList = [];
 		_.each(rows, function (country, ind) {
@@ -96,7 +94,7 @@ cache.set("player-countries", 2*60*60*1000, function() {
 });
 
 function findPlayers(name, country, callback) {
-	let query = db.db("players").where("name", "ilike", "%"+name+"%");
+	let query = database("players").where("name", "ilike", "%"+name+"%");
 	if (country) {
 		query.where(function() {
 			if (country == "__") this.where({ country: "" }).orWhereNull("country");
@@ -105,7 +103,7 @@ function findPlayers(name, country, callback) {
 	}
 	query.orderBy("frags", "desc").limit(200).then(rows => {
 		_.each(rows, row => {
-			if (player.isOnline(row.name)) row.online = true;
+			if (playerManager.isOnline(row.name)) row.online = true;
 		});
 		callback({ results: rows });
 	}).catch(error => {
@@ -113,7 +111,7 @@ function findPlayers(name, country, callback) {
 	});
 }
 
-web.app.get("/players", function(req, res) {
+app.get("/players", function(req, res) {
 	Promise.all([ cache.get("top-players-daily"), cache.get("top-players-weekly"), cache.get("top-players-monthly"),
 			cache.get("top-runners-daily"), cache.get("top-runners-weekly"), cache.get("top-runners-monthly"),
 			cache.get("top-duelists"), cache.get("top-duelists-weekly"), cache.get("top-duelists-monthly"),
@@ -142,7 +140,7 @@ web.app.get("/players", function(req, res) {
 		});
 });
 
-web.app.get("/players/find", function(req, res) {
+app.get("/players/find", function(req, res) {
 	findPlayers(req.query["name"], req.query["country"], results => {
 		if (results.error) {
 			res.status(500).render("error", { status: 500, error: results.error });
@@ -154,7 +152,7 @@ web.app.get("/players/find", function(req, res) {
     });
 });
 
-web.app.get("/api/players/find", function(req, res) {
+app.get("/api/players/find", function(req, res) {
 	findPlayers(req.query["name"], req.query["country"], results => {
 		if (results.error) res.status(500);
         res.send(results);

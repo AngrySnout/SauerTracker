@@ -1,18 +1,19 @@
-var _ = require('lodash');
-var Promise = require('bluebird');
-var moment = require('moment');
+import _ from 'lodash';
+import Promise from "bluebird";
+import moment from 'moment';
 
-var util = require('../util/util');
-var config = require('../../tracker.json');
-var vars = require('../../vars.json');
-var db = require('../util/database');
+import config from '../../tracker.json';
+import vars from "../../vars.json";
+
+import {round2, debug, error, getClan} from '../util/util';
+import database from '../util/database';
 
 function saveTeamStats(gameID, team, score) {
-	return db.db("scores").insert({ game: gameID, team: team, score: score });
+	return database("scores").insert({ game: gameID, team: team, score: score });
 }
 
 function savePlayerStats(gameID, player) {
-	return db.db("stats").insert(_.assign(_.pick(player, [ 'cn', 'name', 'team', 'frags', 'flags', 'deaths', 'tks', 'acc', 'ip', 'country', 'state' ]), { game: gameID, kpd: util.round2((player.frags)/Math.max(player.deaths, 1)) }));
+	return database("stats").insert(_.assign(_.pick(player, [ 'cn', 'name', 'team', 'frags', 'flags', 'deaths', 'tks', 'acc', 'ip', 'country', 'state' ]), { game: gameID, kpd: round2((player.frags)/Math.max(player.deaths, 1)) }));
 }
 
 function saveGame(server, type) {
@@ -29,9 +30,8 @@ function saveGame(server, type) {
 		players: " "+_.map(_.reject(server.game.players, { state: 5 }), "name").join(" ")+" ",
 		specs: " "+_.map(_.filter(server.game.players, { state: 5 }), "name").join(" ")+" "
 	};
-	if (config.database.client == "sqlite3") data.timestamp = moment.utc().format();
 
-	return db.db("games").insert(data).returning("id").then(gameID => {
+	return database("games").insert(data).returning("id").then(gameID => {
 		let promises = [];
 		if (server.game.teams) {
 			if (server.game.gameMode.indexOf("team") >= 0 && server.game.teams.length == 2 && server.game.teams.good === 0 && server.game.teams.evil === 0) {
@@ -53,14 +53,14 @@ function saveGame(server, type) {
 }
 
 function getPlayersElo(players) {
-	return db.db("players").whereIn("name", _.map(players, "name")).select("name", "elo").then(rows => {
+	return database("players").whereIn("name", _.map(players, "name")).select("name", "elo").then(rows => {
 		return _.keyBy(rows, "name");
 	});
 }
 
 function setPlayersElo(players, elos) {
 	return Promise.all(_.map(players, (plr, i) => {
-		return db.db("players").where({ name: plr.name }).update({ elo: elos[i] }).then();
+		return database("players").where({ name: plr.name }).update({ elo: elos[i] }).then();
 	}));
 }
 
@@ -89,7 +89,7 @@ export function getGameType(game) {
 	let teamNames = _.keys(playerTeams);
 	if (vars.mixModes.indexOf(self.gameMode) < 0 || teamNames.length != 2 || !vars.gameModes[self.gameMode].teamMode || pls.length < 4 || pls.length > 10) return ["other"];
 
-	let playerClans = _.countBy(pls, function (pl) { return util.getClan(pl.name)||"random"; });
+	let playerClans = _.countBy(pls, function (pl) { return getClan(pl.name)||"random"; });
 	let clanNames = _.keys(playerClans);
 	if (clanNames.length == 1 && clanNames[0] != "random") return ["intern", JSON.stringify([clanNames[0]])];
 
@@ -101,7 +101,7 @@ export function getGameType(game) {
 		else
 		{
 			_.each(playerTeams, function (playerTeam) {
-				let teamClans = _.countBy(playerTeam, function (pl) { return util.getClan(pl.name)||"random"; });
+				let teamClans = _.countBy(playerTeam, function (pl) { return getClan(pl.name)||"random"; });
 				let dominantClan = _.findKey(teamClans, function (clan, clanname) { return (clan == playerTeam.length || (playerTeam.length > 2 && clan == playerTeam.length) && clanname != "random"); });
 				if (!dominantClan) {
 					isCW = false;
@@ -166,7 +166,7 @@ export default class Game {
 		this.saved = true;
 		let gameType = getGameType(this);
 		return saveGame(this.server, gameType).then(() => {
-			util.debug("Game saved at '" + this.server.description + "' (" + gameType + ").");
+			debug("Game saved at '" + this.server.description + "' (" + gameType + ").");
 			if (gameType[0] == "duel") {
 				let pls = _.reject(this.players, { state: 5 });
 				let plNames = pls.map(pl => pl.name);
@@ -179,7 +179,7 @@ export default class Game {
 					return setPlayersElo(plNames, elo).then();
 				});
 			}
-		}).catch(util.error);
+		}).catch(error);
 	}
 
 	/**

@@ -1,9 +1,9 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var web = require('../util/web');
-var cache = require('../util/cache');
-var metrics = require('../util/metrics');
+import app from '../util/web';
+import cache from '../util/cache';
+import metrics from '../util/metrics';
 
-web.app.get("/metrics", (req, res) => {
+app.get("/metrics", (req, res) => {
     res.render('metrics', {metrics: metrics.getAll()});
 });

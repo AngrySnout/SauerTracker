@@ -1,23 +1,23 @@
-var _ = require('lodash');
-var Promise = require("bluebird");
-var url = require('url');
-var moment = require('moment');
-var countries = require("i18n-iso-countries");
+import _ from 'lodash';
+import Promise from "bluebird";
+import url from 'url';
+import countries from "i18n-iso-countries";
+import moment from 'moment';
 
-var web = require('../util/web');
-var cache = require('../util/cache');
-var vars = require("../../vars.json");
-var db = require("../util/database");
-import {servers} from '../tracker/server-list';
-var config = require('../../tracker.json');
+import config from '../../tracker.json';
+import vars from "../../vars.json";
+
+import {log} from '../util/util';
+import app from '../util/web';
+import cache from '../util/cache';
+import database from '../util/database';
 
 cache.set("latest-duels", 10*60*1000, function(callback) {
-	return db.db("games").where({ gametype: "duel" }).orderBy("timestamp", "desc").limit(10).then(rows => {
+	return database("games").where({ gametype: "duel" }).orderBy("timestamp", "desc").limit(10).then(rows => {
 		_.each(rows, function(row) {
 			try {
 				row.meta = JSON.parse(row.meta);
 			} catch (error) {
-				console.log(error);
 				row.meta = [0, 0, 0, 0];
 			}
 			if (row.meta[1] == row.meta[3]) row.draw = true;
@@ -27,13 +27,12 @@ cache.set("latest-duels", 10*60*1000, function(callback) {
 });
 
 cache.set("latest-clanwars", 10*60*1000, function(callback) {
-	return db.db("games").where({ gametype: "clanwar" }).orderBy("timestamp", "desc").limit(10).then(rows => {
+	return database("games").where({ gametype: "clanwar" }).orderBy("timestamp", "desc").limit(10).then(rows => {
 		_.each(rows, function(row) {
 			try {
 				row.meta = JSON.parse(row.meta);
 			} catch (error) {
-				console.log(error);
-				row.meta = [0, 0, 0, 0];
+				ow.meta = [0, 0, 0, 0];
 			}
 			if (row.meta[1] == row.meta[3]) row.draw = true;
 		});
@@ -42,12 +41,12 @@ cache.set("latest-clanwars", 10*60*1000, function(callback) {
 });
 
 // cache.set("latest-mixes", 10*60*1000, function(callback) {
-//	db.db("games").where({ gametype: "mix" }).orderBy("timestamp", "desc").limit(10).then(rows => {
+//	database("games").where({ gametype: "mix" }).orderBy("timestamp", "desc").limit(10).then(rows => {
 // 		callback(rows);
 // 	}).catch(error => callback());
 // });
 
-web.app.get("/games", (req, res) => {
+app.get("/games", (req, res) => {
     Promise.all([ cache.get("latest-duels"), cache.get("latest-clanwars")/*, cache.get("latest-mixes")*/ ])
     .then(results => {
         res.render("games", {vars: vars, _: _, latestDuels: results[0], latestClanwars: results[1]/*, latestMixes: results[2]*/});
@@ -61,7 +60,7 @@ var pageLimit = 20;
 var maxPageLimit = 1000;
 
 function findGames(params) {
-	let query = db.db("games");
+	let query = database("games");
 
 	if (params.serverdesc) query.where("serverdesc", "ilike", "%"+params.serverdesc+"%");
 	let paramCrit = _.omitBy(_.pick(params, [ "host", "port", "gamemode", "gametype", "map" ]), _.isEmpty);
@@ -104,7 +103,6 @@ function findGames(params) {
 				try {
 					gm.meta = JSON.parse(gm.meta);
 				} catch (error) {
-					console.log(error);
 					gm.meta = [0, 0, 0, 0];
 				}
 				if (gm.meta[1] == gm.meta[3]) gm.draw = true;
@@ -130,7 +128,7 @@ function nextPageURL(req, lastID) {
     return url.format(curURL);
 }
 
-web.app.get('/games/find', function(req, res) {
+app.get('/games/find', function(req, res) {
 	findGames(req.query).then(result => {
 		let prevPage;
 		let nextPage;
@@ -148,13 +146,13 @@ web.app.get('/games/find', function(req, res) {
 	});
 });
 
-web.app.get('/api/games/find', function(req, res) {
+app.get('/api/games/find', function(req, res) {
 	findGames(req.query).then(result => {
 		res.send(result);
 	});
 });
 
-web.app.get('/api/games/players', function(req, res) {
+app.get('/api/games/players', function(req, res) {
 	if (!req.query.players) {
 		res.status(400).send({ error: "You must provide a 'players' parameter in the query string." });
 		return;

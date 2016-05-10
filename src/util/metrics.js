@@ -1,4 +1,4 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
 /**
  *  @private
@@ -53,39 +53,46 @@ class ServerMetric {
     }
 }
 
-var serverMetrics = {};
+class MetricsManager {
+    constructor() {
+        this.servers = {};
+    }
 
-/**
- *  Server has been polled.
- *  @param {string} host - Host IP of the server.
- *  @param {number} port - Port of the server.
- */
-export function polled(host, port) {
-    if (!serverMetrics[host+":"+port]) serverMetrics[host+":"+port] = new ServerMetric();
-    serverMetrics[host+":"+port].polled();
-}
+    /**
+     *  Server has been polled.
+     *  @param {string} host - Host IP of the server.
+     *  @param {number} port - Port of the server.
+     */
+    polled(host, port) {
+        if (!this.servers[host+":"+port]) this.servers[host+":"+port] = new ServerMetric();
+        this.servers[host+":"+port].polled();
+    }
 
-/**
- *  Server has been replied.
- *  @param {string} host - Host IP of the server.
- *  @param {number} port - Port of the server.
- */
-export function replied(host, port) {
-    if (!serverMetrics[host+":"+port]) serverMetrics[host+":"+port] = new ServerMetric();
-    serverMetrics[host+":"+port].replied();
-}
+    /**
+     *  Server has been replied.
+     *  @param {string} host - Host IP of the server.
+     *  @param {number} port - Port of the server.
+     */
+    replied(host, port) {
+        if (!this.servers[host+":"+port]) this.servers[host+":"+port] = new ServerMetric();
+        this.servers[host+":"+port].replied();
+    }
 
-/**
- *  Get all stats.
- *  @returns {array} An array containing object that have properties name and stats, where stats is an object with properties averagePollTime, averageReplyTime, and loss.
- */
-export function getAll() {
-    var res = [];
-    _.each(serverMetrics, (metric, name) => {
-        res.push({
-            name: name,
-            stats: metric.get()
+    /**
+     *  Get all stats.
+     *  @returns {array} An array containing object that have properties name and stats, where stats is an object with properties averagePollTime, averageReplyTime, and loss.
+     */
+    getAll() {
+        var res = [];
+        _.each(this.servers, (metric, name) => {
+            res.push({
+                name: name,
+                stats: metric.get()
+            });
         });
-    });
-    return res;
+        return res;
+    }
 }
+
+var metrics = new MetricsManager();
+export default metrics;

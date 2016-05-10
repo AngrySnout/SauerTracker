@@ -1,16 +1,17 @@
-var _ = require('lodash');
-var moment = require('moment');
-var Promise = require('bluebird');
+import _ from 'lodash';
+import Promise from "bluebird";
+import moment from 'moment';
 
-var db = require("../util/database");
-var web = require('../util/web');
-var config = require('../../tracker.json');
+import config from '../../tracker.json';
 
-web.app.get("/stats", function(req, res) {
+import app from '../util/web';
+import database from '../util/database';
+
+app.get("/stats", function(req, res) {
 	var weekAgo = moment().endOf("day").subtract(7, "days").format("YYYY-MM-DD");
 	let queries = [
-		db.db.raw("SELECT to_char(timestamp, 'MM-DD') AS date, COUNT(DISTINCT trim(trailing '0123456789' from ip)) AS visitors, COUNT(url) AS requests FROM requests WHERE timestamp > '"+weekAgo+"' GROUP BY date ORDER BY date DESC").then(result => result.rows),
-		db.db.raw("SELECT to_char(timestamp, 'MM-DD') AS date, COUNT(*) AS games FROM games WHERE timestamp > '"+weekAgo+"' GROUP BY date ORDER BY date DESC").then(result => result.rows)
+		database.raw("SELECT to_char(timestamp, 'MM-DD') AS date, COUNT(DISTINCT trim(trailing '0123456789' from ip)) AS visitors, COUNT(url) AS requests FROM requests WHERE timestamp > '"+weekAgo+"' GROUP BY date ORDER BY date DESC").then(result => result.rows),
+		database.raw("SELECT to_char(timestamp, 'MM-DD') AS date, COUNT(*) AS games FROM games WHERE timestamp > '"+weekAgo+"' GROUP BY date ORDER BY date DESC").then(result => result.rows)
 	];
 	Promise.all(queries).spread((visits, games) => {
 			let stats = _.keyBy(visits, "date");
@@ -26,7 +27,7 @@ web.app.get("/stats", function(req, res) {
 
 function reapRequests() {
 	var weekAgo = moment().endOf("day").subtract(8, "days").format("YYYY-MM-DD");
-	db.db("requests").where("timestamp", "<", weekAgo).del().then();
+	database("requests").where("timestamp", "<", weekAgo).del().then();
 }
 setInterval(reapRequests, 5*60*60*1000);
 reapRequests();

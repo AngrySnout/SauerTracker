@@ -1,12 +1,12 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var config = require('../../tracker.json');
-var vars = require('../../vars.json');
+import config from '../../tracker.json';
+import vars from "../../vars.json";
 
 /**
- *  Replace the last byte in an IP address.
+ *  Replace the last octet in an IP address.
  *  @param {string} ip - The IP address.
- *  @param {string} to - The new last byte.
+ *  @param {string} to - The new last octet.
  *  @returns {string}
  */
 export function ipRepLB(ip, to) {
@@ -47,16 +47,24 @@ export function isValidPort(port) {
 }
 
 /**
+ *  Prints log message.
+ *  @param {any} msg
+ */
+export function log(...msg) {
+	console.log(...msg);
+}
+
+/**
  *  If in debug mode print stack stace and exits. Otherwise print error message.
  *  @param {any} msg
  */
 export function error(msg) {
 	if (config.debug) {
-		console.log("Error:", msg);
+		log("Error:", msg);
 		if (typeof msg === "string") throw new Error(msg);
 		throw new Error(msg);
 	}
-	else console.log("Error:", msg);
+	else log("Error:", msg);
 }
 
 /**
@@ -64,7 +72,7 @@ export function error(msg) {
  *  @param {any} msg
  */
 export function debug(...msg) {
-	if (config.debug) console.log(...msg);
+	if (config.debug) log(...msg);
 }
 
 /**
@@ -74,7 +82,7 @@ export function debug(...msg) {
  */
 export function assert(condition, msg) {
 	if (config.debug) throw new Error("Assert failed: "+msg);
-	else console.log("Assert failed: "+msg);
+	else log("Assert failed: "+msg);
 }
 
 /**

@@ -1,34 +1,35 @@
-var _ = require('lodash');
-var Promise = require("bluebird");
-var geoip = require('geoip-lite');
-var countries = require("i18n-iso-countries");
+import _ from 'lodash';
+import Promise from "bluebird";
+import geoip from 'geoip-lite';
+import countries from "i18n-iso-countries";
 
-var web = require('../util/web');
-var util = require('../util/util');
-var vars = require("../../vars.json");
-var db = require("../util/database");
-import {servers} from '../tracker/server-list';
+import vars from "../../vars.json";
+
+import app from '../util/web';
+import {round2} from '../util/util';
+import database from '../util/database';
+import serverManager from '../tracker/server-manager';
 
 function getGameScores(id) {
-	return db.db("scores").where({ game: id }).select("team", "score");
+	return database("scores").where({ game: id }).select("team", "score");
 }
 
 function getGameStats(id) {
-	return db.db("stats").where({ game: id }).select("name", "team", "frags", "flags", "deaths", "tks", "acc", "country", "state", "kpd").then(rows => {
+	return database("stats").where({ game: id }).select("name", "team", "frags", "flags", "deaths", "tks", "acc", "country", "state", "kpd").then(rows => {
 		_.each(rows, function(plr) {
 			if (!plr.country || plr.country == "unknown") {
 				plr.country = "";
 				plr.countryName = "Unknown";
 			}
 			else plr.countryName = countries.getName(plr.country, "en");
-			if (!plr.kpd) plr.kpd = util.round2(plr.frags/Math.max(plr.deaths, 1));
+			if (!plr.kpd) plr.kpd = round2(plr.frags/Math.max(plr.deaths, 1));
 		});
 		return rows;
 	});
 }
 
 function getGameRow(id) {
-	return db.db("games").where({ id: id }).then(rows => rows[0]);
+	return database("games").where({ id: id }).then(rows => rows[0]);
 }
 
 function getGame(id, callback) {
@@ -48,7 +49,7 @@ function getGame(id, callback) {
 		locals.host =  results[0].host;
 		locals.port =  results[0].port;
 
-		let server = servers.find(results[0].host, results[0].port);
+		let server = serverManager.find(results[0].host, results[0].port);
 
 		if (server) {
 			locals.descriptionStyled = server.descriptionStyled||results[0].serverdesc;
@@ -76,7 +77,7 @@ function getGame(id, callback) {
 	});
 }
 
-web.app.get('/game/:id', function(req, res) {
+app.get('/game/:id', function(req, res) {
 	getGame(req.params.id, result => {
 		if (result.error) {
 			let status = (result.error=="Game not found."? 404: 500);
@@ -87,7 +88,7 @@ web.app.get('/game/:id', function(req, res) {
 	});
 });
 
-web.app.get('/api/game/:id', function(req, res) {
+app.get('/api/game/:id', function(req, res) {
 	getGame(req.params.id, result => {
 		if (result.error) res.status(result.error=="Game not found."? 404: 500);
 		res.send(result);
