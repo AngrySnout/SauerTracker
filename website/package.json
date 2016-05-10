@@ -1,12 +1,10 @@
 {
   "name": "sauer-tracker",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "Website for SauerTracker.",
   "scripts": {
-    "test": "echo No test script yet",
     "start": "gulp",
-    "build": "gulp build",
-    "bumpv": "npm version patch"
+    "build": "gulp build"
   },
   "browser": {
     "jquery": "./bower_components/jquery/dist/jquery.js",

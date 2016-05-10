@@ -1,6 +1,6 @@
 {
   "name": "sauer-tracker",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "Server and stats tracker for Cube 2: Sauerbraten.",
   "main": "main.js",
   "repository": "https://github.com/AngrySnout/SauerTracker",
