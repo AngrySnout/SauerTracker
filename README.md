@@ -33,6 +33,26 @@ npm restart
 npm stop
 ```   
 
+## Upgrade
+```bash
+# Pull the repository
+git pull origin master
+# Update the dependencies
+npm install
+# Rebuild the Tracker
+npm run-script build
+```   
+
+## Running
+```bash
+# Start it using forever, so it restarts automatically when it crashes
+npm start
+# Manually restart it
+npm restart
+# Or shut it down
+npm stop
+```   
+
 ## Development
 The Tracker is split into 2 parts; the tracker, and the website, each of which has its own *package.json* file.    
 For development it is easier to have *Gulp* and *Knex* installed globally. This can be achieved with:
