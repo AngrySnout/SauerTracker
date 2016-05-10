@@ -33,7 +33,8 @@ npm restart
 npm stop
 ```   
 
-## Upgrade
+### Upgrade
+
 ```bash
 # Pull the repository
 git pull origin master
@@ -43,7 +44,8 @@ npm install
 npm run-script build
 ```   
 
-## Running
+### Running
+
 ```bash
 # Start it using forever, so it restarts automatically when it crashes
 npm start
