@@ -20,17 +20,10 @@ To learn more, read the [configuration file's wiki page](https://github.com/Angr
 # Clone the repository
 git clone https://github.com/AngrySnout/SauerTracker
 cd SauerTracker
-# Then install the dependencies
+# Install the dependencies
 npm install
 # Build the Tracker
 npm run-script build
-# And start it
-npm start
-# This starts it using forever, so it restarts automatically when it crashes.
-# You can manually restart it
-npm restart
-# Or shut it down
-npm stop
 ```   
 
 ### Upgrade
