@@ -71,14 +71,15 @@ function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
 
 /**
  *  Get type of the game.
- * @param {object} game - The game to detect. Should have properties 'gameMode', 'masterMode', 'players', and 'teams'.
+ *	@param {object} game - The game to detect. Should have properties 'gameMode', 'masterMode', 'players', and 'teams'.
  *	@returns {array} An array, the first element of which is one of 'duel', 'public', 'other', 'clanwar', 'mix', 'intern'. If the first element if one of 'duel' and 'clanwar', the second element is a string representing the participants and the result. If the first element is 'intern', the second element is a string representing the clan.
  */
-export function getGameType(game) {
+export function getGameType(game, threshold) {
 	let self = game;
 	let pls = _.reject(self.players, { state: 5 });
+	if (typeof threshold == "undefined") threshold = vars.duelThresholds[self.gameMode];
 
-	if (pls.length == 2 && vars.duelModes.indexOf(self.gameMode) >= 0 && vars.lockedMModes.indexOf(self.masterMode) >= 0 && !(vars.gameModes[self.gameMode].teamMode && pls[0].team == pls[1].team) && (pls[0].frags > vars.duelThresholds[self.gameMode] && pls[1].frags > vars.duelThresholds[self.gameMode])) {
+	if (pls.length == 2 && vars.duelModes.indexOf(self.gameMode) >= 0 && vars.lockedMModes.indexOf(self.masterMode) >= 0 && !(vars.gameModes[self.gameMode].teamMode && pls[0].team == pls[1].team) && (pls[0].frags > threshold && pls[1].frags > threshold)) {
 		pls = _.sortBy(pls, "frags");
 		return ["duel", JSON.stringify([pls[0].name, pls[0].frags, pls[1].name, pls[1].frags])];
 	}
@@ -193,7 +194,7 @@ export default class Game {
 		res.info = this.server.info;
 		res.players = _.map(this.players, pl => _.pick(pl, ["name", "frags", "team", "flags", "deaths", "kpd", "acc", "tks", "state", "country", "countryName", "ping"]));
 		res.teams = this.teams;
-		let gameType = getGameType(this);
+		let gameType = getGameType(this, -1000);
 		res.gameType = gameType[0];
 		try {
 			if (gameType[1]) res.meta = JSON.parse(gameType[1]);

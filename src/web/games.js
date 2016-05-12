@@ -59,6 +59,7 @@ app.get("/games", (req, res) => {
 var pageLimit = 20;
 var maxPageLimit = 1000;
 
+// TODO: make results consistent with /api/game/
 function findGames(params) {
 	let query = database("games");
 

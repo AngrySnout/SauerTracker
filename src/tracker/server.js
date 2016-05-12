@@ -41,7 +41,6 @@ export default class Server {
 			this.info.website = info.website;
 			this.info.demourl = info.demourl;
 			this.info.banned = info.banned;
-			this.info.keep = true;
 		}
 	}
 
