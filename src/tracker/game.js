@@ -190,6 +190,7 @@ export default class Game {
 	serialize() {
 		let res = this.server.serialize(false);
 		res.zombie = this.zombie;
+		res.info = this.server.info;
 		res.players = _.map(this.players, pl => _.pick(pl, ["name", "frags", "team", "flags", "deaths", "kpd", "acc", "tks", "state", "country", "countryName", "ping"]));
 		res.teams = this.teams;
 		let gameType = getGameType(this);
