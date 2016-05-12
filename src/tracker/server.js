@@ -124,8 +124,8 @@ export default class Server {
 	}
 
 	shouldClean(time) {
-		// only keep the server if it had replied in the last 2 minutes or if it's sticky
-		return (time-this.lastReply>120000 && !this.keep);
+		// only keep the server if it had replied in the last 2 minutes
+		return (time-this.lastReply>120000);
 	}
 
 	parseReply(data, type, time) {
