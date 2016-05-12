@@ -49,6 +49,10 @@ function getGame(id, callback) {
 		locals.host =  results[0].host;
 		locals.port =  results[0].port;
 
+		try {
+			if (results[0].meta) locals.meta = JSON.parse(results[0].meta);
+		} catch (e) {};
+
 		let server = serverManager.find(results[0].host, results[0].port);
 
 		if (server) {
