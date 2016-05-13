@@ -94,6 +94,7 @@ cache.set("player-countries", 2*60*60*1000, function() {
 });
 
 function findPlayers(name, country, callback) {
+	if (typeof name == "undefined") name = "";
 	let query = database("players").where("name", "ilike", "%"+name+"%");
 	if (country) {
 		query.where(function() {
