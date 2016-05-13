@@ -12,7 +12,7 @@
 		"port": 28787
 	},
 	"irc": {
-		"server": "irc.gamesurge.net",
+		"server": null,
 		"port": 6667,
 		"nick": "MyTracker",
 		"chan": "#mychannel",
