@@ -42,6 +42,7 @@ function getPlayer(name, callback) {
 					row.clan = pclan.title;
 					row.clanTag = pclan.tag;
 				}
+				if (playerManager.isOnline(row.name)) row.online = true;
 				Promise.all([getTotalGames(name), getLastGames(name)])
 					.then(results => {
 						callback({ player: row, totalGames: results[0], games: results[1] });
