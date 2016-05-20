@@ -12,16 +12,45 @@ import {error} from '../util/util';
 import database from '../util/database';
 import serverManager from '../tracker/server-manager';
 
+function populateStats() {
+	database.raw("DROP TABLE IF EXISTS serverranks").then(() => {
+		database.raw("CREATE TABLE serverranks AS SELECT ranked.*, rank() OVER (ORDER BY count DESC) AS rank FROM (SELECT host, port, count(*) FROM games GROUP BY host, port) AS ranked ORDER BY rank ASC").then();
+	}).catch(err => {
+		error(err);
+	});
+}
+
+populateStats();
+setInterval(populateStats, 10*60*1000);
+
 app.get('/api/server/:host/:port', function (req, res) {
-    let server = serverManager.find(req.params.host, parseInt(req.params.port));
-    if (server) res.send(server.game.serialize());
-    else res.status(404).send({ error: "Server not found." });
+    let host = req.params.host;
+    let port = parseInt(req.params.port);
+    let server = serverManager.find(host, port);
+    if (server) {
+        server = server.game.serialize();
+        database("serverranks").where({ host: host, port: port }).select("count", "rank").then(result => {
+            server.totalGames = result[0].count;
+            server.rank = result[0].rank;
+        }).finally(() => {
+            res.send(server);
+        });
+    } else res.status(404).send({ error: "Server not found." });
 });
 
 app.get('/server/:host/:port', function (req, res) {
-    let server = serverManager.find(req.params.host, parseInt(req.params.port));
-    if (server) res.render('server', { server: server.game.serialize(), vars: vars, _: _ });
-    else res.status(404).render("error", { status: 404 });
+    let host = req.params.host;
+    let port = parseInt(req.params.port);
+    let server = serverManager.find(host, port);
+    if (server) {
+        server = server.game.serialize();
+        database("serverranks").where({ host: host, port: port }).select("count", "rank").then(result => {
+            server.totalGames = result[0].count;
+            server.rank = result[0].rank;
+        }).finally(() => {
+            res.render('server', { server: server, vars: vars, _: _ });
+        });
+    } else res.status(404).render("error", { status: 404 });
 });
 
 function getActivityDay(host, port) {
