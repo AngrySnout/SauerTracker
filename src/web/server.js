@@ -12,16 +12,15 @@ import {error} from '../util/util';
 import database from '../util/database';
 import serverManager from '../tracker/server-manager';
 
-function populateStats() {
+function populateRanks() {
 	database.raw("DROP TABLE IF EXISTS serverranks").then(() => {
 		database.raw("CREATE TABLE serverranks AS SELECT ranked.*, rank() OVER (ORDER BY count DESC) AS rank FROM (SELECT host, port, count(*) FROM games GROUP BY host, port) AS ranked ORDER BY rank ASC").then();
 	}).catch(err => {
 		error(err);
 	});
 }
-
-populateStats();
-setInterval(populateStats, 10*60*1000);
+populateRanks();
+setInterval(populateRanks, 10*60*1000);
 
 app.get('/api/server/:host/:port', function (req, res) {
     let host = req.params.host;

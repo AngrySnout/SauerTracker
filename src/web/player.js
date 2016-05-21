@@ -9,6 +9,16 @@ import {getClan, error} from "../util/util";
 import playerManager from "../tracker/player-manager";
 import database from '../util/database';
 
+function populateRanks() {
+	database.raw("DROP TABLE IF EXISTS playerranks").then(() => {
+		database.raw("CREATE TABLE playerranks AS SELECT ranked.*, rank() OVER (ORDER BY frags DESC) AS rank FROM (SELECT name, frags FROM players) AS ranked ORDER BY rank ASC").then();
+	}).catch(err => {
+		error(err);
+	});
+}
+populateRanks();
+setInterval(populateRanks, 10*60*1000);
+
 function getTotalGames(name) {
 	return database.count("* as count").from("stats").join("games", "games.id", "stats.game").where("stats.name", name).whereNot("stats.state", 5).then(rows => {
 		return rows[0].count;
@@ -43,9 +53,9 @@ function getPlayer(name, callback) {
 					row.clanTag = pclan.tag;
 				}
 				if (playerManager.isOnline(row.name)) row.online = true;
-				Promise.all([getTotalGames(name), getLastGames(name)])
+				Promise.all([getTotalGames(name), getLastGames(name), database("playerranks").where({ name: name })])
 					.then(results => {
-						callback({ player: row, totalGames: results[0], games: results[1] });
+						callback({ player: row, totalGames: results[0], games: results[1], rank: results[2][0].rank });
 					})
 					.catch(err => {
 						error(err);
