@@ -46,7 +46,8 @@ app.get("/api/clan/:name", function(req, res) {
 	Promise.all([ cache.get("clans"), getLatestGames(req.params.name), getLatestMembers(req.params.name) ])
 	.spread((clans, latestGames, latestMembers) => {
 		let clan = _.find(clans, { name: req.params.name });
-		if (clan) res.send({ clan: clan, games: latestGames, members: latestMembers });
+		let info = _.find(vars.clans, { tag: req.params.name });
+		if (clan) res.send({ clan: clan, info: info, games: latestGames, members: latestMembers });
 		else res.status(404).send({ error: "Clan not found." });
 	}).catch(err => {
 		error(err);
