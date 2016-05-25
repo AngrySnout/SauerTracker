@@ -29,7 +29,8 @@
 		{ "tag": "[RUSS]", "title": "RUSS" },
 		{ "tag": "RED|", "title": "RED" },
 		{ "tag": "#TJS.", "title": "TJS" },
-		{ "tag": "va|", "title": "VoxelArmy" }
+		{ "tag": "va|", "title": "VoxelArmy" },
+		{ "tag": "vE'", "title": "vE'ctor", "website": "http://vectorsauer.tk" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
