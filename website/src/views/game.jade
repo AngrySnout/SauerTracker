@@ -12,15 +12,6 @@ block content
         .medium-12.columns
             #game
                 include ./_partials/game.jade
-            if !server.info.banned
-                .row.columns.client-side(style="margin-top: 1em")
-                    label.big Server activity for today (avg # of players, time is in UTC):
-                    div(style="width: 100%; margin-right: 50px;")
-                        canvas#server-activity-day(style="width: 100%; height: 300px;")
-                .row.columns.client-side
-                    label.big Server activity for the last 15 days (# of games):
-                    div(style="width: 100%; margin-right: 50px;")
-                        canvas#server-activity-month(style="width: 100%; height: 300px;")
                         
     .reveal#connect-info(data-reveal)
         | Copy the following line, paste it in the game, and press Enter to connect to the server:
