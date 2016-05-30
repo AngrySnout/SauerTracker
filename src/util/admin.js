@@ -73,7 +73,7 @@ function addhandler(command, help, modereq, handler) {
 }
 
 function commandList() {
-	return config.irc.prefix+_.reduce(_.keys(handlers), function (memo, cname) { return memo+", "+config.irc.prefix+cname; });
+	return "All commands: " + config.irc.prefix+_.reduce(_.keys(handlers), function (memo, cname) { return memo+", "+config.irc.prefix+cname; });
 }
 
 addhandler("commands", config.irc.prefix+"commands: lists all commands.", "", function(sendTo) {
@@ -86,7 +86,7 @@ addhandler("help", config.irc.prefix+"help [command]: prints help message for [c
 });
 
 addhandler("numservs", config.irc.prefix+"numservs: prints the total number of servers.", "", function(sendTo) {
-	bot.message(sendTo, "Number of servers: " + serverList.countServers());
+	bot.message(sendTo, "Number of servers: " + serversAdmin.countServers());
 });
 
 addhandler("setservinfo", config.irc.prefix+"setservinfo [ip] [port] [info] [value]: sets [info] of server to [value]. Pass and empty [value] to clear. [info] is one of 'website', 'demourl', and 'banned' (where [value] is the ban reason).", "o", function(sendTo, host, port, info, value) {
