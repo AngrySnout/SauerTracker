@@ -141,6 +141,9 @@ addhandler("unbanname", config.irc.prefix+"unbanname [name]: unban player with n
 	playersAdmin.unbanName(name, function (text) { bot.message(sendTo, text); });
 });
 
-addhandler("banlist", config.irc.prefix+"banlist: prints a list of all banned IPs.", "v", function(sendTo) {
-	bot.message(sendTo, _.keys(playersAdmin.bans).join(" "));
+addhandler("banlist", config.irc.prefix+"banlist: prints a list of all banned IPs and names.", "v", function(sendTo) {
+	bot.message(sendTo,
+`Banned IPs: ${_.keys(playersAdmin.getBans()).join(" ")}
+Banned names: ${_.keys(playersAdmin.getBanNames()).join(" ")}`
+	);
 });

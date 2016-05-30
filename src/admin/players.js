@@ -150,3 +150,11 @@ export function unbanName(name, callback) {
 		callback("Player \x0303" + name + "\x0F was not banned.");
 	}
 }
+
+export function getBans() {
+	return playerManager.bans;
+}
+
+export function getBanNames() {
+	return playerManager.banNames;
+}
