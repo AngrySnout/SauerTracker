@@ -2,7 +2,6 @@ import _ from 'lodash';
 import Promise from "bluebird";
 import moment from 'moment';
 
-import config from '../../tracker.json';
 import vars from "../../vars.json";
 
 import app from '../util/web';
@@ -51,7 +50,7 @@ app.get('/server/:host/:port', function (req, res) {
 	            server.rank = result[0].rank;
 			}
         }).finally(() => {
-            res.render('server', { server: server, vars: vars, _: _, bannerURL: config.bannerURL });
+            res.render('server', { server: server, vars: vars, _: _, bannerURL: vars.bannerURL });
         });
     } else res.status(404).render("error", { status: 404 });
 });
