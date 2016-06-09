@@ -22,6 +22,5 @@
 	"serverPort": 80,
 	"secureServerPort": 443,
 	"baseElo": 1200,
-	"databaseConnection": "postgres://user:password@server/database",
-	"bannerHost": "http://banners.sauertracker.net/"
+	"databaseConnection": "postgres://user:password@server/database"
 }
