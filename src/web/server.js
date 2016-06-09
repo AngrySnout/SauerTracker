@@ -12,9 +12,7 @@ import database from '../util/database';
 import serverManager from '../tracker/server-manager';
 
 function populateRanks() {
-	database.raw("DROP TABLE IF EXISTS serverranks").then(() => {
-		database.raw("CREATE TABLE serverranks AS SELECT ranked.*, rank() OVER (ORDER BY count DESC) AS rank FROM (SELECT host, port, count(*) FROM games GROUP BY host, port) AS ranked ORDER BY rank ASC").then();
-	}).catch(err => {
+	database.raw("BEGIN; CREATE TABLE serverranks2 AS SELECT ranked.*, rank() OVER (ORDER BY count DESC) AS rank FROM (SELECT host, port, count(*) FROM games GROUP BY host, port) AS ranked ORDER BY rank ASC; CREATE INDEX ON serverranks2 (host, port); DROP TABLE IF EXISTS serverranks; ALTER TABLE serverranks2 RENAME TO serverranks; COMMIT;").catch(err => {
 		error(err);
 	});
 }

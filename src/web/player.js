@@ -10,9 +10,7 @@ import playerManager from "../tracker/player-manager";
 import database from '../util/database';
 
 function populateRanks() {
-	database.raw("DROP TABLE IF EXISTS playerranks").then(() => {
-		database.raw("CREATE TABLE playerranks AS SELECT ranked.*, rank() OVER (ORDER BY frags DESC) AS rank FROM (SELECT name, frags FROM players) AS ranked ORDER BY rank ASC").then();
-	}).catch(err => {
+	database.raw("BEGIN; CREATE TABLE playerranks2 AS SELECT ranked.*, rank() OVER (ORDER BY frags DESC) AS rank FROM (SELECT name, frags FROM players) AS ranked ORDER BY rank ASC; CREATE INDEX ON playerranks2 (name); DROP TABLE IF EXISTS playerranks; ALTER TABLE playerranks2 RENAME TO playerranks; COMMIT;").catch(err => {
 		error(err);
 	});
 }
