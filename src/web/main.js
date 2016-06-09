@@ -11,6 +11,7 @@ require("./clan");
 require("./profile");
 require("./help");
 require("./stats");
+require("./banners");
 try {
     // compat.js provides backwards compatibily for certain routes, and is not necessary for the Tracker
     require("./compat");

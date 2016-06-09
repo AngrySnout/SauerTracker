@@ -16,7 +16,6 @@ block content
             if error
                 label.big #{error}
             else
-                //- include ./_partials/game.jade
                 h2#player-name= player.name
                 span
                     if (!player.country || player.countryName == "Unknown")
@@ -70,6 +69,14 @@ block content
                             td.text-center: +fixedAcc(player.acc)
                             td.text-center: +fixedAcc(player.instastats[5])
                             td.text-center: +fixedAcc(player.efficstats[5])
+                            
+                if bannerURL
+                    br
+                    label.big Banner
+                    a(href="/banners?type=player&name="+encodeURIComponent(player.name))
+                        img#banner(src=bannerURL+"player?theme=default&name="+encodeURIComponent(player.name))
+                    br
+                    br
                 
                 if games
                     br

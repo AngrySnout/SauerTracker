@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import Promise from "bluebird";
 
-import config from '../../tracker.json';
 import vars from "../../vars.json";
 
 import app from '../util/web';
@@ -34,7 +33,7 @@ app.get("/clan/:name", function(req, res) {
 	.spread((clans, latestGames, latestMembers) => {
 		let clan = _.find(clans, { name: req.params.name });
 		let info = _.find(vars.clans, { tag: req.params.name });
-		if (clan && info) res.render("clan", { clan: clan, info: info, games: latestGames, members: latestMembers });
+		if (clan && info) res.render("clan", { clan: clan, info: info, games: latestGames, members: latestMembers, bannerURL: vars.bannerURL });
 		else res.status(404).render("error", { status: 404 });
 	}).catch(err => {
 		error(err);

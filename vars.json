@@ -107,5 +107,6 @@
 	"duelModes": [ "insta", "instateam", "effic", "efficteam", "tac", "tacteam", "ffa", "teamplay" ],
 	"mixModes": [ "teamplay", "instateam", "efficteam", "capture", "rcapture", "ctf", "ictf", "protect", "iprotect", "hold", "ihold", "ectf", "eprotect", "ehold", "collect", "icollect", "icollect" ],
 	"lockedMModes": [ "locked", "private", "password" ],
-	"duelThresholds": { "insta": 20, "instateam": 20, "effic": 20, "efficteam": 20, "tac": 10, "tacteam": 10, "ffa": 0, "teamplay": 0 }
+	"duelThresholds": { "insta": 20, "instateam": 20, "effic": 20, "efficteam": 20, "tac": 10, "tacteam": 10, "ffa": 0, "teamplay": 0 },
+	"bannerURL": "http://banners.sauertracker.net/"
 }

@@ -5,7 +5,7 @@ import moment from 'moment';
 import vars from "../../vars.json";
 import app from '../util/web';
 import cache from '../util/cache';
-import {debug, error} from '../util/util';
+import {debug, error, round2} from '../util/util';
 import database from '../util/database';
 
 cache.set("clans", 60*60*1000, function() {
@@ -36,7 +36,7 @@ cache.set("clans", 60*60*1000, function() {
 			if (!losses[clan.tag]) losses[clan.tag] = 0;
 			var draws_2 = ((clans[clan.tag]||0)-((wins[clan.tag]||0)+(losses[clan.tag]||0)))/2;
 			var rate = (clans[clan.tag]? (wins[clan.tag]+draws_2)/clans[clan.tag]: 0);
-			return { "name": clan.tag, "wins": wins[clan.tag], "losses": losses[clan.tag], "rate": rate, "points": (wins[clan.tag]+draws_2)*rate };
+			return { "name": clan.tag, "wins": wins[clan.tag], "losses": losses[clan.tag], "rate": round2(rate), "points": round2((wins[clan.tag]+draws_2)*rate) };
 		}), "points", "desc");
 		var rank = 1;
 		_.each(clns, function (clan) {

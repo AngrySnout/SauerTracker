@@ -24,6 +24,14 @@ block content
                 if info.website
                     br
                     label.big Website: <a href=#{info.website}>#{info.website}</a>
+                            
+                if bannerURL
+                    br
+                    label.big Banner
+                    a(href="/banners?type=clan&clantag="+encodeURIComponent(clan.name))
+                        img#banner(src=bannerURL+"clan?theme=default&clantag="+encodeURIComponent(clan.name))
+                    br
+                    br
                 
                 if members
                     br

@@ -55,7 +55,7 @@ function getPlayer(name, callback) {
 				if (playerManager.isOnline(row.name)) row.online = true;
 				Promise.all([getTotalGames(name), getLastGames(name), database("playerranks").where({ name: name })])
 					.then(results => {
-						callback({ player: row, totalGames: results[0], games: results[1], rank: results[2][0].rank });
+						callback({ player: row, totalGames: results[0], games: results[1], rank: results[2].length? results[2][0].rank: undefined });
 					})
 					.catch(err => {
 						error(err);
@@ -75,7 +75,7 @@ app.get("/player/:name", function(req, res) {
 				res.status(status).render("error", { status: status, error: result.error });
 			}
 		} else {
-			res.render("player", _.assign(result, { _: _ }) );
+			res.render("player", _.assign(result, { _: _, bannerURL: vars.bannerURL }) );
 		}
 	});
 });

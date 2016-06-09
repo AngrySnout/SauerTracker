@@ -29,8 +29,10 @@ app.get('/api/server/:host/:port', function (req, res) {
     if (server) {
         server = server.game.serialize();
         database("serverranks").where({ host: host, port: port }).select("count", "rank").then(result => {
-            server.totalGames = result[0].count;
-            server.rank = result[0].rank;
+			if (result.length) {
+	            server.totalGames = result[0].count;
+	            server.rank = result[0].rank;
+			}
         }).finally(() => {
             res.send(server);
         });
@@ -44,10 +46,12 @@ app.get('/server/:host/:port', function (req, res) {
     if (server) {
         server = server.game.serialize();
         database("serverranks").where({ host: host, port: port }).select("count", "rank").then(result => {
-            server.totalGames = result[0].count;
-            server.rank = result[0].rank;
+			if (result.length) {
+	            server.totalGames = result[0].count;
+	            server.rank = result[0].rank;
+			}
         }).finally(() => {
-            res.render('server', { server: server, vars: vars, _: _ });
+            res.render('server', { server: server, vars: vars, _: _, bannerURL: config.bannerURL });
         });
     } else res.status(404).render("error", { status: 404 });
 });
