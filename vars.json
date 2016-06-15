@@ -26,12 +26,12 @@
 		{ "tag": "<pWn>", "title": "pWn" },
 		{ "tag": ".c2|", "title": "C2", "website": "http://c2clan.tk" },
 		{ "tag": "(ESP)", "title": "Especial Super Paragons", "website": "http://espclan.ru" },
-		{ "tag": "[RUSS]", "title": "RUSS" },
+		{ "tag": "[RUSS]", "title": "RUSS", "website": "http://russauerclan.boards.net" },
 		{ "tag": "RED|", "title": "RED" },
 		{ "tag": "#TJS.", "title": "TJS" },
 		{ "tag": "va|", "title": "VoxelArmy" },
 		{ "tag": "vE'", "title": "vE'ctor", "website": "http://vectorsauer.tk" },
-		{ "tag": "|TEK|", "title": "The Eternal Killers", "website": "http://tekclansauer.createaforum.com/" }
+		{ "tag": "|TEK|", "title": "The Eternal Killers", "website": "http://tekclansauer.createaforum.com" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
