@@ -60,7 +60,7 @@ var cube2colors = [ 'green', 'blue', 'yellow', 'red', 'grey', 'magenta', 'orange
  *  @returns {string} The UTF8 string.
  */
 function cube2uni(str) {
-	var res = "";
+	var res = '';
 	for (var i = 0; i < str.length; i++) res += String.fromCharCode(cube2unichars[str[i].charCodeAt()]);
 	return res;
 }
@@ -71,7 +71,7 @@ function cube2uni(str) {
  *  @returns {string} The Cube 2 string.
  */
 function uni2cube(str) {
-	var res = "";
+	var res = '';
 	for (var i = 0; i < str.length; i++) {
 		var c = str[i].charCodeAt();
 		res += String.fromCharCode((c <= 0x7FF)? uni2cubechars[uni2cubeoffsets[c>>8] + (c&0xFF)]: 0);
@@ -85,7 +85,7 @@ function uni2cube(str) {
  *  @returns {string} Filtered string.
  */
 export function filterString(str) {
-	var res = "";
+	var res = '';
 	for (var i = 0; i < str.length; i++) {
 		if (str[i] == '\f') i++;
 		else res += str[i];
@@ -117,7 +117,7 @@ function escapeHtml(string) {
  */
 export function cube2colorHTML(str) {
     str = escapeHtml(str);
-	var res = "";
+	var res = '';
 	if (str.length && str[0] != '\f') res += '<span style="color: lightgrey">';
     else res += "<span>";
 	var curc = -1;
@@ -209,7 +209,7 @@ export default class Packet {
 			res += String.fromCharCode(this.getInt());
 		}
 		this.offset++;
-		return cube2uni(res).replace(/\x00/g, "");
+		return cube2uni(res).replace(/\x00/g, '');
     }
 
     /**

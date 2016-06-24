@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import Promise from "bluebird";
+import Promise from 'bluebird';
 
 import config from '../../tracker.json';
 
 import {debug, error} from '../util/util';
 import database from '../util/database';
-import Player from "./player";
+import Player from './player';
 
 class PlayerManager {
 	constructor(name) {
@@ -23,8 +23,8 @@ class PlayerManager {
 
 	flushplayers() {
 		let self = this;
-		return database("players").whereIn("name", _.map(self.players, "name")).then(rows => {
-			rows = _.keyBy(rows, "name");
+		return database('players').whereIn('name', _.map(self.players, 'name')).then(rows => {
+			rows = _.keyBy(rows, 'name');
 			return database.transaction(function(trx) {
 				let promises = [];
 				_.each(self.players, player => {

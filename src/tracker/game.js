@@ -1,19 +1,19 @@
 import _ from 'lodash';
-import Promise from "bluebird";
+import Promise from 'bluebird';
 import moment from 'moment';
 
 import config from '../../tracker.json';
-import vars from "../../vars.json";
+import vars from '../../vars.json';
 
 import {round2, debug, error, getClan} from '../util/util';
 import database from '../util/database';
 
 function saveTeamStats(gameID, team, score) {
-	return database("scores").insert({ game: gameID, team: team, score: score });
+	return database('scores').insert({ game: gameID, team: team, score: score });
 }
 
 function savePlayerStats(gameID, player) {
-	return database("stats").insert(_.assign(_.pick(player, [ 'cn', 'name', 'team', 'frags', 'flags', 'deaths', 'tks', 'acc', 'ip', 'country', 'state' ]), { game: gameID, kpd: round2((player.frags)/Math.max(player.deaths, 1)) }));
+	return database('stats').insert(_.assign(_.pick(player, [ 'cn', 'name', 'team', 'frags', 'flags', 'deaths', 'tks', 'acc', 'ip', 'country', 'state' ]), { game: gameID, kpd: round2((player.frags)/Math.max(player.deaths, 1)) }));
 }
 
 function saveGame(server, type) {
@@ -27,14 +27,17 @@ function saveGame(server, type) {
 		numplayers: server.game.clients,
 		gametype: type[0],
 		meta: type[1],
-		players: " "+_.map(_.reject(server.game.players, { state: 5 }), "name").join(" ")+" ",
-		specs: " "+_.map(_.filter(server.game.players, { state: 5 }), "name").join(" ")+" "
+		players: ' '+_.map(_.reject(server.game.players, { state: 5 }), 'name').join(' ')+' ',
+		specs: ' '+_.map(_.filter(server.game.players, { state: 5 }), 'name').join(' ')+' '
 	};
 
-	return database("games").insert(data).returning("id").then(gameID => {
+	return database('games').insert(data).returning('id').then(gameID => {
 		let promises = [];
 		if (server.game.teams) {
-			if (server.game.gameMode.indexOf("team") >= 0 && server.game.teams.length == 2 && server.game.teams.good === 0 && server.game.teams.evil === 0) {
+			if (server.game.gameMode.indexOf('team') >= 0 &&
+					server.game.teams.length == 2 &&
+					server.game.teams.good === 0 &&
+					server.game.teams.evil === 0) {
 				_.each(server.game.players, player => {
 					if (player.state !== 5) server.game.teams[player.team] += player.frags;
 				});
@@ -53,14 +56,14 @@ function saveGame(server, type) {
 }
 
 function getPlayersElo(players) {
-	return database("players").whereIn("name", _.map(players, "name")).select("name", "elo").then(rows => {
-		return _.keyBy(rows, "name");
+	return database('players').whereIn('name', _.map(players, 'name')).select('name', 'elo').then(rows => {
+		return _.keyBy(rows, 'name');
 	});
 }
 
 function setPlayersElo(players, elos) {
 	return Promise.all(_.map(players, (plr, i) => {
-		return database("players").where({ name: plr.name }).update({ elo: elos[i] }).then();
+		return database('players').where({ name: plr.name }).update({ elo: elos[i] }).then();
 	}));
 }
 
@@ -77,22 +80,22 @@ function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
 export function getGameType(game, threshold) {
 	let self = game;
 	let pls = _.reject(self.players, { state: 5 });
-	if (typeof threshold == "undefined") threshold = vars.duelThresholds[self.gameMode];
+	if (typeof threshold == 'undefined') threshold = vars.duelThresholds[self.gameMode];
 
 	if (pls.length == 2 && vars.duelModes.indexOf(self.gameMode) >= 0 && vars.lockedMModes.indexOf(self.masterMode) >= 0 && !(vars.gameModes[self.gameMode].teamMode && pls[0].team == pls[1].team) && (pls[0].frags > threshold && pls[1].frags > threshold)) {
-		pls = _.sortBy(pls, "frags");
-		return ["duel", JSON.stringify([pls[0].name, pls[0].frags, pls[1].name, pls[1].frags])];
+		pls = _.sortBy(pls, 'frags');
+		return ['duel', JSON.stringify([pls[0].name, pls[0].frags, pls[1].name, pls[1].frags])];
 	}
 
-	if (vars.lockedMModes.indexOf(self.masterMode) < 0) return ["public"];
+	if (vars.lockedMModes.indexOf(self.masterMode) < 0) return ['public'];
 
-	let playerTeams = _.groupBy(pls, "team");
+	let playerTeams = _.groupBy(pls, 'team');
 	let teamNames = _.keys(playerTeams);
-	if (vars.mixModes.indexOf(self.gameMode) < 0 || teamNames.length != 2 || !vars.gameModes[self.gameMode].teamMode || pls.length < 4 || pls.length > 10) return ["other"];
+	if (vars.mixModes.indexOf(self.gameMode) < 0 || teamNames.length != 2 || !vars.gameModes[self.gameMode].teamMode || pls.length < 4 || pls.length > 10) return ['other'];
 
-	let playerClans = _.countBy(pls, function (pl) { return getClan(pl.name)||"random"; });
+	let playerClans = _.countBy(pls, function (pl) { return getClan(pl.name)||'random'; });
 	let clanNames = _.keys(playerClans);
-	if (clanNames.length == 1 && clanNames[0] != "random") return ["intern", JSON.stringify([clanNames[0]])];
+	if (clanNames.length == 1 && clanNames[0] != 'random') return ['intern', JSON.stringify([clanNames[0]])];
 
 	if (pls.length >= 4) {
 		let isCW = true;
@@ -102,8 +105,8 @@ export function getGameType(game, threshold) {
 		else
 		{
 			_.each(playerTeams, function (playerTeam) {
-				let teamClans = _.countBy(playerTeam, function (pl) { return getClan(pl.name)||"random"; });
-				let dominantClan = _.findKey(teamClans, function (clan, clanname) { return (clan == playerTeam.length || (playerTeam.length > 2 && clan == playerTeam.length) && clanname != "random"); });
+				let teamClans = _.countBy(playerTeam, function (pl) { return getClan(pl.name)||'random'; });
+				let dominantClan = _.findKey(teamClans, function (clan, clanname) { return (clan == playerTeam.length || (playerTeam.length > 2 && clan == playerTeam.length) && clanname != 'random'); });
 				if (!dominantClan) {
 					isCW = false;
 					return false;
@@ -111,16 +114,16 @@ export function getGameType(game, threshold) {
 				clans.push(dominantClan);
 				let teamScore;
 				if (self.teams) teamScore = self.teams[playerTeam[0].team];
-				result.push({"clan": dominantClan, "score": (self.teams && teamScore)? teamScore: 0});
+				result.push({'clan': dominantClan, 'score': (self.teams && teamScore)? teamScore: 0});
 			});
 		}
-		if (isCW && result.length == 2 && clans[0] != clans[1] && clans[0] != "random" && clans[1] != "random") {
-			result = _.sortBy(result, "score");
-			return ["clanwar", JSON.stringify([result[0].clan, result[0].score, result[1].clan, result[1].score])];
+		if (isCW && result.length == 2 && clans[0] != clans[1] && clans[0] != 'random' && clans[1] != 'random') {
+			result = _.sortBy(result, 'score');
+			return ['clanwar', JSON.stringify([result[0].clan, result[0].score, result[1].clan, result[1].score])];
 		}
 	}
 
-	return ["mix"];
+	return ['mix'];
 }
 
 /**
@@ -145,10 +148,10 @@ export default class Game {
 		this.players = {};
 		this.teams = {};
 		this.clients = -1;
-		this.mapName = "";
-		this.gameMode = "";
+		this.mapName = '';
+		this.gameMode = '';
 		this.maxClients = -1;
-		this.mmColor = "";
+		this.mmColor = '';
 		this.isFull = false;
 		this.paused = false;
 		this.gameSpeed = -1;
@@ -167,8 +170,8 @@ export default class Game {
 		this.saved = true;
 		let gameType = getGameType(this);
 		return saveGame(this.server, gameType).then(() => {
-			debug("Game saved at '" + this.server.description + "' (" + gameType + ").");
-			if (gameType[0] == "duel") {
+			debug(`Game saved at '${this.server.description}' (${gameType}).`);
+			if (gameType[0] == 'duel') {
 				let pls = _.reject(this.players, { state: 5 });
 				let plNames = pls.map(pl => pl.name);
 				return getPlayersElo(plNames).then(elos => {
@@ -192,7 +195,7 @@ export default class Game {
 		let res = this.server.serialize(false);
 		res.zombie = this.zombie;
 		res.info = this.server.info;
-		res.players = _.map(this.players, pl => _.pick(pl, ["name", "frags", "team", "flags", "deaths", "kpd", "acc", "tks", "state", "country", "countryName", "ping"]));
+		res.players = _.map(this.players, pl => _.pick(pl, ['name', 'frags', 'team', 'flags', 'deaths', 'kpd', 'acc', 'tks', 'state', 'country', 'countryName', 'ping']));
 		res.teams = this.teams;
 		let gameType = getGameType(this, -1000);
 		res.gameType = gameType[0];

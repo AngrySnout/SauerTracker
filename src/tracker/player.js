@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import moment from 'moment';
-import Promise from "bluebird";
+import Promise from 'bluebird';
 
 import config from '../../tracker.json';
-import vars from "../../vars.json";
+import vars from '../../vars.json';
 
 import {round2} from '../util/util';
 import database from '../util/database';
@@ -22,10 +22,10 @@ export default class Player {
 
 		if (server.game.zombie || newState.cn >= 128 || server.game.gameMode == 'coop' || server.banned || newState.banned) return;
 
-		let modetype = "any";
+		let modetype = 'any';
 		if (vars.gameModes[server.game.gameMode]) {
-			if (vars.gameModes[server.game.gameMode].efficMode) modetype = "effic";
-			else if (vars.gameModes[server.game.gameMode].instaMode) modetype = "insta";
+			if (vars.gameModes[server.game.gameMode].efficMode) modetype = 'effic';
+			else if (vars.gameModes[server.game.gameMode].instaMode) modetype = 'insta';
 		}
 
 		if (!this.modes[modetype]) this.modes[modetype] = { frags: 0, flags: 0, deaths: 0, tks: 0, acc: 0 };
@@ -40,7 +40,7 @@ export default class Player {
 		this.modes[modetype].deaths += Math.max(newState.deaths-oldState.deaths, 0);
 		this.modes[modetype].tks += Math.max(newState.tks-oldState.tks, 0);
 
-		if (!this.country || this.countryName == "Unknown") {
+		if (!this.country || this.countryName == 'Unknown') {
 			this.country = newState.country;
 			this.countryName = newState.countryName;
 		}
@@ -49,9 +49,9 @@ export default class Player {
 	saveSpy() {
 		let self = this;
 		return _.map(this.ips, function (info, ip) {
-			return database("spy").where({ name: self.name, ip: ip }).then(rows => {
-				if (!rows.length) return database("spy").insert({ name: self.name, ip: self.ip, country: self.country, lastseen: info.lastSeen, lshost: info.onServer.host, lsport: info.onServer.port }).then();
-				else return database("spy").where({ name: self.name, ip: ip }).update({ country: self.country, lastseen: info.lastSeen, lshost: info.onServer.host, lsport: info.onServer.port }).then();
+			return database('spy').where({ name: self.name, ip: ip }).then(rows => {
+				if (!rows.length) return database('spy').insert({ name: self.name, ip: self.ip, country: self.country, lastseen: info.lastSeen, lshost: info.onServer.host, lsport: info.onServer.port }).then();
+				else return database('spy').where({ name: self.name, ip: ip }).update({ country: self.country, lastseen: info.lastSeen, lshost: info.onServer.host, lsport: info.onServer.port }).then();
 			});
 		});
 	}
@@ -86,10 +86,10 @@ export default class Player {
 						kpd: 0,
 						acc: row.acc||0,
 						elo: row.elo||config.baseElo,
-						country: row.country||"",
-						countryName: row.countryName||"Unknown",
-					 	instastats: row.instastats||"[0,0,0,0,0,0]",
-					 	efficstats: row.efficstats||"[0,0,0,0,0,0]" };
+						country: row.country||'',
+						countryName: row.countryName||'Unknown',
+					 	instastats: row.instastats||'[0,0,0,0,0,0]',
+					 	efficstats: row.efficstats||'[0,0,0,0,0,0]' };
 
 		// accuracy must be done first
 		if (newStats.frags+stats.frags === 0) stats.acc = 0;
@@ -101,14 +101,14 @@ export default class Player {
 		// and kpd last
 		stats.kpd = round2(stats.frags/Math.max(stats.deaths, 1));
 
-		if (this.country && this.countryName != "Unknwon") {
+		if (this.country && this.countryName != 'Unknwon') {
 			stats.country = this.country;
 			stats.countryName = this.countryName;
 		}
 
 		function calcModeStats(self, mode) {
 			let newModeStats = self.getModeStats(mode);
-			let modeStats = JSON.parse(mode==="insta"? stats.instastats: stats.efficstats);
+			let modeStats = JSON.parse(mode==='insta'? stats.instastats: stats.efficstats);
 			if (modeStats[0]+newModeStats[0] === 0) modeStats[5] = 0;
 			else modeStats[5] = round2((modeStats[0]*modeStats[5]+newModeStats[0]*newModeStats[5])/(modeStats[0]+newModeStats[0]));
 			modeStats[0] += newModeStats[0]; //frags
@@ -119,10 +119,10 @@ export default class Player {
 			return modeStats;
 		}
 
-		if (this.modes.insta) stats.instastats = JSON.stringify(calcModeStats(this, "insta"));
-		if (this.modes.effic) stats.efficstats = JSON.stringify(calcModeStats(this, "effic"));
+		if (this.modes.insta) stats.instastats = JSON.stringify(calcModeStats(this, 'insta'));
+		if (this.modes.effic) stats.efficstats = JSON.stringify(calcModeStats(this, 'effic'));
 
-		if (row.name) return database("players").where("name", this.name).update(stats).transacting(trx).then();
-		else return database("players").insert(stats).transacting(trx).then();
+		if (row.name) return database('players').where('name', this.name).update(stats).transacting(trx).then();
+		else return database('players').insert(stats).transacting(trx).then();
 	}
 }

@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import Promise from "bluebird";
+import Promise from 'bluebird';
 import moment from 'moment';
 
 import config from '../../tracker.json';
-import vars from "../../vars.json";
+import vars from '../../vars.json';
 
 import {ipRepLB} from '../util/util';
 import database from '../util/database';

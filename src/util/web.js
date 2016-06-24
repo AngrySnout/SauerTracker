@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set('views', './website/src/views');
 app.set('view engine', 'jade');
 
-if (process.env.NODE_ENV !== "production") app.locals.pretty = true;
+if (process.env.NODE_ENV !== 'production') app.locals.pretty = true;
 
 app.use(function(req, res, next) {
 	// If using an old domain, redirect to "sauertracker.net"
@@ -39,7 +39,7 @@ app.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
 	// Disable caching on /api/ routes (fixes bug on Dolphin browser)
-	if (req.path.indexOf("/api/") === 0) {
+	if (req.path.indexOf('/api/') === 0) {
 		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		res.setHeader("Pragma", "no-cache");
 		res.setHeader("Expires", "0");
@@ -49,7 +49,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(responseTime(function (req, res, time) {
-	database("requests").insert(_.assign(_.pick(req, [ "method", "ip", "url" ]), { time: time })).then();
+	database("requests").insert(_.assign(_.pick(req, [ 'method', 'ip', 'url' ]), { time: time })).then();
 }));
 
 app.use('/', express.static('./website/assets', { maxAge: 7*24*60*60*1000 }));

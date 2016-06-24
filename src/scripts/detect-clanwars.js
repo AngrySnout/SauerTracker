@@ -27,14 +27,14 @@ database.raw(`
     _.each(row.teams, team => {
         teams[team.f1] = team.f2;
     });
-    let g = { masterMode: "locked", teams: teams, players: players, gameMode: row.gamemode };
+    let g = { masterMode: 'locked', teams: teams, players: players, gameMode: row.gamemode };
     let gameType = getGameType(g);
     database.raw();
     if (gameType[0] != row.gametype) {
         count++;
-        return database("games").where("id", row.id).update({ gametype: gameType[0], meta: gameType[1] }).then();
+        return database('games').where('id', row.id).update({ gametype: gameType[0], meta: gameType[1] }).then();
     }
 }).then(() => {
-    log(count);
+    log(`Updated ${count} games`);
     process.exit();
 });

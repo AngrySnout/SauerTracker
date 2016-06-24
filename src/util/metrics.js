@@ -64,8 +64,8 @@ class MetricsManager {
      *  @param {number} port - Port of the server.
      */
     polled(host, port) {
-        if (!this.servers[host+":"+port]) this.servers[host+":"+port] = new ServerMetric();
-        this.servers[host+":"+port].polled();
+        if (!this.servers[host+':'+port]) this.servers[host+':'+port] = new ServerMetric();
+        this.servers[host+':'+port].polled();
     }
 
     /**
@@ -74,8 +74,8 @@ class MetricsManager {
      *  @param {number} port - Port of the server.
      */
     replied(host, port) {
-        if (!this.servers[host+":"+port]) this.servers[host+":"+port] = new ServerMetric();
-        this.servers[host+":"+port].replied();
+        if (!this.servers[host+':'+port]) this.servers[host+':'+port] = new ServerMetric();
+        this.servers[host+':'+port].replied();
     }
 
     /**

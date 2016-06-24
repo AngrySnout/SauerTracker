@@ -1,7 +1,7 @@
 import dgram from 'dgram';
 import _ from 'lodash';
 import geoip from 'geoip-lite';
-import countries from "i18n-iso-countries";
+import countries from 'i18n-iso-countries';
 import moment from 'moment';
 
 import config from '../../tracker.json';
@@ -14,16 +14,16 @@ import playerManager from '../tracker/player-manager';
 import metrics from '../util/metrics';
 
 var typeBuffers = [
-		new Buffer("8001", "hex"),
-		new Buffer("0001ff", "hex"), // EXT_PLAYERSTATS -1
-		new Buffer("0002", "hex") // EXT_TEAMSCORE
+		new Buffer('8001', 'hex'),
+		new Buffer('0001ff', 'hex'), // EXT_PLAYERSTATS -1
+		new Buffer('0002', 'hex') // EXT_TEAMSCORE
 	];
 
 export default class Server {
 	constructor(host, port, info) {
-		if (!isValidIP(host)) throw new Error("Invalid host ("+host+") provided to Server().");
+		if (!isValidIP(host)) throw new Error(`Invalid host ${host} provided to Server().`);
 		port = parseInt(port);
-		if (!isValidPort(port)) throw new Error("Invalid port ("+port+") provided to Server().");
+		if (!isValidPort(port)) throw new Error(`Invalid port ${port} provided to Server().`);
 
 		this.host = host;
 		this.port = port;
@@ -34,8 +34,8 @@ export default class Server {
 		this.info = {};
 
 		let gipl = geoip.lookup(this.host);
-		this.country = gipl? gipl.country: "";
-		this.countryName = gipl? countries.getName(this.country, "en"): "Unknown";
+		this.country = gipl? gipl.country: '';
+		this.countryName = gipl? countries.getName(this.country, 'en'): 'Unknown';
 
 		if (info) {
 			this.info.website = info.website;
@@ -73,7 +73,7 @@ export default class Server {
 				}
 			}, 2000);
 		} catch(err) {
-			debug('Error: Server query failed with uncaught error: ', err);
+			debug(`Error: Server query failed with uncaught error: ${err}`);
 			debug(err.stack);
 			if (socket !== null) {
 				socket.close();
@@ -84,22 +84,22 @@ export default class Server {
 
 	shouldPoll(type, time) {
 		switch (type) {
-			case "ping": {
-				return (time-this.lastPoll > config.pollingInterval*1000 || this.shouldPoll("extInfo", time));
+			case 'ping': {
+				return (time-this.lastPoll > config.pollingInterval*1000 || this.shouldPoll('extInfo', time));
 			}
-			case "extInfo": {
-				return ((time-this.lastExtInfoPoll > config.extInfoPollingInt*1000 && this.game.clients > 0) || this.shouldPoll("endGame", time));
+			case 'extInfo': {
+				return ((time-this.lastExtInfoPoll > config.extInfoPollingInt*1000 && this.game.clients > 0) || this.shouldPoll('endGame', time));
 			}
-			case "endGame": {
+			case 'endGame': {
 				return (!this.info.banned && this.game.timeLeft < 5 && !this.game.paused && time-this.lastPoll > config.endGamePollingInt*1000 && this.game.clients > 0);
 			}
 		}
 	}
 
 	tryPoll(time) {
-		let pollExtInfo = this.shouldPoll("extInfo", time);
+		let pollExtInfo = this.shouldPoll('extInfo', time);
 
-		if (this.shouldPoll("ping", time)) {
+		if (this.shouldPoll('ping', time)) {
 			this.lastPoll = time;
 			this.poll(0, time);
 		}
@@ -112,7 +112,11 @@ export default class Server {
 			this.poll(2, time);
 		}
 
-		if (!this.info.banned && this.game.timeLeft <= 0 && !this.game.intermission && this.game.gameMode != "coop" && _.countBy(this.game.players, pl => pl.state!=5)[true] > 1) {
+		if (!this.info.banned &&
+				this.game.timeLeft <= 0 &&
+				!this.game.intermission &&
+				this.game.gameMode != 'coop' &&
+				_.countBy(this.game.players, pl => pl.state!=5)[true] > 1) {
 			this.game.intermission = true;
 			let self = this;
 			setTimeout(function () {
@@ -154,9 +158,9 @@ export default class Server {
 
 					this.game.gameMode = getGameMode(st.getInt());
 					this.game.timeLeft = st.getInt();
-					if (this.game.gameMode == "coop" && this.game.timeLeft <= 0) this.game.timeLeftS = "";
-					else if (this.game.timeLeft <= 0) this.game.timeLeftS = "intermission";
-					else this.game.timeLeftS = _.padStart(Math.floor(this.game.timeLeft/60), 2, "0")+":"+_.padStart(this.game.timeLeft%60, 2, "0");
+					if (this.game.gameMode == 'coop' && this.game.timeLeft <= 0) this.game.timeLeftS = '';
+					else if (this.game.timeLeft <= 0) this.game.timeLeftS = 'intermission';
+					else this.game.timeLeftS = _.padStart(Math.floor(this.game.timeLeft/60), 2, '0')+':'+_.padStart(this.game.timeLeft%60, 2, '0');
 					this.game.maxClients = st.getInt();
 					this.game.masterMode = getMasterMode(st.getInt());
 
@@ -168,8 +172,8 @@ export default class Server {
 						this.game.gameSpeed = 100;
 					}
 
-					this.game.mapName = st.getString()||"[new map]";
-					if (this.game.mapName.length > 20) this.game.mapName = this.game.mapName.slice(0, 20)+"...";
+					this.game.mapName = st.getString()||'[new map]';
+					if (this.game.mapName.length > 20) this.game.mapName = this.game.mapName.slice(0, 20)+'...';
 
 					let description = st.getString();
 					this.description = filterString(description);
@@ -197,12 +201,12 @@ export default class Server {
 						player.ping = st.getInt();
 						player.name = st.getString();
 						if (player.name.length > 15) {
-							log("Warning: player name longer than 15 characters. Truncating. name:", player.name, "server:", this.host, this.port);
+							log(`Warning: player name longer than 15 characters. Truncating. name: ${player.name} server: ${this.host} ${this.port}`);
 							player.name = player.name.substring(0, 15);
 						}
 						player.team = st.getString();
 						if (player.team.length > 4) {
-							log("Warning: team name longer than 4 characters. Truncating. name:", player.team, "server:", this.host, this.port);
+							log(`Warning: team name longer than 4 characters. Truncating. name: ${player.team} server: ${this.host} ${this.port}`);
 							player.team = player.team.substring(0, 15);
 						}
 						player.frags = st.getInt();
@@ -215,7 +219,7 @@ export default class Server {
 						player.privilege = st.getInt();
 						player.state = st.getInt();
 
-						if (player.name.toLowerCase() == "zombie" && player.cn >= 128) {
+						if (player.name.toLowerCase() == 'zombie' && player.cn >= 128) {
 							this.game.zombie = true;
 						}
 
@@ -227,14 +231,14 @@ export default class Server {
 						let gipl = geoip.lookup(ip);
 
 						// work-around for spaghettimod falsely giving US player's an IP from Singapore
-						player.country = gipl? ((player.ip == "220.232.59.0")? "US": gipl.country): "";
-						player.countryName = gipl? countries.getName(player.country, "en"): "Unknown";
+						player.country = gipl? ((player.ip == '220.232.59.0')? 'US': gipl.country): '';
+						player.countryName = gipl? countries.getName(player.country, 'en'): 'Unknown';
 
 						let oldPlayer = this.game.players[player.cn];
 						this.game.players[player.cn] = player;
 
 						// save player info and stats
-						let curtime = moment().format("YYYY-MM-DD HH:mm:ss");
+						let curtime = moment().format('YYYY-MM-DD HH:mm:ss');
 						if (oldPlayer && oldPlayer.name == player.name && oldPlayer.ip == player.ip) {
 							playerManager.updatePlayer(this, player, oldPlayer, curtime);
 						}
@@ -262,7 +266,7 @@ export default class Server {
 					while (st.remaining() > 0) {
 						let name = st.getString();
 						if (name.length > 4) {
-							log("Warning: team name longer than 4 characters. Truncating. name:", name, "server:", this.host, this.port);
+							log(`Warning: team name longer than 4 characters. Truncating. name: ${name} server: ${this.host} ${this.port}`);
 							name = name.substring(0, 15);
 						}
 						let score = st.getInt();
@@ -274,7 +278,7 @@ export default class Server {
 				}
 			}
 		} catch(err) {
-			debug('Error: Server response parsing failed:', err, this.description, this.host, this.port, type, data);
+			debug(`Error: Server response parsing failed: ${err} ${this.description} ${this.host} ${this.port} ${type} ${data}`);
 			debug(err.stack);
 		}
 	}

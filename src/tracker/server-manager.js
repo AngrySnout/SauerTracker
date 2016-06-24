@@ -59,7 +59,7 @@ class ServerManager {
 		_.each(this.list, server => {
 			if (!server.shouldClean(now)) newList.push(server);
 		});
-		if (this.list.length > newList.length) debug('Clean up removed ' + (this.list.length - newList.length) + ' server(s)');
+		if (this.list.length > newList.length) debug(`Clean up removed ${this.list.length - newList.length} server(s)`);
 		this.list = newList;
 	}
 
@@ -71,7 +71,7 @@ class ServerManager {
 			_.each(res, sv => {
 				if (self.add(sv.host, sv.port)) count++;
 			});
-			debug('Updated server list,', count, "server(s) added.");
+			debug(`Updated server list, ${count} server(s) added.`);
 		}, (...err) => {
 			debug(...err);
 		});
