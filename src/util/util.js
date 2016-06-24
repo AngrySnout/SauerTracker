@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import config from '../../tracker.json';
-import vars from "../../vars.json";
+import vars from '../../vars.json';
 
 /**
  *  Replace the last octet in an IP address.
@@ -10,7 +10,7 @@ import vars from "../../vars.json";
  *  @returns {string}
  */
 export function ipRepLB(ip, to) {
-	return ip.replace(/\.[\d\*]+$/, "."+to);
+	return ip.replace(/\.[\d\*]+$/, '.'+to);
 }
 
 /**
@@ -28,7 +28,7 @@ export function round2(val) {
  *  @returns {boolean}
  */
 export function isValidIP(ip) {
-	let parts = ip.split(".");
+	let parts = ip.split('.');
 	if (parts.length != 4) return false;
 	for (let i = 0; i < 4; i++) {
 		let n = Number(parts[i]);
@@ -61,7 +61,7 @@ export function log(...msg) {
 export function error(msg) {
 	if (config.debug) {
 		log("Error:", msg);
-		if (typeof msg === "string") throw new Error(msg);
+		if (typeof msg === 'string') throw new Error(msg);
 		throw new Error(msg);
 	}
 	else log("Error:", msg);
@@ -93,3 +93,15 @@ export function getClan(name) {
 	let clan = _.find(vars.clans, clan => (name.indexOf(clan.tag) >= 0));
 	return clan&&clan.tag;
 }
+
+/**
+ *  Object not found error type.
+ */
+export function ObjectNotFoundError() {}
+ObjectNotFoundError.prototype = Object.create(Error.prototype);
+
+/**
+ *  Object banned error type.
+ */
+export function ObjectBannedError() {}
+ObjectBannedError.prototype = Object.create(Error.prototype);
