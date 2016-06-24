@@ -4,12 +4,11 @@ import geoip from 'geoip-lite';
 import countries from "i18n-iso-countries";
 import moment from 'moment';
 
-import config from '../../tracker.json';
-
 import app from '../util/web';
 import cache from '../util/cache';
 import database from '../util/database';
 import playerManager from '../tracker/player-manager';
+import {findPlayers} from '../api/v1/players';
 
 cache.set("top-players-daily", 60*60*1000, function() {
 	let start = moment().startOf('day').format("YYYY-MM-DD HH:mm:ss");
@@ -93,25 +92,6 @@ cache.set("player-countries", 2*60*60*1000, function() {
 	});
 });
 
-function findPlayers(name, country, callback) {
-	if (typeof name == "undefined") name = "";
-	let query = database("players").where("name", "ilike", "%"+name+"%");
-	if (country) {
-		query.where(function() {
-			if (country == "__") this.where({ country: "" }).orWhereNull("country");
-			else this.where({ country: country });
-		});
-	}
-	query.orderBy("frags", "desc").limit(200).then(rows => {
-		_.each(rows, row => {
-			if (playerManager.isOnline(row.name)) row.online = true;
-		});
-		callback({ results: rows });
-	}).catch(error => {
-		callback({ error: error });
-	});
-}
-
 app.get("/players", function(req, res) {
 	Promise.all([ cache.get("top-players-daily"), cache.get("top-players-weekly"), cache.get("top-players-monthly"),
 			cache.get("top-runners-daily"), cache.get("top-runners-weekly"), cache.get("top-runners-monthly"),
@@ -142,20 +122,11 @@ app.get("/players", function(req, res) {
 });
 
 app.get("/players/find", function(req, res) {
-	findPlayers(req.query["name"], req.query["country"], results => {
-		if (results.error) {
-			res.status(500).render("error", { status: 500, error: results.error });
-		} else {
+	findPlayers(req.query["name"], req.query["country"])
+		.then(results => {
 			cache.get("player-countries").then(countries => {
-		        res.render("players", _.assign(results, { name: req.query["name"], _: _, countries: countries }));
+		        res.render("players", { results: results, name: req.query["name"], _: _, countries: countries });
 			});
-		}
-    });
-});
-
-app.get("/api/players/find", function(req, res) {
-	findPlayers(req.query["name"], req.query["country"], results => {
-		if (results.error) res.status(500);
-        res.send(results);
-    });
+		})
+		.catch(err => { res.status(500).render("error", { status: 500, error: results.error })});
 });
