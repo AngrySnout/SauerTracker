@@ -108,9 +108,9 @@ export function lastSeenIP(ip, callback) {
 export function banIP(ip, callback) {
 	if (!ip) return;
 	ip = ipRepLB(ip, "0");
-	if (_.isUndefined(bans[ip])) {
+	if (_.isUndefined(playerManager.bans[ip])) {
 		database("bans").insert({ ip: ip });
-		bans[ip] = true;
+		playerManager.bans[ip] = true;
 		callback("Done!");
 	} else {
 		callback("IP \x0302" + ip + "\x0F is already banned.");
@@ -120,9 +120,9 @@ export function banIP(ip, callback) {
 export function unbanIP(ip, callback) {
 	if (!ip) return;
 	ip = ipRepLB(ip, "0");
-	if (bans[ip]) {
+	if (playerManager.bans[ip]) {
 		database("bans").where({ ip: ip }).del();
-		delete bans[ip];
+		delete playerManager.bans[ip];
 		callback("Done!");
 	} else {
 		callback("IP \x0302" + ip + "\x0F was not banned.");
@@ -130,10 +130,10 @@ export function unbanIP(ip, callback) {
 }
 
 export function banName(name, callback) {
-	if (_.isUndefined(banNames[name])) {
+	if (_.isUndefined(playerManager.banNames[name])) {
 		database("bans").insert({ name: name });
 		database("players").where({ name: name }).del();
-		banNames[name] = true;
+		playerManager.banNames[name] = true;
 		callback("Done!");
 	} else {
 		callback("Player \x0303" + name + "\x0F is already banned.");
@@ -141,10 +141,10 @@ export function banName(name, callback) {
 }
 
 export function unbanName(name, callback) {
-	if (banNames[name]) {
+	if (playerManager.banNames[name]) {
 		database.run("DELETE FROM bans WHERE ip = ?", name);
 		database("bans").where({ name: name }).del();
-		delete banNames[name];
+		delete playerManager.banNames[name];
 		callback("Done!");
 	} else {
 		callback("Player \x0303" + name + "\x0F was not banned.");
