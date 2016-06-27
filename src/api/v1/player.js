@@ -23,6 +23,22 @@ function getTotalGames(name) {
 	});
 }
 
+function getDuels(name) {
+	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%${name}%`)
+		.then(rows => {
+			let res = { total: rows.length, wins: 0, losses: 0, ties: 0 };
+			_.each(rows, row => {
+				try {
+					let meta = JSON.parse(row.meta);
+					if (meta[1] == meta[3]) res.ties++;
+					else if (meta[0] == name) res.losses++;
+					else res.wins++;
+				} catch (err) {}
+			});
+			return res;
+		});
+}
+
 function getLastGames(name) {
 	return database.select('games.id', 'games.host', 'games.port', 'games.serverdesc', 'games.gamemode', 'games.map', 'games.gametype', 'games.timestamp').from('stats').join('games', 'games.id', 'stats.game').where('stats.name', name).whereNot('stats.state', 5).orderBy('games.id', 'desc').limit(10);
 }
@@ -51,9 +67,9 @@ export function getPlayer(name) {
 					row.clanTag = pclan.tag;
 				}
 				if (playerManager.isOnline(row.name)) row.online = true;
-				return Promise.all([getTotalGames(name), getLastGames(name), database('playerranks').where({ name: name })])
+				return Promise.all([getTotalGames(name), getLastGames(name), database('playerranks').where({ name: name }), getDuels(name)])
 					.then(results => {
-						return { player: row, totalGames: results[0], games: results[1], rank: results[2].length? results[2][0].rank: undefined };
+						return { player: row, totalGames: results[0], games: results[1], rank: results[2].length? results[2][0].rank: undefined, duelStats: results[3] };
 					});
 			}
 		});

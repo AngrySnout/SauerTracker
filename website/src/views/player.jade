@@ -69,6 +69,21 @@ block content
                             td.text-center: +fixedAcc(player.acc)
                             td.text-center: +fixedAcc(player.instastats[5])
                             td.text-center: +fixedAcc(player.efficstats[5])
+                
+                br
+                .row.medium-10.large-6.columns: table(width="100%")
+                    thead
+                        tr
+                            td.text-center(width="25%") Duels
+                            td.text-center(width="25%") Wins
+                            td.text-center(width="25%") Losses
+                            td.text-center(width="25%") Ties
+                    tbody
+                        tr
+                            td.text-center= duelStats.total
+                            td.text-center= duelStats.wins
+                            td.text-center= duelStats.losses
+                            td.text-center= duelStats.ties
                             
                 if bannerURL
                     br
