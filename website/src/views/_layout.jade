@@ -36,9 +36,6 @@ html
                             li(class=(section=="banners"? "active": undefined)): a(href="/banners") Banners
                             li(class=(section=="about"? "active": undefined)): a(href="/about") About
             #content
-                .row.columns
-                    .label.warning(style="font-size: 1em; margin-bottom: 10px;") Notice: Due to some temporary issues, you are viewing an older version of the website. New games are not be recorded, and some games may be missing. Sorry about that.
-
                 block content
                 footer.footer.row
                     .row(data-equalizer, data-equalize-on="medium")
