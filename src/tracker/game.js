@@ -166,6 +166,7 @@ export default class Game {
      *  @memberof Game
      */
 	save() {
+		return; // temporary
 		if (!this || this.saved || this.zombie) return;
 		this.saved = true;
 		let gameType = getGameType(this);
