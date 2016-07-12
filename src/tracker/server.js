@@ -204,6 +204,7 @@ export default class Server {
 							log(`Warning: player name longer than 15 characters. Truncating. name: ${player.name} server: ${this.host} ${this.port}`);
 							player.name = player.name.substring(0, 15);
 						}
+						if (!player.name) player.name = 'unnamed';
 						player.team = st.getString();
 						if (player.team.length > 4) {
 							log(`Warning: team name longer than 4 characters. Truncating. name: ${player.team} server: ${this.host} ${this.port}`);

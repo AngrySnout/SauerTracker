@@ -8,7 +8,7 @@ import database from '../util/database';
 import Player from './player';
 
 class PlayerManager {
-	constructor(name) {
+	constructor() {
 		this.players = {};
 		this.bans = {};
 		this.banNames = {};
@@ -16,6 +16,7 @@ class PlayerManager {
 
 	updatePlayer(server, newState, oldState, curTime) {
 		let name = newState.name;
+		if (!name) return;
 		if (this.banNames[name] || this.bans[newState.ip]) return;
 		if (!this.players[name]) this.players[name] = new Player(name);
 		this.players[name].updateState(server, newState, oldState, curTime);
