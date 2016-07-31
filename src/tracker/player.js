@@ -4,6 +4,7 @@ import Promise from 'bluebird';
 
 import config from '../../tracker.json';
 import vars from '../../vars.json';
+import countryLimits from '../../countryLimits.json';
 
 import {round2} from '../util/util';
 import database from '../util/database';
@@ -16,6 +17,11 @@ export default class Player {
 	}
 
 	updateState(server, newState, oldState, curTime) {
+		if (countryLimits[this.name] && countryLimits[this.name] != newState.country) {
+			console.log(`Faker found: ${this.name} ${newState.country}`);
+			return;
+		}
+
 		this.ips[newState.ip] = { lastSeen: curTime, onServer: server };
 		this.lastSeen = curTime;
 		this.ip = newState.ip;
