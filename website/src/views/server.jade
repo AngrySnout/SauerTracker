@@ -14,7 +14,6 @@ block content
                 include ./_partials/game.jade
             if bannerURL
                 br
-                label.big Banner
                 a(href="/banners?type=server&host="+server.host+"&port="+server.port)
                     img#banner(src=bannerURL+"server?theme=default&host="+server.host+"&port="+server.port)
             if !server.info.banned && !server.zombie

@@ -3,6 +3,7 @@ extends ./_layout.jade
 block vars
     - section = "clans";
     - title = clan.name;
+    link(href='//fonts.googleapis.com/css?family=Raleway:900', rel='stylesheet', type='text/css')
     
 block content
     .row.main-container
@@ -13,44 +14,73 @@ block content
             if error
                 label.big= error
             else
-                h2(style="display: inline-block")= clan.name
-                h3(style="display: inline-block; margin-left: 0.5em")= info.title
-                br
-                label.big Rank: #{clan.rank}
-                label.big Wins: #{clan.wins}
-                label.big Losses: #{clan.losses}
-                label.big Win rate: #{parseInt(clan.rate*100)}%
+                .row
+                    .medium-12.large-6.columns
+                        h2(style="display: inline-block; font-family: Raleway; font-weight: 900;")= clan.name
+                        h3(style="display: inline-block; margin-left: 0.5em; font-family: Raleway; font-weight: 900;")= info.title
+                        br
+                        label.big Rank: 
+                            span.stat-digits #{clan.rank}
+                        br
+                        label.big Win rate: 
+                            span.stat-digits #{parseInt(clan.rate*100)}%
+                        br
+                        if info.website
+                            label.big Website: <a href=#{info.website}>#{info.website}</a>
+                        br
+                                    
+                        if bannerURL
+                            br
+                            a(href="/banners?type=clan&clantag="+encodeURIComponent(clan.name))
+                                img#banner(src=bannerURL+"clan?theme=default&clantag="+encodeURIComponent(clan.name))
+                            br
+                        br
+                    
+                    .medium-12.large-6.columns
+                        if members
+                            br
+                            table.scroll(width="100%")
+                                thead
+                                    tr
+                                        td(colspan=3) Recently seen members
+                                tbody
+                                    - var chunks = _.chunk(members, 3);
+                                    - if (chunks[chunks.length-1].length < 3) {
+                                    -   for (var i = chunks[chunks.length-1].length; i < 3; i++) {
+                                    -       chunks[chunks.length-1].push({ name: "" });
+                                    -   }
+                                    - }
+                                    for chunk in chunks
+                                        tr
+                                            for member in chunk
+                                                td(width="33%")
+                                                    a(href=("/player/"+encodeURIComponent(member.name)))= member.name
+                                    tr
+                                        td(colspan=3): a(href=("/players/find?name="+encodeURIComponent(clan.name))) Find more...
+                            br
                 
-                if info.website
-                    br
-                    label.big Website: <a href=#{info.website}>#{info.website}</a>
-                            
-                if bannerURL
-                    br
-                    label.big Banner
-                    a(href="/banners?type=clan&clantag="+encodeURIComponent(clan.name))
-                        img#banner(src=bannerURL+"clan?theme=default&clantag="+encodeURIComponent(clan.name))
-                    br
+                - var clanwars = clan.wins + clan.losses + clan.ties;
                 
-                if members
-                    br
-                    label.big Last 10 members seen (
-                        a(href=("/players/find?name="+encodeURIComponent(clan.name))) find more
-                        |):
-                        for member, i in members
-                            if (i !== 0)
-                                | ,
-                            a(href=("/player/"+encodeURIComponent(member.name)))= " "+member.name
+                .row.medium-12.large-12.columns(style="position: relative;")
+                    div.duel-desc(style="z-index: 100;") Clanwars 
+                        span.stat-digits= clanwars
+                    div.duel-desc(style="left: 0; width: "+(clan.wins*100/clanwars)+"%;") Won 
+                        span.stat-digits= clan.wins
+                    div.duel-desc(style="left: "+Math.min(clan.wins*100/clanwars, 90)+"%;  width: "+Math.max(clan.ties*100/clanwars, 5)+"%;") Tied 
+                        span.stat-digits= clan.ties
+                    div.duel-desc(style="left: "+Math.min((clan.wins+clan.ties)*100/clanwars, 95)+"%; width: "+Math.max(clan.losses*100/clanwars, 5)+"%;") Lost 
+                        span.stat-digits= clan.losses
+                .row.medium-12.large-12.columns(style="margin-top: 2em;")
+                    span.duel-bar(style="width: "+(clan.wins*100/clanwars)+"%; background-color: green;")
+                    span.duel-bar(style="width: "+(clan.ties*100/clanwars)+"%; background-color: orange;")
+                    span.duel-bar(style="width: "+(clan.losses*100/clanwars)+"%; background-color: red;")
                 
                 if games
                     br
-                    label.big Last 10 clanwars (
-                        a(href=("/games/find?gametype=clanwar&players="+encodeURIComponent(clan.name))) find more
-                        |):
                     table.scroll(width="100%")
                         thead
                             tr
-                                td(width="20%") Server
+                                td(width="20%") Recent clanwars
                                 td(width="20%") Mode / Map
                                 td.text-center(width="30%") Results
                                 td(width="10%") Clients
@@ -72,3 +102,9 @@ block content
                                                 = " "+game.meta[0]
                                     td #{game.numplayers}
                                     td: span.date= (game.timestamp instanceof Date)? game.timestamp.toJSON(): game.timestamp
+                            tr
+                                td: a(href=("/games/find?gametype=clanwar&players="+encodeURIComponent(clan.name))) Find more...
+                                td
+                                td
+                                td
+                                td

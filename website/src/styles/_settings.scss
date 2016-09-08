@@ -45,19 +45,20 @@
 // ---------
 
 $global-font-size: 100%;
-$global-width: 88rem;
+$global-width: 98rem;
 // $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $primary-color: #2199e8;
-$secondary-color: #4a4a4a;
+$secondary-color: #383c4a;
 $success-color: #4D7A20;
 $warning-color: #BA781C;
 $alert-color: #C42525;
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
-$dark-gray: #8a8a8a;
-$darker-gray: #4a4949;
-$light-black: #333;
+$blue-gray-dark: #2b2e39;
+$dark-gray: #747c98; //#8a8a8a;
+$darker-gray: #4d5266; //#4a4949;
+$light-black: #262a34; //#333;
 $black: #0a0a0a;
 $white: #fefefe;
 $body-background: $light-black;
@@ -477,7 +478,7 @@ $switch-paddle-transition: all 0.25s ease-out;
 // 30. Table
 // ---------
 
-$table-background: #282828;
+$table-background: #292c34;// #282828;
 $table-color-scale: 5%;
 $table-border: 1px solid smart-scale($table-background, $table-color-scale);
 $table-padding: rem-calc(8 10 10);
@@ -544,6 +545,6 @@ $tooltip-radius: $global-radius;
 // -----------
 
 $topbar-padding: 0.5rem;
-$topbar-background: $darker-gray;
+$topbar-background: $secondary-color;
 $topbar-link-color: $light-gray;
 $topbar-input-width: 200px;

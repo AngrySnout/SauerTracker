@@ -3,6 +3,7 @@ extends ./_layout.jade
 block vars
     - section = "players";
     - title = error? "Error": player.name;
+    link(href='//fonts.googleapis.com/css?family=Raleway:900', rel='stylesheet', type='text/css')
     
 mixin fixedAcc(accuracy)
     = _.padStart(parseInt(accuracy).toString(), 2, "0")+"%"
@@ -16,92 +17,105 @@ block content
             if error
                 label.big #{error}
             else
-                h2#player-name= player.name
-                span
-                    if (!player.country || player.countryName == "Unknown")
-                        | Country unknown
-                    else
-                        img.flag(src="/images/flags/"+player.country+".png")
-                        |  #{player.countryName}
-                br
-                br
-                label.big Games played: #{totalGames}
-                label.big ELO: #{player.elo}
-                if player.clan
-                    label.big Clan: <a href='/clan/#{player.clanTag}'>#{player.clan}</a>
-                
-                br
-                .row.medium-10.large-6.columns: table(width="100%")
-                    thead
-                        tr
-                            td(width="20%") Stats
-                            td.text-center(width="27%") Total
-                            td.text-center(width="27%") Insta modes
-                            td.text-center(width="27%") Effic modes
-                    tbody
-                        tr
-                            td Frags
-                            td.text-center= player.frags
-                            td.text-center= player.instastats[0]
-                            td.text-center= player.efficstats[0]
-                        tr
-                            td Flags
-                            td.text-center= player.flags
-                            td.text-center= player.instastats[1]
-                            td.text-center= player.efficstats[1]
-                        tr
-                            td Deaths
-                            td.text-center= player.deaths
-                            td.text-center= player.instastats[2]
-                            td.text-center= player.efficstats[2]
-                        tr
-                            td Teamkills
-                            td.text-center= player.tks
-                            td.text-center= player.instastats[3]
-                            td.text-center= player.efficstats[3]
-                        tr
-                            td K/D
-                            td.text-center= player.kpd
-                            td.text-center= player.instastats[4]
-                            td.text-center= player.efficstats[4]
-                        tr
-                            td Accuracy
-                            td.text-center: +fixedAcc(player.acc)
-                            td.text-center: +fixedAcc(player.instastats[5])
-                            td.text-center: +fixedAcc(player.efficstats[5])
-                
-                br
-                .row.medium-10.large-6.columns: table(width="100%")
-                    thead
-                        tr
-                            td.text-center(width="25%") Duels
-                            td.text-center(width="25%") Wins
-                            td.text-center(width="25%") Losses
-                            td.text-center(width="25%") Ties
-                    tbody
-                        tr
-                            td.text-center= duelStats.total
-                            td.text-center= duelStats.wins
-                            td.text-center= duelStats.losses
-                            td.text-center= duelStats.ties
+                .row
+                    .medium-12.large-6.columns
+                        h2#player-name(style="font-family: Raleway; font-weight: 900;")= player.name
+                        span
+                            if (!player.country || player.countryName == "Unknown")
+                                | Country unknown
+                            else
+                                img.flag(src="/images/flags/"+player.country+".png")
+                                |  #{player.countryName}
+                        br
+                        br
+                        label.big Games played: 
+                            span.stat-digits #{totalGames}
+                        br
+                        label.big ELO: 
+                            span.stat-digits #{player.elo}
+                        br
+                        if player.clan
+                            label.big Clan: 
+                                a(href='/clan/#{player.clanTag}') #{player.clan}
+                        br
                             
-                if bannerURL
-                    br
-                    label.big Banner
-                    a(href="/banners?type=player&name="+encodeURIComponent(player.name))
-                        img#banner(src=bannerURL+"player?theme=default&name="+encodeURIComponent(player.name))
-                    br
-                    br
+                        if bannerURL
+                            br
+                            a(href="/banners?type=player&name="+encodeURIComponent(player.name))
+                                img#banner(src=bannerURL+"player?theme=default&name="+encodeURIComponent(player.name))
+                            br
+                        br
+                    
+                    .medium-12.large-6.columns
+                        br
+                        table(width="100%")
+                            thead
+                                tr
+                                    td(width="20%") Stats
+                                    td.text-center(width="27%") Total
+                                    td.text-center(width="27%") Insta modes
+                                    td.text-center(width="27%") Effic modes
+                            tbody
+                                tr
+                                    td Frags
+                                    td.text-center= player.frags
+                                    td.text-center= player.instastats[0]
+                                    td.text-center= player.efficstats[0]
+                                tr
+                                    td Flags
+                                    td.text-center= player.flags
+                                    td.text-center= player.instastats[1]
+                                    td.text-center= player.efficstats[1]
+                                tr
+                                    td Deaths
+                                    td.text-center= player.deaths
+                                    td.text-center= player.instastats[2]
+                                    td.text-center= player.efficstats[2]
+                                tr
+                                    td Teamkills
+                                    td.text-center= player.tks
+                                    td.text-center= player.instastats[3]
+                                    td.text-center= player.efficstats[3]
+                                tr
+                                    td K/D
+                                    td.text-center= player.kpd
+                                    td.text-center= player.instastats[4]
+                                    td.text-center= player.efficstats[4]
+                                tr
+                                    td Accuracy
+                                    td.text-center: +fixedAcc(player.acc)
+                                    td.text-center: +fixedAcc(player.instastats[5])
+                                    td.text-center: +fixedAcc(player.efficstats[5])
                 
+                br
+                            
+                .row.medium-12.large-12.columns(style="position: relative;")
+                    div.duel-desc Duels 
+                        span.stat-digits= duelStats.total
+                    if duelStats.total > 0
+                        if duelStats.wins > 0
+                            div.duel-desc(style="left: 0; width: "+(duelStats.wins*100/duelStats.total)+"%;") Won 
+                                span.stat-digits= duelStats.wins
+                        if duelStats.ties > 0
+                            div.duel-desc(style="left: "+Math.min(duelStats.wins*100/duelStats.total, 90)+"%;  width: "+Math.max(duelStats.ties*100/duelStats.total, 5)+"%;") Tied 
+                                span.stat-digits= duelStats.ties
+                        if duelStats.losses > 0
+                            div.duel-desc(style="left: "+Math.min((duelStats.wins+duelStats.ties)*100/duelStats.total, 95)+"%; width: "+Math.max(duelStats.losses*100/duelStats.total, 5)+"%;") Lost 
+                                span.stat-digits= duelStats.losses
+                if duelStats.total > 0
+                    .row.medium-12.large-12.columns(style="margin-top: 2em;")
+                        span.duel-bar(style="width: "+(duelStats.wins*100/duelStats.total)+"%; background-color: green;")
+                        span.duel-bar(style="width: "+(duelStats.ties*100/duelStats.total)+"%; background-color: orange;")
+                        span.duel-bar(style="width: "+(duelStats.losses*100/duelStats.total)+"%; background-color: red;")
+                else
+                    br
+                                    
                 if games
                     br
-                    label.big Last 10 games (
-                        a(href=("/games/find?exact=on&players="+encodeURIComponent(player.name))) find more
-                        | ):
                     table.scroll(width="100%")
                         thead
                             tr
-                                td(width="25%") Server
+                                td(width="25%") Recent games
                                 td(width="25%") Mode / Map
                                 td(width="25%") Type
                                 td(width="25%") End time
@@ -116,10 +130,15 @@ block content
                                     td= game.gamemode+" "+game.map
                                     td= game.gametype
                                     td: span.date= (game.timestamp instanceof Date)? game.timestamp.toJSON(): game.timestamp
+                            tr
+                                td: a(href=("/games/find?exact=on&players="+encodeURIComponent(player.name))) Find more...
+                                td
+                                td
+                                td
                                     
                 .row.columns.client-side(style="margin-top: 1em")
                     br
-                    label.big Player activity for the last 15 days (# of games played):
+                    label.big Activity graph:
                     div(style="width: 100%; margin-right: 50px;")
                         canvas#player-activity-month(style="width: 100%; height: 300px;")
 

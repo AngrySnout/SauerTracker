@@ -53,3 +53,15 @@ $(window.document).ready(function(){
     window.dateReflow();
     window.disableDefault();
 });
+
+var pollVisible = false;
+
+window.togglePoll = function() {
+    pollVisible = !pollVisible;
+
+    if (pollVisible) {
+        $(".slidebar").animate({ left: "0px" }, 400, "linear");
+    } else {
+        $(".slidebar").animate({ left: "-490px" }, 400, "linear");
+    }
+}

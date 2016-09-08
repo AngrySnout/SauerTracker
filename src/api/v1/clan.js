@@ -26,7 +26,7 @@ function getLatestGames(clan) {
 }
 
 function getLatestMembers(clan) {
-	return database("spy").where("name", "ilike", "%"+clan+"%").max("lastseen as lastseen").select("name").groupBy("name").orderBy("lastseen", "desc").limit(10);
+	return database("spy").where("name", "ilike", "%"+clan+"%").max("lastseen as lastseen").select("name").groupBy("name").orderBy("lastseen", "desc").limit(9);
 }
 
 export function getClan(name) {

@@ -154,14 +154,14 @@ window.showServer = function(host, port) {
 	$("#server-info").css("background", "rgba(27, 27, 27, 0.89)");
 	loadServer(host, port);
 	$("#server-info").css("display", "block");
-	$("#server-info").animate({ height: "300px", scrollTop: 0 }, 400, "linear");
+	$("#server-info").animate({ height: "300px", scrollTop: 0 }, 350, "linear");
 	openServerHost = host;
 	openServerPort = port;
 	return false;
 };
 
 window.hideServer = function() {
-	$("#server-info").animate({ height: "0px" }, 400, "linear", function() {
+	$("#server-info").animate({ height: "0px" }, 350, "linear", function() {
 		$("#server-info").css("display", "none");
 	});
 	openServerHost = "";

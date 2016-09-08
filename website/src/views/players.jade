@@ -20,7 +20,7 @@ block content
                     .small-8.medium-7.large-8.columns
                         input#name(type="text", name="name", placeholder="Name...", value=(name))
                     .small-4.small-pull-4.medium-2.medium-pull-0.columns.small-centered
-                        button.button.expanded.secondary#submit(type="submit") Search
+                        button.button.expanded#submit(type="submit") Search
                 .row
                     .small-4.medium-3.large-2.columns
                         label.big.text-right.middle(for="country") Country:
@@ -44,11 +44,10 @@ block content
                     .row
                         for category in categoriesB
                             .medium-4.columns
-                                label.big= category
                                 table(width="100%")
                                     thead
                                         tr
-                                            td(width="34%") Name
+                                            td(width="34%")= category
                                             td(width="33%") Wins
                                             td(width="33%") Win rate
                                     tbody
@@ -63,11 +62,10 @@ block content
                     .row
                         for category in categoriesA
                             .medium-4.columns
-                                label.big= category
                                 table(width="100%")
                                     thead
                                         tr
-                                            td(width="50%") Name
+                                            td(width="50%")= category
                                             td(width="50%") Frags
                                     tbody
                                         for player in topFraggers[category]
@@ -80,11 +78,10 @@ block content
                     .row
                         for category in categoriesA
                             .medium-4.columns
-                                label.big= category
                                 table(width="100%")
                                     thead
                                         tr
-                                            td(width="50%") Name
+                                            td(width="50%")= category
                                             td(width="50%") Flags
                                     tbody
                                         for player in topRunners[category]

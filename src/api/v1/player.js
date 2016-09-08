@@ -44,7 +44,7 @@ function getLastGames(name) {
 }
 
 export function getPlayer(name) {
-	if (playerManager.banNames[name]) Promise.reject(new ObjectBannedError());
+	if (playerManager.banNames[name]) return Promise.reject(new ObjectBannedError());
 	else {
 		return database("players").where({ name: name }).then(rows => {
 			if (!rows.length) {

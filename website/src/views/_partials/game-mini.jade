@@ -62,14 +62,16 @@ else
     .row(style="margin-top: 10px")
         for team, i in teams
             .medium-6.large-4.columns(class=(i==teams.length-1? "end": undefined))
-                if !teamMode && team.players.length
-                    label.big Players
-                else
-                    label.big
-                        span(class=(team.name=="good"? "primary": "alert")) #{team.name} 
-                        |  #{team.score}
+                .row
+                    .small-12.columns
+                        if !teamMode && team.players.length
+                            label.big Players
+                        else
+                            label.big
+                                span(class=(team.name=="good"? "primary": "alert")) #{team.name} 
+                                |  #{team.score}
                 for player in team.players
-                    .row
+                    .row.bordered-left
                         .small-1.columns
                             if flagMode
                                 span.label(class=(player.flags? "success": "secondary")) #{player.flags}
@@ -87,7 +89,7 @@ else
                 label.big Spectators
                 
                 for spec in specs
-                    .row
+                    .row.bordered-left
                         .small-4.columns
                             a(href=("/player/"+spec.name), class=(spec.highlight? "highlighted": null)) #{spec.name}
                         .small-5.columns.end

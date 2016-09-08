@@ -28,6 +28,7 @@ label {
 
 label.big {
 	font-size: 1.1em;
+	display: inline-block;
 	//font-weight: bold;
 }
 
@@ -43,14 +44,14 @@ label.medium {
 }
 
 .top-bar {
-	border-bottom: solid 1px #444;
-	box-shadow: inset 0 10px 10px #555, 0 2px 2px #555;
+	border-bottom: solid 1px $blue-gray-dark;
 	padding: 0;
 
 	.logo {
 		height: 43px;
 		width: auto;
 		margin: -0.5em 0.5em -0.5em 0;
+		padding-top: 2px;
 	}
 
 	@include breakpoint(small down) {
@@ -81,8 +82,8 @@ label.medium {
 		}
 
 		ul li.active a {
-			border-bottom: solid 1px #00ACDA;
-			background-color: #00ACDA;
+			border-bottom: solid 1px #03657e;
+			background-color: #03657e;
 		}
 	}
 }
@@ -96,17 +97,14 @@ label.medium {
 		position: relative;
 
 		.breadcrumbs {
-			background: $darker-gray;
-			border: 0;
-			border-bottom: solid 1px #282828;
-			border-radius: 10px 10px 0 0;
+			background: $secondary-color;
+			border-bottom: solid 1px $blue-gray-dark;
 			padding: .25rem .8rem;
 		}
 
 		.main-container {
 			background: rgba($black, 0.8);
-			border-radius: 10px 10px 0 0;
-			box-shadow: 0 0 5px $light-black;
+			border: solid 1px $blue-gray-dark;
 			padding-bottom: 20px;
 		}
 	}
@@ -144,11 +142,11 @@ label.medium {
 		padding: 1em 2em 1em 2em;
 		width: 100%;
 		font-size: 0.9em;
-		background-color: $darker-gray;
+		background-color: $secondary-color;
 		color: $light-gray;
-		box-shadow: inset 0 40px 40px darken($darker-gray, 3), 0 2px 5px darken($darker-gray, 5);
-		border-top: solid 1px #282828;
-		border-radius: 0 0 10px 10px;
+		border-left: solid 1px $blue-gray-dark;
+		border-bottom: solid 1px $blue-gray-dark;
+		border-right: solid 1px $blue-gray-dark;
 
 		div {
 			text-align: left;
@@ -261,7 +259,7 @@ tr.scroll-to {
 	color: $body-font-color;
 	margin-bottom: 20px;
 	min-height: 33em;
-	margin-top: -0.87rem;
+	margin-top: -1rem;
 	padding-top: 3rem;
 	background-color: rgba(0, 0, 0, 0.4);
 	box-shadow: 0 2px 2px #555;
@@ -339,9 +337,8 @@ ul.tabs, .tabs-content {
 	.tt-menu {
 		width: 100%;
 		top: 70% !important;
-		background-color: #333;
-		border: 1px solid #ccc;
-		border: 1px solid rgba(0, 0, 0, 0.2);
+		background-color: $light-black;
+		border: 1px solid $secondary-color;
 		box-shadow: 0 5px 10px rgba(0,0,0,.2);
 
 		.tt-suggestion {
@@ -417,4 +414,31 @@ ul.tabs, .tabs-content {
 
 svg {
 	text-align: left;
+}
+
+.bordered-left {
+	// border-left: 5px solid $blue-gray-dark;
+}
+
+.server-count {
+	color: #abe6ff;
+	width: 35px;
+	display: inline-block;
+}
+
+.duel-bar {
+	height: 20px;
+	display: inline-block;
+	margin: 0;
+}
+
+.duel-desc {
+	display: inline-block;
+	position: absolute;
+	text-align: center;
+}
+
+.stat-digits {
+	font-weight: bold;
+	color: #BBB;
 }

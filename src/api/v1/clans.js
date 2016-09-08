@@ -33,9 +33,9 @@ cache.set("clans", 60*60*1000, function() {
 		var clns = _.orderBy(_.map(vars.clans, function (clan) {
 			if (!wins[clan.tag]) wins[clan.tag] = 0;
 			if (!losses[clan.tag]) losses[clan.tag] = 0;
-			var draws_2 = ((clans[clan.tag]||0)-((wins[clan.tag]||0)+(losses[clan.tag]||0)))/2;
-			var rate = (clans[clan.tag]? (wins[clan.tag]+draws_2)/clans[clan.tag]: 0);
-			return { "name": clan.tag, "wins": wins[clan.tag], "losses": losses[clan.tag], "rate": round2(rate), "points": round2((wins[clan.tag]+draws_2)*rate) };
+			var draws = ((clans[clan.tag]||0)-((wins[clan.tag]||0)+(losses[clan.tag]||0)));
+			var rate = (clans[clan.tag]? (wins[clan.tag]+draws/2)/clans[clan.tag]: 0);
+			return { "name": clan.tag, "wins": wins[clan.tag], "losses": losses[clan.tag], "ties": draws, "rate": round2(rate), "points": round2((wins[clan.tag]+draws/2)*rate) };
 		}), "points", "desc");
 		var rank = 1;
 		_.each(clns, function (clan) {
