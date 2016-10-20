@@ -46,11 +46,10 @@ block content
             li.current Top 10s
         .large-4.columns
             if topPlayers
-                label.big Top players
                 table(width="100%")
                     thead
                         tr
-                            td(width="50%") Player
+                            td(width="50%") Top players
                             td(width="50%") Frags
                     tbody
                         for player in topPlayers
@@ -58,12 +57,11 @@ block content
                                 td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
                                 td= player.frags
         .large-4.columns
-            label.big Top countries
             if topCountries
                 table(width="100%")
                     thead
                         tr
-                            td(width="50%") Country
+                            td(width="50%") Top countries
                             td(width="50%") Frags
                     tbody
                         for country in topCountries
@@ -75,12 +73,11 @@ block content
                                     = country.name
                                 td= country["frags"]
         .large-4.columns
-            label.big Top servers
             if topServers
                 table(width="100%")
                     thead
                         tr
-                            td(width="50%") Server
+                            td(width="50%") Top servers
                             td(width="50%") # of games
                     tbody
                         for server in topServers
