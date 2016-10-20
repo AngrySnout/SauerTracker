@@ -61,7 +61,6 @@ export function log(...msg) {
 export function error(msg) {
 	if (config.debug) {
 		log("Error:", msg);
-		if (typeof msg === 'string') throw new Error(msg);
 		throw new Error(msg);
 	}
 	else log("Error:", msg);

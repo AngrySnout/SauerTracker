@@ -36,12 +36,6 @@ cache.set('latest-clanwars', 10*60*1000, function(callback) {
 	});
 });
 
-// cache.set('latest-mixes', 10*60*1000, function(callback) {
-//	database('games').where({ gametype: 'mix' }).orderBy('timestamp', 'desc').limit(10).then(rows => {
-// 		callback(rows);
-// 	}).catch(error => callback());
-// });
-
 app.get('/games', (req, res) => {
     Promise.all([ cache.get('latest-duels'), cache.get('latest-clanwars')/*, cache.get('latest-mixes')*/ ])
     .then(results => {
