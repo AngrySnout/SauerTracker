@@ -32,7 +32,8 @@
 		{ "tag": "va|", "title": "VoxelArmy", "website": "http://www.voxelarmy.com" },
 		{ "tag": "vE'", "title": "vE'ctor", "website": "http://vectorsauer.tk" },
 		{ "tag": "|EK|", "title": "Eternal Killers", "website": "http://tekclansauer.createaforum.com" },
-		{ "tag": "=MyS=", "title": "Makes you Sick", "website": "http://myys.bplaced.net" }
+		{ "tag": "=MyS=", "title": "Makes you Sick", "website": "http://myys.bplaced.net" },
+		{ "tag": "|RaGe", "title": "RaGe" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
