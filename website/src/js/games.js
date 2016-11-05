@@ -11,7 +11,7 @@ var vars = require("../../../vars.json");
 var gameTemplate = require('../views/_partials/game-mini.jade');
 var gameSearchResultsTemplate = require('../views/_partials/game-search-results.jade');
 
-var originalURL = window.location.href;
+var originalURL = window.location.pathname + window.location.search + window.location.hash;
 var openGameID = null;
 
 function prevPageURL(pageUrl, firstID) {
