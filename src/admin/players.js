@@ -31,27 +31,33 @@ export function ipNames(ip, callback) {
 	});
 }
 
-export function ipNamesL(ip, callback) {
+export function ipNamesL(ip, callback, limit) {
 	if (!ip) return;
 	ip = ipRepLB(ip, "0");
 	let names = _.filter(_.map(_.reject(playerManager.players, function (pl) { return _.isUndefined(pl.ips[ip]); }), "name"), function (name) { return name; });
-	database("spy").where({ ip: ip }).select("name").orderBy("lastseen", "desc").limit(5).then(rows => {
+	database("spy").where({ ip: ip }).select("name").orderBy("lastseen", "desc").limit(limit || 5).then(rows => {
 		names = _.union(names, _.map(rows, "name"));
 		callback(names);
 	});
 }
 
-// TODO: use the names in memory
 export function namesFor(str, callback) {
+	function ipFound(ip) {
+		ipNamesL(ip, (names) => {
+			callback("Most recent name(s) for \x02\x0303" + str + "\x0F are: \x02\x0302" + _.reduce(names, function (memo, name) { return memo + "\x0F, \x02\x0302" + name; }));
+		}, 10);
+	}
+
 	let name = str.toLowerCase();
-	database("spy").where("name", "ilike", "%"+name+"%").whereNot({ ip: "0.0.0.0" }).select("ip").orderBy("lastseen", "desc").limit(1).then(iprows => {
-		if (iprows.length) {
-			database("spy").where({ ip: iprows[0].ip }).select("name").orderBy("lastseen", "desc").limit(10).then(rows => {
-				let names = _.map(rows, "name");
-				callback("Most recent name(s) for \x02\x0303" + str + "\x0F are: \x02\x0302" + _.reduce(names, function (memo, name) { return memo + "\x0F, \x02\x0302" + name; }));
-			});
-		} else callback("No names found for \x02\x0303" + name);
-	});
+	if (playerManager.players[name] && playerManager.players[name].ips) {
+		ipFound(_.keys(playerManager.players[name].ips)[0]);
+	} else {
+		database("spy").where("name", "ilike", "%"+name+"%").whereNot({ ip: "0.0.0.0" }).select("ip").orderBy("lastseen", "desc").limit(1).then(iprows => {
+			if (iprows.length) {
+				ipFound(iprows[0].ip);
+			} else callback("No names found for \x02\x0303" + name);
+		});
+	}
 }
 
 export function findName(str, callback) {
