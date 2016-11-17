@@ -143,7 +143,7 @@ function renderGame() {
 
 function loadServer(host, port) {
 	$.get("/api/server/"+host+"/"+port, function(result) {
-		if (!openServerHost) return;
+		if (!openServerHost || openServerHost != host || openServerPort != port) return;
 		openGame = result;
 		renderGame();
 	});
