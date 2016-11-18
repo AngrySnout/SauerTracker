@@ -21,6 +21,7 @@
 	},
 	"serverPort": 80,
 	"secureServerPort": 443,
+	"teamBalanceServerPort": 36581,
 	"baseElo": 1200,
 	"databaseConnection": "postgres://user:password@server/database"
 }
