@@ -53,6 +53,13 @@ export var apiPaths = [
         "example": "/api/players/find?name=named&country=US"
     },
     {
+        "name"   : "players-balance-teams",
+        "title"  : "/players/teams",
+        "route"  : "/api/players/teams?...",
+        "desc"   : "Returns an object containing two arrays, 'evil' and 'good', each of which contains the names of the players provided in the 'names' parameter, split into semi balanced teams. Players are split into these teams based on their frags/deaths and flagruns/games in ***mix games*** played in the last 3 months. This API function may return different results for the same set of players.",
+        "example": "/api/players/teams?names=Player1 Player2 Player3 Player4 Player5 Player6"
+    },
+    {
         "name"   : "player",
         "title"  : "/player",
         "route"  : "/api/player/:name",
