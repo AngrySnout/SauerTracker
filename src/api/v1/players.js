@@ -33,7 +33,7 @@ app.get('/api/players/find', function(req, res) {
 });
 
 export function makeTeams(names) {
-	return database.count('* as games').sum('frags as frags').sum('deaths as deaths').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').where('gametype', 'mix').whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '100 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name')
+	return database.count('* as games').sum('frags as frags').sum('deaths as deaths').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').where('gametype', 'mix').whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name')
 	.then(players => {
 		players = _.keyBy(players, 'name');
 
