@@ -33,16 +33,22 @@ app.get('/api/players/find', function(req, res) {
 });
 
 export function makeTeams(names) {
+	if (names.length > 64) names = names.slice(0, 64);
+
 	return database.count('* as games').sum('frags as frags').sum('deaths as deaths').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').where('gametype', 'mix').whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name')
 	.then(players => {
 		players = _.keyBy(players, 'name');
 
 		let stats = _.map(names, name => {
 			if (!players[name]) return { name: name, fragginess: 0.5, flagginess: 0.5 };
-			return { name: name, fragginess: players[name].frags*2/players[name].deaths, flagginess: players[name].flags/players[name].games };
+
+			var fragginess = players[name].frags*2/players[name].deaths;
+			var flagginess = players[name].flags/players[name].games;
+
+			return { name: name, fragginess: fragginess, flagginess: players[name].flags/players[name].games, score: fragginess+flagginess };
 		});
 
-		stats = _.orderBy(stats, ['fragginess', 'flagginess'], ['desc', 'desc']);
+		stats = _.orderBy(stats, ['score'], ['desc']);
 
 		let teams = [{ fragginess: 0, flagginess: 0, players: [] }, { fragginess: 0, flagginess: 0, players: [] }];
 
@@ -88,8 +94,9 @@ export function makeTeams(names) {
 
 		let totalIter = 0;
 		let stagnantIter = 0;
+		let maxIter = math.Min(names.length * 3, 32);
 
-		while (stagnantIter < 6 && totalIter < 30) {
+		while (stagnantIter < 6 && totalIter < maxIter) {
 			let old = _.cloneDeep(teams);
 			swapRandom();
 
