@@ -92,21 +92,23 @@ export function makeTeams(names) {
 					bDeltaFrag + bDeltaFlag + Math.abs(bDeltaFrag - bDeltaFlag);
 		}
 
-		let totalIter = 0;
-		let stagnantIter = 0;
-		let maxIter = math.Min(names.length * 3, 32);
+		if (names > 1) {
+			let totalIter = 0;
+			let stagnantIter = 0;
+			let maxIter = Math.min(names.length * 3, 32);
 
-		while (stagnantIter < 6 && totalIter < maxIter) {
-			let old = _.cloneDeep(teams);
-			swapRandom();
+			while (stagnantIter < 6 && totalIter < maxIter) {
+				let old = _.cloneDeep(teams);
+				swapRandom();
 
-			if (compareTeamPairs(teams, old) == 0) {
-				stagnantIter++;
-				teams = old;
-			} else {
-				stagnantIter = 0;
+				if (compareTeamPairs(teams, old) == 0) {
+					stagnantIter++;
+					teams = old;
+				} else {
+					stagnantIter = 0;
+				}
+				totalIter++;
 			}
-			totalIter++;
 		}
 
 		return { good: _.map(teams[0].players, 'name'), evil: _.map(teams[1].players, 'name') };
