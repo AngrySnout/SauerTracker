@@ -35,14 +35,14 @@ app.get('/api/players/find', function(req, res) {
 export function makeTeams(names) {
 	if (names.length > 64) names = names.slice(0, 64);
 
-	return database.count('* as games').sum('frags as frags').sum('deaths as deaths').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').where('gametype', 'mix').whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name')
+	return database.count('* as games').sum('frags as frags').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').whereIn('gametype', ['mix', 'clanwar']).whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '9 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name')
 	.then(players => {
 		players = _.keyBy(players, 'name');
 
 		let stats = _.map(names, name => {
 			if (!players[name]) return { name: name, fragginess: 0.5, flagginess: 0.5 };
 
-			var fragginess = players[name].frags*2/players[name].deaths;
+			var fragginess = players[name].frags*(2/15.96)/players[name].games; // 16 is the average deaths/game
 			var flagginess = players[name].flags/players[name].games;
 
 			return { name: name, fragginess: fragginess, flagginess: players[name].flags/players[name].games, score: fragginess+flagginess };
@@ -63,12 +63,14 @@ export function makeTeams(names) {
 			}
 		}
 
-		let size = stats.length - (stats.length + 1)%2 - 1;
-		for (let i = 0; i < size; i++) {
-			teams[i%2].players.push(stats[i]);
-		}
-		for (let i = 0; i < stats.length-size; i++) {
-			teams[(i+1)%2].players.push(stats[i + size]);
+		// Split player in the following order:
+		// _0_ _1_
+		//      |
+		// _3_ _2_
+		//  |
+		// _4_ _5_
+		for (let i = 0; i < stats.length; i++) {
+			teams[Math.floor((i+1)/2)%2].players.push(stats[i]);
 		}
 		recalclScore();
 
