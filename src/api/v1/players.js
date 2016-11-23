@@ -35,7 +35,7 @@ app.get('/api/players/find', function(req, res) {
 export function makeTeams(names) {
 	if (names.length > 64) names = names.slice(0, 64);
 
-	return database.count('* as games').sum('frags as frags').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').whereIn('gametype', ['mix', 'clanwar']).whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '9 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name')
+	return database.count('* as games').sum('frags as frags').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').whereIn('gametype', ['mix', 'clanwar']).whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name')
 	.then(players => {
 		players = _.keyBy(players, 'name');
 
