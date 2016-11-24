@@ -42,7 +42,7 @@ export function makeTeams(names) {
 		let stats = _.map(names, name => {
 			if (!players[name]) return { name: name, fragginess: 0.5, flagginess: 0.5 };
 
-			var fragginess = players[name].frags*(2/15.96)/players[name].games; // 16 is the average deaths/game
+			var fragginess = players[name].frags*(2/16)/players[name].games; // 16 is the average deaths/game
 			var flagginess = players[name].flags/players[name].games;
 
 			return { name: name, fragginess: fragginess, flagginess: players[name].flags/players[name].games, score: fragginess+flagginess };
