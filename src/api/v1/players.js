@@ -32,18 +32,24 @@ app.get('/api/players/find', function(req, res) {
 		.catch(err => { res.status(500).send({ error: err.message }); });
 });
 
-export function makeTeams(names) {
+export function makeTeams(names, mode, map) {
 	if (names.length > 64) names = names.slice(0, 64);
 
-	return database.count('* as games').sum('frags as frags').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').whereIn('gametype', ['mix', 'clanwar']).whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name')
-	.then(players => {
+	let query = database.count('* as games').sum('frags as frags').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game');
+	if (mode) query = query.where('gamemode', mode);
+	if (map) query = query.where('map', map);
+	query = query.whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name');
+
+	console.log(names, mode, map);
+
+	return query.then(players => {
 		players = _.keyBy(players, 'name');
 
 		let stats = _.map(names, name => {
 			if (!players[name]) return { name: name, fragginess: 0.5, flagginess: 0.5 };
 
 			var fragginess = players[name].frags*(2/16)/players[name].games; // 16 is the average deaths/game
-			var flagginess = players[name].flags/players[name].games;
+			var flagginess = players[name].flags*1.5/players[name].games;
 
 			return { name: name, fragginess: fragginess, flagginess: players[name].flags/players[name].games, score: fragginess+flagginess };
 		});
@@ -72,6 +78,14 @@ export function makeTeams(names) {
 		for (let i = 0; i < stats.length; i++) {
 			teams[Math.floor((i+1)/2)%2].players.push(stats[i]);
 		}
+
+		// Make sure the second team has more players if there is an odd number of them
+		if (teams[0].length > teams[1].length) {
+			let temp = teams[1];
+			teams[1] = teams[0];
+			teams[0] = temp;
+		}
+
 		recalclScore();
 
 		function swapRandom() {
@@ -118,7 +132,7 @@ export function makeTeams(names) {
 }
 
 app.get('/api/players/teams', function(req, res) {
-	makeTeams(req.query['names'].split(' '))
+	makeTeams(req.query['names'].split(' '), req.query['mode'], req.query['map'])
 		.then(teams => { res.send(teams); })
 		.catch(err => { res.status(500).send({ error: err.message }); });
 });
@@ -135,11 +149,15 @@ export function startTeamBalanceServer() {
 		let st = new Packet(data, 0);
 		let s;
 		let names = [];
+		let mode;
+		let map;
 		while (s = st.getString()) {
 			names.push(s);
 		}
+		if (s = st.getString()) mode = s;
+		if (s = st.getString()) map = s;
 
-		makeTeams(names)
+		makeTeams(names, mode, map)
 			.then(teams => {
 				let buf = new Buffer.alloc(1024);
 				let p = new Packet(buf);
