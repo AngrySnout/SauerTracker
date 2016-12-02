@@ -26,7 +26,7 @@ export default class Player {
 		this.lastSeen = curTime;
 		this.ip = newState.ip;
 
-		if (server.game.zombie || newState.cn >= 128 || server.game.gameMode == 'coop' || server.banned || newState.banned) return;
+		if (server.game.zombie || newState.cn >= 128 || server.game.gameMode == 'coop_edit' || server.banned || newState.banned) return;
 
 		let modetype = 'any';
 		if (vars.gameModes[server.game.gameMode]) {

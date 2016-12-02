@@ -115,7 +115,7 @@ export default class Server {
 		if (!this.info.banned &&
 				this.game.timeLeft <= 0 &&
 				!this.game.intermission &&
-				this.game.gameMode != 'coop' &&
+				this.game.gameMode != 'coop_edit' &&
 				_.countBy(this.game.players, pl => pl.state!=5)[true] > 1) {
 			this.game.intermission = true;
 			let self = this;
@@ -158,7 +158,7 @@ export default class Server {
 
 					this.game.gameMode = getGameMode(st.getInt());
 					this.game.timeLeft = st.getInt();
-					if (this.game.gameMode == 'coop' && this.game.timeLeft <= 0) this.game.timeLeftS = '';
+					if (this.game.gameMode == 'coop_edit' && this.game.timeLeft <= 0) this.game.timeLeftS = '';
 					else if (this.game.timeLeft <= 0) this.game.timeLeftS = 'intermission';
 					else this.game.timeLeftS = _.padStart(Math.floor(this.game.timeLeft/60), 2, '0')+':'+_.padStart(this.game.timeLeft%60, 2, '0');
 					this.game.maxClients = st.getInt();

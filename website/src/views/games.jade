@@ -51,7 +51,7 @@ block content
                                     for group in vars.gameModeGroups
                                         optgroup(label=group.name)
                                             for mode in group.modes
-                                                 option(value=mode.name, selected=(query&&query.gamemode==mode.name? "selected": undefined)) #{mode.name} (#{mode.title})
+                                                 option(value=mode.name, selected=(query&&query.gamemode==mode.name? "selected": undefined)) #{mode.name}
                                          
                     .small-12.medium-4.columns
                         .row

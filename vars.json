@@ -44,70 +44,70 @@
 	},
 	"gameModes": {
 		"ffa": {},
-		"coop": {},
+		"coop_edit": {},
 		"teamplay": { "teamMode": true },
-		"insta": { "instaMode": true },
-		"instateam": { "teamMode": true, "instaMode": true },
-		"effic": { "efficMode": true },
-		"efficteam": { "teamMode": true, "efficMode": true },
-		"tac": {},
-		"tacteam": { "teamMode": true },
+		"instagib": { "instaMode": true },
+		"insta_team": { "teamMode": true, "instaMode": true },
+		"efficiency": { "efficMode": true },
+		"effic_team": { "teamMode": true, "efficMode": true },
+		"tactics": {},
+		"tac_team": { "teamMode": true },
 		"capture": { "teamMode": true, "flagMode": true },
-		"rcapture": { "teamMode": true, "flagMode": true },
+		"regen_capture": { "teamMode": true, "flagMode": true },
 		"ctf": { "teamMode": true, "flagMode": true },
-		"ictf": { "teamMode": true, "instaMode": true, "flagMode": true },
+		"insta_ctf": { "teamMode": true, "instaMode": true, "flagMode": true },
 		"protect": { "teamMode": true, "flagMode": true },
-		"iprotect": { "teamMode": true, "instaMode": true, "flagMode": true },
+		"insta_protect": { "teamMode": true, "instaMode": true, "flagMode": true },
 		"hold": { "teamMode": true, "flagMode": true },
-		"ihold": { "teamMode": true, "instaMode": true, "flagMode": true },
-		"ectf": { "teamMode": true, "efficMode": true, "flagMode": true },
-		"eprotect": { "teamMode": true, "efficMode": true, "flagMode": true },
-		"ehold": { "teamMode": true, "efficMode": true, "flagMode": true },
+		"insta_hold": { "teamMode": true, "instaMode": true, "flagMode": true },
+		"effic_ctf": { "teamMode": true, "efficMode": true, "flagMode": true },
+		"effic_protect": { "teamMode": true, "efficMode": true, "flagMode": true },
+		"effic_hold": { "teamMode": true, "efficMode": true, "flagMode": true },
 		"collect": { "teamMode": true, "flagMode": true },
-		"icollect": { "teamMode": true, "instaMode": true, "flagMode": true },
-		"ecollect": { "teamMode": true, "efficMode": true, "flagMode": true }
+		"insta_collect": { "teamMode": true, "instaMode": true, "flagMode": true },
+		"effic_collect": { "teamMode": true, "efficMode": true, "flagMode": true }
 	},
 	"gameModeGroups": [
 		{ "name": "Classic", "modes": [
-				{ "title": "Coop-edit", "name": "coop" },
-				{ "title": "Free For All", "name": "ffa" },
-				{ "title": "Insta", "name": "insta" },
-				{ "title": "Efficiency", "name": "effic" },
-				{ "title": "Tactics", "name": "tac" }
+				{ "name": "coop_edit" },
+				{ "name": "ffa" },
+				{ "name": "instagib" },
+				{ "name": "efficiency" },
+				{ "name": "tactics" }
 			] },
 		{ "name": "Team", "modes": [
-				{ "title": "Teamplay", "name": "teamplay" },
-				{ "title": "Insta team", "name": "instateam" },
-				{ "title": "Effic team", "name": "efficteam" },
-				{ "title": "Tac team", "name": "tacteam" }
+				{ "name": "teamplay" },
+				{ "name": "insta_team" },
+				{ "name": "effic_team" },
+				{ "name": "tac_team" }
 			] },
 		{ "name": "Capture The Flag", "modes": [
-				{ "title": "CTF", "name": "ctf" },
-				{ "title": "Insta CTF", "name": "ictf" },
-				{ "title": "Effic CTF", "name": "ectf" }
+				{ "name": "ctf" },
+				{ "name": "insta_ctf" },
+				{ "name": "effic_ctf" }
 			] },
 		{ "name": "Hold", "modes": [
-				{ "title": "Hold", "name": "hold" },
-				{ "title": "Insta hold", "name": "ihold" },
-				{ "title": "Effic hold", "name": "ehold" }
+				{ "name": "hold" },
+				{ "name": "insta_hold" },
+				{ "name": "effic_hold" }
 			] },
 		{ "name": "Protect", "modes": [
-				{ "title": "Protect", "name": "protect" },
-				{ "title": "Insta protect", "name": "iprotect" },
-				{ "title": "Effic protect", "name": "eprotect" }
+				{ "name": "protect" },
+				{ "name": "insta_protect" },
+				{ "name": "effic_protect" }
 			] },
 		{ "name": "Capture", "modes": [
-				{ "title": "Capture", "name": "capture" },
-				{ "title": "Regen capture", "name": "rcapture" }
+				{ "name": "capture" },
+				{ "name": "regen_capture" }
 			] },
 		{ "name": "Collect", "modes": [
-				{ "title": "Collect", "name": "collect" },
-				{ "title": "Insta collect", "name": "icollect" },
-				{ "title": "Effic collect", "name": "ecollect" }
+				{ "name": "collect" },
+				{ "name": "insta_collect" },
+				{ "name": "effic_collect" }
 			] }
 	],
-	"duelModes": [ "insta", "instateam", "effic", "efficteam", "tac", "tacteam", "ffa", "teamplay" ],
-	"mixModes": [ "teamplay", "instateam", "efficteam", "capture", "rcapture", "ctf", "ictf", "protect", "iprotect", "hold", "ihold", "ectf", "eprotect", "ehold", "collect", "icollect", "icollect" ],
+	"duelModes": [ "instagib", "insta_team", "efficiency", "effic_team", "tactics", "tac_team", "ffa", "teamplay" ],
+	"mixModes": [ "teamplay", "insta_team", "effic_team", "capture", "regen_capture", "ctf", "insta_ctf", "protect", "insta_protect", "hold", "insta_hold", "effic_ctf", "effic_protect", "effic_hold", "collect", "insta_collect", "effic_collect" ],
 	"lockedMModes": [ "locked", "private", "password" ],
 	"duelThresholds": { "insta": 8, "instateam": 8, "effic": 8, "efficteam": 8, "tac": 0, "tacteam": 0, "ffa": 0, "teamplay": 0 },
 	"bannerURL": "https://banners.sauertracker.net/"
