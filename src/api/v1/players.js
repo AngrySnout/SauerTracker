@@ -35,28 +35,69 @@ app.get('/api/players/find', function(req, res) {
 export function makeTeams(names, mode, map) {
 	if (names.length > 64) names = names.slice(0, 64);
 
-	let query = database.count('* as games').sum('frags as frags').sum('flags as flags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game');
-	if (mode) query = query.where('gamemode', mode);
-	if (map) query = query.where('map', map);
-	query = query.whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name');
+	// Get average number of frags and of flags per game for each player for selected map and mode
+	let query1 = database.avg('frags as avgFrags').avg('flags as avgFlags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game');
+	if (mode) query1 = query1.where('gamemode', mode);
+	if (map) query1 = query1.where('map', map);
+	query1 = query1.whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '15 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name');
 
-	console.log(names, mode, map);
+	// Get average number of frags and of flags per game for selected mode and map
+	let query2 = database.avg('frags as avgFrags').avg('flags as avgFlags').from('stats').join('games', 'games.id', 'stats.game');
+	if (mode) query2 = query2.where('gamemode', mode);
+	if (map) query2 = query2.where('map', map);
 
-	return query.then(players => {
+	return Promise.join(query1, query2, (players, avgStats) => {
 		players = _.keyBy(players, 'name');
 
-		let stats = _.map(names, name => {
-			if (!players[name]) return { name: name, fragginess: 0.5, flagginess: 0.5 };
+		// 16 and 0.5 are roughly the global averages of frags and flags per game,
+		// respectively, as of December 2nd, 2016
+		let avgFrags = avgStats[0].avgFrags || 16;
+		let avgFlags = avgStats[0].avgFlags || 0.5;
 
-			var fragginess = players[name].frags*(2/16)/players[name].games; // 16 is the average deaths/game
-			var flagginess = players[name].flags*1.5/players[name].games;
+		let stats = _.map(players, player => {
+			// Normalize fragginess and flagginess for selected mode and map and give
+			// fragginess a higher weight
 
-			return { name: name, fragginess: fragginess, flagginess: players[name].flags/players[name].games, score: fragginess+flagginess };
+			var fragginess = (player.avgFrags || avgFrags)*(1.5 / avgFrags);
+			var flagginess = (player.avgFlags || avgFlags)*(1   / avgFlags);
+
+			return { name: player.name, fragginess: fragginess, flagginess: flagginess, score: fragginess+flagginess };
 		});
+
+		// Give players which have no data for selected mode and map (average stats - 10%)
+		let missing = _.difference(names, _.keys(players));
+		if (missing.length) {
+			let meanFragginess = _.meanBy(stats, 'fragginess');
+			let meanFlagginess = _.meanBy(stats, 'flagginess');
+			meanFragginess *= 0.9;
+			meanFlagginess *= 0.9;
+
+			_.each(missing, player => {
+				stats.push({ name: player, fragginess: meanFragginess, flagginess: meanFlagginess, score: meanFragginess+meanFlagginess });
+			});
+		}
 
 		stats = _.orderBy(stats, ['score'], ['desc']);
 
 		let teams = [{ fragginess: 0, flagginess: 0, players: [] }, { fragginess: 0, flagginess: 0, players: [] }];
+
+		// Split player in the following order:
+		// TeamA  TeamB
+		// _0_______1_
+		//          |
+		// _3_______2_
+		//  |
+		// _4_______5_
+		for (let i = 0; i < stats.length; i++) {
+			teams[Math.floor((i+1)/2)%2].players.push(stats[i]);
+		}
+
+		// Make sure the second team has more players if there is an odd number of them
+		if (teams[0].length > teams[1].length) {
+			let temp = teams[1];
+			teams[1] = teams[0];
+			teams[0] = temp;
+		}
 
 		function recalclScore() {
 			for (let j = 0; j < teams.length; j++) {
@@ -67,23 +108,6 @@ export function makeTeams(names, mode, map) {
 					teams[j].flagginess += teams[j].players[i].flagginess;
 				}
 			}
-		}
-
-		// Split player in the following order:
-		// _0_ _1_
-		//      |
-		// _3_ _2_
-		//  |
-		// _4_ _5_
-		for (let i = 0; i < stats.length; i++) {
-			teams[Math.floor((i+1)/2)%2].players.push(stats[i]);
-		}
-
-		// Make sure the second team has more players if there is an odd number of them
-		if (teams[0].length > teams[1].length) {
-			let temp = teams[1];
-			teams[1] = teams[0];
-			teams[0] = temp;
 		}
 
 		recalclScore();
@@ -99,6 +123,10 @@ export function makeTeams(names, mode, map) {
 		}
 
 		function compareTeamPairs(a, b) {
+			// Try to minimize delta fragginess and delta flaggniness between
+			// teams and to minimize the gap between fragginess and flagginess
+			// in the same team
+
 			let aDeltaFrag = Math.abs(a[0].fragginess - a[1].fragginess);
 			let bDeltaFrag = Math.abs(b[0].fragginess - b[1].fragginess);
 			let aDeltaFlag = Math.abs(a[0].flagginess - a[1].flagginess);
@@ -108,7 +136,7 @@ export function makeTeams(names, mode, map) {
 					bDeltaFrag + bDeltaFlag + Math.abs(bDeltaFrag - bDeltaFlag);
 		}
 
-		if (names > 1) {
+		if (names.length > 1) {
 			let totalIter = 0;
 			let stagnantIter = 0;
 			let maxIter = Math.min(names.length * 3, 32);
