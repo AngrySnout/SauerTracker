@@ -81,13 +81,13 @@ export function makeTeams(names, mode, map) {
 
 		let teams = [{ fragginess: 0, flagginess: 0, players: [] }, { fragginess: 0, flagginess: 0, players: [] }];
 
-		// Split player in the following order:
+		// Split players in the following order:
 		// TeamA  TeamB
-		// _0_______1_
+		//  _0______1_
 		//          |
-		// _3_______2_
-		//  |
-		// _4_______5_
+		//  _3______2_
+		//   |
+		//  _4______5_
 		for (let i = 0; i < stats.length; i++) {
 			teams[Math.floor((i+1)/2)%2].players.push(stats[i]);
 		}
