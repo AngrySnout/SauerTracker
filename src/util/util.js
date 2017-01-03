@@ -59,11 +59,10 @@ export function log(...msg) {
  *  @param {any} msg
  */
 export function error(msg) {
+	log("Error:", msg);
 	if (config.debug) {
-		log("Error:", msg);
 		throw new Error(msg);
 	}
-	else log("Error:", msg);
 }
 
 /**
