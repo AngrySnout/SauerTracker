@@ -1,5 +1,5 @@
 mixin sortable(name, value)
-    a(onclick="sortBy('#{value}')") #{name} 
+    a(onclick="sortBy('#{value}')") #{name}
         if sortedBy == value
             span.fa(class=("fa-caret-"+(sortOrder=="asc"? "up": "down")))
 
@@ -22,7 +22,7 @@ table.scroll#table-contents(width="100%")
                 +sortable("Country", "country")
             td.nowrap(width="22%")
                 +sortable("Host", "host")
-                |  :  
+                |  :
                 +sortable("Port", "port")
     tbody
         for server in servers
@@ -37,6 +37,6 @@ table.scroll#table-contents(width="100%")
                         span(style=("color: "+vars.materModeColors[server.masterMode])) #{server.masterMode}
                     td.clickable.nowrap(onclick=("showServer('"+server.host+"', "+server.port+")"))
                         if server.country
-                            img.flag(src=`/images/flags/${server.country}.png`)
+                            img.flag(src="/images/flags/"+server.country+".png")
                         |  #{server.countryName}
                     td.clickable(onclick="showConnect('#{server.host}', #{server.port})") #{server.host}:#{server.port}
