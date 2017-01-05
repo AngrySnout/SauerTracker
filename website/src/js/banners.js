@@ -2,7 +2,7 @@ var $ = window.$;
 var _ = window._;
 var foundation = window.Foundation;
 var NProgress = window.NProgress;
-var CodeMirror = require("codemirror");
+var CodeMirror = require("codemirror/lib/codemirror");
 var CodeMirrorHTML = require("codemirror/mode/htmlmixed/htmlmixed");
 var Handlebars = require("handlebars");
 
