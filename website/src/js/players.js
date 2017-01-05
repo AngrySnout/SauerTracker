@@ -4,7 +4,7 @@ var foundation = window.Foundation;
 var NProgress = window.NProgress;
 var url = window.url;
 
-var searchResultsTemplate = require('../views/_partials/player-search-results.jade');
+var searchResultsTemplate = require('../views/_partials/player-search-results.pug');
 
 var originalURL = window.location.href;
 

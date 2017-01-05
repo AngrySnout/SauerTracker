@@ -8,8 +8,8 @@ var url = window.url;
 
 var vars = require("../../../vars.json");
 
-var gameTemplate = require('../views/_partials/game-mini.jade');
-var gameSearchResultsTemplate = require('../views/_partials/game-search-results.jade');
+var gameTemplate = require('../views/_partials/game-mini.pug');
+var gameSearchResultsTemplate = require('../views/_partials/game-search-results.pug');
 
 var originalURL = window.location.pathname + window.location.search + window.location.hash;
 var openGameID = null;

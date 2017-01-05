@@ -6,7 +6,7 @@ var url = window.url;
 import {loadCharts} from "./_server-charts.js";
 var vars = require("../../../vars.json");
 
-var gameTemplate = require('../views/_partials/game.jade');
+var gameTemplate = require('../views/_partials/game.pug');
 
 var urlPath = url.parse(window.location.href).pathname.split("/");
 var host = urlPath[2];

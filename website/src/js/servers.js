@@ -5,9 +5,9 @@ import {filter} from 'fuzzaldrin';
 
 var vars = require("../../../vars.json");
 
-var serverListTemplate = require('../views/_partials/server-list.jade');
-var clansOnlineTemplate = require('../views/_partials/clans-online.jade');
-var gameTemplate = require('../views/_partials/game-mini.jade');
+var serverListTemplate = require('../views/_partials/server-list.pug');
+var clansOnlineTemplate = require('../views/_partials/clans-online.pug');
+var gameTemplate = require('../views/_partials/game-mini.pug');
 
 var servers = [];
 var hideEmpty = $("#hide-empty").is(":checked");
