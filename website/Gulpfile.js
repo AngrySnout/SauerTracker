@@ -48,7 +48,7 @@ function bundleJS(file, watch) {
 	bundler.transform('babelify', {presets: ['es2015'], only: /\/src\/js/})
 		.transform('browserify-shim')
 		.transform('debowerify')
-		.transform('jadeify');
+		.transform('pugify');
 
 	function bundle() {
 		bundler.bundle()
