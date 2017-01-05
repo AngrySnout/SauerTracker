@@ -5,7 +5,7 @@ This is the second iteration of [sauertracker.net](http://sauertracker.net/). It
 
 Written in ECMAScript 6, the new version of JavaScript, and transpiled to ECMAScript 5 using Babel.  
 
-Powered by NodeJS, Jade, Sass, and PostgreSQL.
+Powered by NodeJS, Pug (Jade), Sass, and PostgreSQL.
 
 ## Configuration
 There are 2 config files: *tracker.json* and *vars.json*.   

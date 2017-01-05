@@ -1,4 +1,4 @@
-extends ./_layout.jade
+extends ./_layout.pug
 
 block vars
     - section = "games";
@@ -11,7 +11,7 @@ block content
             li.current= id
         .medium-12.columns
             #game
-                include ./_partials/game.jade
+                include ./_partials/game.pug
                         
     .reveal#connect-info(data-reveal)
         | Copy the following line, paste it in the game, and press Enter to connect to the server:

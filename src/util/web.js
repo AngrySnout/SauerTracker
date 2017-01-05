@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.set('views', './website/src/views');
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 if (process.env.NODE_ENV !== 'production') app.locals.pretty = true;
 

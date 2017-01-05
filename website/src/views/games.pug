@@ -1,4 +1,4 @@
-extends ./_layout.jade
+extends ./_layout.pug
 
 block vars
     - section = "games";
@@ -99,7 +99,7 @@ block content
                             
         #search-result-container
             if results
-                include _partials/game-search-results.jade
+                include _partials/game-search-results.pug
             
             else if error
                 = error

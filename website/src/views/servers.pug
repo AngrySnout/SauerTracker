@@ -1,4 +1,4 @@
-extends ./_layout.jade
+extends ./_layout.pug
 
 block vars
     - section = "servers";
@@ -36,7 +36,7 @@ block content
                 button.close-button.maximize-button(type="button", onclick="expandServer()") <i class="fa fa-expand"></i>
             
             #server-list
-                include ./_partials/server-list.jade
+                include ./_partials/server-list.pug
 
     .reveal#connect-info(data-reveal)
         | Copy the following line, paste it in the game, and press Enter to connect to the server:
