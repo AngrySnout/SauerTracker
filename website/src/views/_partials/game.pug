@@ -2,8 +2,8 @@ if !server || !server.gameMode
     | Server not found.
 else
     h2: a(href=("/server/"+server.host+"/"+server.port)) !{server.descriptionStyled}
-    a#server-address(onclick="showConnect('#{server.host}', #{server.port})") #{server.host}:#{server.port}
-    span  | 
+    a#server-address(onclick="showConnect('"+server.host+"', "+server.port+")") #{server.host}:#{server.port}
+    span  |
         if (server.country && server.country != "unknown")
             img.flag(src="/images/flags/"+server.country+".png")
         |  #{server.countryName}
@@ -29,10 +29,9 @@ else
     br
     h5
         | #{server.gameMode}
-        |  
         span#map-name #{server.mapName}
         if server.masterMode
-            |  | 
+            |  |
             span(style=("color: "+vars.materModeColors[server.masterMode])) #{server.masterMode}
         if server.gameType
             |  | #{server.gameType}
@@ -40,16 +39,15 @@ else
             |  | #{server.timeLeftS}
             if server.timeLeftS != "intermission"
                 |  left
-        |  | 
+        |  |
         span(style=(server.clients==server.maxClients? "color: yellow": ""))  #{server.clients}
             if server.maxClients
                 | /#{server.maxClients}
         |  players
         if server.time
             |  |
-            |  
             span.date= (server.time instanceof Date)? server.time.toJSON(): server.time
-        
+
     - var players = _.groupBy(server.players, function (pl) { return pl.state==5; });
     - var specs = players[true];
     - players = players[false];
@@ -75,7 +73,7 @@ else
                         label.big Players
                     else
                         label.big
-                            span(class=(team.name=="good"? "primary": "alert")) #{team.name} 
+                            span(class=(team.name=="good"? "primary": "alert")) #{team.name}
                             |  #{team.score}
                 if team.players.length
                     table.scroll(width="100%")
@@ -112,17 +110,16 @@ else
                                     td #{player.acc}%
                                     td.nowrap
                                         if player.country
-                                            img.flag(src=("/images/flags/"+player.country+".png")) 
-                                            |  
+                                            img.flag(src=("/images/flags/"+player.country+".png"))
                                         | #{player.countryName}
                                     if pings
                                         td #{player.ping||0}
-                                    
+
     if specs
         .row
             .large-6.columns
                 label.big Spectators
-                
+
                 table(width="100%")
                     thead
                         tr
@@ -137,8 +134,7 @@ else
                                     a(href=("/player/"+spec.name)) #{spec.name}
                                 td
                                     if spec.country
-                                        img.flag(src=("/images/flags/"+spec.country+".png")) 
-                                        |  
+                                        img.flag(src=("/images/flags/"+spec.country+".png"))
                                     | #{spec.countryName}
                                 if pings
                                     td #{spec.ping||0}

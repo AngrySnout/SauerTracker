@@ -1,5 +1,5 @@
 mixin sortable(name, value)
-    a(onclick="sortBy('#{value}')") #{name}
+    a(onclick="sortBy('"+value+"')") #{name}&nbsp;
         if sortedBy == value
             span.fa(class=("fa-caret-"+(sortOrder=="asc"? "up": "down")))
 
@@ -39,4 +39,4 @@ table.scroll#table-contents(width="100%")
                         if server.country
                             img.flag(src="/images/flags/"+server.country+".png")
                         |  #{server.countryName}
-                    td.clickable(onclick="showConnect('#{server.host}', #{server.port})") #{server.host}:#{server.port}
+                    td.clickable(onclick="showConnect('"+server.host+"', "+server.port+")") #{server.host}:#{server.port}

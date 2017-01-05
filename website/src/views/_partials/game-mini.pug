@@ -4,8 +4,8 @@ else
     .row
         .large-4.columns
             h2: a(href=("/server/"+server.host+"/"+server.port)) !{server.descriptionStyled}
-            a#server-address(onclick="showConnect('#{server.host}', #{server.port})") #{server.host}:#{server.port}
-            span  | 
+            a#server-address(onclick="showConnect('"+server.host+"', "+server.port+")") #{server.host}:#{server.port}
+            span  |
                 if (server.country && server.country != "unknown")
                     img.flag(src="/images/flags/"+server.country+".png")
                 |  #{server.countryName}
@@ -23,10 +23,9 @@ else
                 br
             h5(style="margin-top: 10px")
                 | #{server.gameMode}
-                |  
                 span#map-name #{server.mapName}
                 if server.masterMode
-                    |  | 
+                    |  |
                     span(style=("color: "+vars.materModeColors[server.masterMode])) #{server.masterMode}
                 if server.gameType
                     |  | #{server.gameType}
@@ -34,16 +33,15 @@ else
                     |  | #{server.timeLeftS}
                     if server.timeLeftS != "intermission"
                         |  left
-                |  | 
+                |  |
                 span(style=(server.clients==server.maxClients? "color: yellow": ""))  #{server.clients}
                     if server.maxClients
                         | /#{server.maxClients}
                 |  players
                 if server.time
                     |  |
-                    |  
                     span.date= (server.time instanceof Date)? server.time.toJSON(): server.time
-        
+
     - var players = _.groupBy(server.players, function (pl) { return pl.state==5; });
     - var specs = players[true];
     - players = players[false];
@@ -68,7 +66,7 @@ else
                             label.big Players
                         else
                             label.big
-                                span(class=(team.name=="good"? "primary": "alert")) #{team.name} 
+                                span(class=(team.name=="good"? "primary": "alert")) #{team.name}
                                 |  #{team.score}
                 for player in team.players
                     .row.bordered-left
@@ -81,18 +79,18 @@ else
                             | #{player.frags}/#{player.deaths}
                         .small-5.columns.end
                             if player.country
-                                img.flag(src=("/images/flags/"+player.country+".png")) 
+                                img.flag(src=("/images/flags/"+player.country+".png"))
                                 |  #{player.country}
-    
+
         if specs
             .medium-6.large-4.columns.end
                 label.big Spectators
-                
+
                 for spec in specs
                     .row.bordered-left
                         .small-4.columns
                             a(href=("/player/"+spec.name), class=(spec.highlight? "highlighted": null)) #{spec.name}
                         .small-5.columns.end
                             if spec.country
-                                img.flag(src=("/images/flags/"+spec.country+".png")) 
+                                img.flag(src=("/images/flags/"+spec.country+".png"))
                                 |  #{spec.country}
