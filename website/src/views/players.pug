@@ -1,4 +1,4 @@
-extends ./_layout.jade
+extends ./_layout.pug
 
 block vars
     - section = "players";
@@ -34,7 +34,7 @@ block content
                 if error
                     = error
                 else if typeof(results)!="undefined"
-                        include ./_partials/player-search-results.jade
+                        include ./_partials/player-search-results.pug
                 else
                     - var categoriesA = ["Today", "Last 7 days", "Last 30 days"];
                     - var categoriesB = ["Of all time", "Last 7 days", "Last 30 days"];
