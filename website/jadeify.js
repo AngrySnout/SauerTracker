@@ -19,6 +19,7 @@ module.exports = function (fileName, options) {
             var self = this;
 
             options.filename = fileName;
+			options.compileDebug = false;
 
             var result;
             try {
@@ -33,7 +34,7 @@ module.exports = function (fileName, options) {
             });
 
             var moduleBody = "var pug = require(\"" + options.runtimePath + "\");\n\n" +
-                             "module.exports = " + result.body + ";";
+                             "module.exports = template;" + result.body + ";";
 
             self.queue(moduleBody);
             self.queue(null);
