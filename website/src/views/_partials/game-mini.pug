@@ -23,10 +23,10 @@ else
                 br
             h5(style="margin-top: 10px")
                 | #{server.gameMode}
-                span#map-name #{server.mapName}
+                span#map-name  #{server.mapName}
                 if server.masterMode
                     |  |
-                    span(style=("color: "+vars.materModeColors[server.masterMode])) #{server.masterMode}
+                    span(style=("color: "+vars.materModeColors[server.masterMode]))  #{server.masterMode}
                 if server.gameType
                     |  | #{server.gameType}
                 if server.timeLeftS
