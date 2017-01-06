@@ -39,7 +39,7 @@ else
                         | /#{server.maxClients}
                 |  players
                 if server.time
-                    |  |
+                    |  |  
                     span.date= (server.time instanceof Date)? server.time.toJSON(): server.time
 
     - var players = _.groupBy(server.players, function (pl) { return pl.state==5; });
