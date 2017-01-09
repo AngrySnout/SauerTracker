@@ -5,7 +5,7 @@ else
         .large-4.columns
             h2: a(href=("/server/"+server.host+"/"+server.port)) !{server.descriptionStyled}
             a#server-address(onclick="showConnect('"+server.host+"', "+server.port+")") #{server.host}:#{server.port}
-            span  |
+            span  |  
                 if (server.country && server.country != "unknown")
                     img.flag(src="/images/flags/"+server.country+".png")
                 |  #{server.countryName}
@@ -52,7 +52,7 @@ else
     - } else {
     -     var teams = _.groupBy(players, "team");
     -     teams = _.orderBy(_.map(server.teams, function (val, key) {
-    -         if (server.gameMode.indexOf("team") >= 0 && val === 0) val = _.sumBy(teams[key], "frags");
+    -         if (teamMode && !flagMode) val = _.sumBy(teams[key], "frags");
     -         return {name: key, score: val, players: teams[key]};
     -     }), "score", "desc");
     - }
