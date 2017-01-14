@@ -13,11 +13,11 @@ import Game from './game';
 import playerManager from '../tracker/player-manager';
 import metrics from '../util/metrics';
 
-var typeBuffers = [
-		new Buffer('8001', 'hex'),
-		new Buffer('0001ff', 'hex'), // EXT_PLAYERSTATS -1
-		new Buffer('0002', 'hex') // EXT_TEAMSCORE
-	];
+const typeBuffers = [
+	new Buffer('8001', 'hex'),
+	new Buffer('0001ff', 'hex'), // EXT_PLAYERSTATS -1
+	new Buffer('0002', 'hex') // EXT_TEAMSCORE
+];
 
 export default class Server {
 	constructor(host, port, info) {
