@@ -46,7 +46,7 @@ class CacheManager {
 	}
 
 	/**
-	 *	Purge expired cahe entries.
+	 *	Purge expired cache entries.
 	 */
 	purge() {
 		var time = new Date().getTime();
