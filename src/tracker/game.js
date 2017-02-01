@@ -173,6 +173,7 @@ export default class Game {
 			debug(`Game saved at '${this.server.description}' (${gameType}).`);
 			if (gameType[0] == 'duel') {
 				let pls = _.reject(this.players, { state: 5 });
+				let plNames = _.map(this.players, 'name');
 				return getPlayersElo(pls).then(elos => {
 					let elo = [(elos[plNames[0]]&&elos[plNames[0]].elo)||config.baseElo, (elos[plNames[1]]&&elos[plNames[1]].elo)||config.baseElo];
 					let elod1 = calcEloChange(elo[0], elo[1], pls[0].frags, pls[1].frags);
