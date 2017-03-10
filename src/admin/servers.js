@@ -37,7 +37,7 @@ export function findServer(host, port) {
 
 var infos = ['website', 'demourl', 'banned', 'keep'];
 export function setInfo(host, port, key, value) {
-	if (infos.indexOf(infoKey) < 0) throw new Error(`Invalid info param '${infoKey}'.`);
+	if (infos.indexOf(key) < 0) throw new Error(`Invalid info param '${key}'.`);
 	var server = serverManager.find(host, port);
 	if (!server) return "Error: server not found.";
 
@@ -45,10 +45,10 @@ export function setInfo(host, port, key, value) {
 		server.setInfo(key, value);
 		database('servers').where({ host: host, port: port }).then(rows => {
 			if (rows.length) {
-				database('servers').where({ id: rows[0].id }).update(infoKey, infoValue).then();
+				database('servers').where({ id: rows[0].id }).update(key, value).then();
 			} else {
 				let newserv = { host: host, port: port };
-				newserv[infoKey] = infoValue;
+				newserv[key] = value;
 				database('servers').insert(newserv).then();
 			}
 		});
