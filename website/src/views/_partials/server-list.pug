@@ -1,5 +1,5 @@
 mixin sortable(name, value)
-    a(onclick="sortBy('"+value+"')") #{name}
+    a(onclick="sortBy('"+value+"')") #{name}  
         if sortedBy == value
             span.fa(class=("fa-caret-"+(sortOrder=="asc"? "up": "down")))
 

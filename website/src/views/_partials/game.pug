@@ -28,8 +28,8 @@ else
         label.big Demos: <a href="#{server.info.demourl}">#{server.info.demourl}</a>
     br
     h5
-        | #{server.gameMode}
-        span#map-name  #{server.mapName}
+        | #{server.gameMode}  
+        span#map-name #{server.mapName}
         if server.masterMode
             |  |
             span(style=("color: "+vars.materModeColors[server.masterMode]))  #{server.masterMode}
