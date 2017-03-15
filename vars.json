@@ -5,7 +5,7 @@
 		{ "tag": ".cS|", "title": "Cube Strikers" },
 		{ "tag": ".rC|", "title": "Rising Cubers", "website": "http://rising-cubers.eu" },
 		{ "tag": "GC1/", "title": "Gamer Class 1"},
-		{ "tag": "vaQ'", "title": "Volture Attack Squad", "website": "http://vaq-clan.de" },
+		{ "tag": "vaQ'", "title": "Vulture Attack Squad", "website": "http://vaq-clan.de" },
 		{ "tag": "sp4nk", "title": "sp4nk", "website": "http://sp4nk.net" },
 		{ "tag": "[tBMC]", "title": "The Blue Monkey Cult", "website": "http://thebluemonkeycult.webs.com" },
 		{ "tag": "oo|", "title": "Ogros", "website": "http://ogros.org" },
@@ -34,7 +34,7 @@
 		{ "tag": "|EK|", "title": "Eternal Killers", "website": "http://tekclansauer.createaforum.com" },
 		{ "tag": "MyS", "title": "Makes you Sick", "website": "http://myys.bplaced.net" },
 		{ "tag": "|ONI|", "title": "ONI", "website": "http://www.oniclan.enjin.com/" },
-		{ "tag": "ww|", "title": "War Wolves" }
+		{ "tag": "[ITZ]'", "title": "Internal Terror Zappers" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
