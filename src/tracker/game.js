@@ -63,7 +63,7 @@ function getPlayersElo(players) {
 
 function setPlayersElo(players, elos) {
 	return Promise.all(_.map(players, (plr, i) => {
-		return database('players').where({ name: plr.name }).update({ elo: elos[i] }).then();
+		return database('players').where({ name: plr }).update({ elo: elos[i] }).then();
 	}));
 }
 
