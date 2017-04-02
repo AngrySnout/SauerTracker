@@ -33,8 +33,8 @@
 		{ "tag": "vE'", "title": "vE'ctor", "website": "http://vector.enjin.com" },
 		{ "tag": "|EK|", "title": "Eternal Killers", "website": "http://tekclansauer.createaforum.com" },
 		{ "tag": "MyS", "title": "Makes you Sick", "website": "http://myys.bplaced.net" },
-		{ "tag": "|ONI|", "title": "ONI", "website": "http://www.oniclan.enjin.com/" },
-		{ "tag": "[ITZ]'", "title": "Internal Terror Zappers" }
+		{ "tag": "|ONI|", "title": "ONI", "website": "http://www.oniclan.enjin.com" },
+		{ "tag": "ww|", "title": "War Wolves", "website": "http://ww-warwolves.enjin.com" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
