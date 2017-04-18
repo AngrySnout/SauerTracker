@@ -5,7 +5,7 @@ import moment from 'moment';
 import vars from "../../../vars.json";
 
 import app from '../../util/web';
-import {getClan, error, ObjectNotFoundError, ObjectBannedError} from "../../util/util";
+import {getClan, error, ObjectNotFoundError, ObjectBannedError, escapePostgresLike} from "../../util/util";
 import playerManager from "../../tracker/player-manager";
 import database from '../../util/database';
 
@@ -24,7 +24,7 @@ function getTotalGames(name) {
 }
 
 function getDuels(name) {
-	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%${name}%`)
+	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%${escapePostgresLike(name)}%`)
 		.then(rows => {
 			let res = { total: rows.length, wins: 0, losses: 0, ties: 0 };
 			_.each(rows, row => {

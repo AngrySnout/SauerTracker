@@ -5,7 +5,7 @@ import moment from 'moment';
 import config from '../../tracker.json';
 import vars from '../../vars.json';
 
-import {ipRepLB} from '../util/util';
+import {ipRepLB, escapePostgresLike} from '../util/util';
 import database from '../util/database';
 import serverManager from '../tracker/server-manager';
 import playerManager from '../tracker/player-manager';
@@ -52,7 +52,7 @@ export function namesFor(str, callback) {
 	if (playerManager.players[name] && playerManager.players[name].ips) {
 		ipFound(_.keys(playerManager.players[name].ips)[0]);
 	} else {
-		database("spy").where("name", "ilike", "%"+name+"%").whereNot({ ip: "0.0.0.0" }).select("ip").orderBy("lastseen", "desc").limit(1).then(iprows => {
+		database("spy").where("name", "ilike", "%"+escapePostgresLike(name)+"%").whereNot({ ip: "0.0.0.0" }).select("ip").orderBy("lastseen", "desc").limit(1).then(iprows => {
 			if (iprows.length) {
 				ipFound(iprows[0].ip);
 			} else callback("No names found for \x02\x0303" + name);
@@ -63,7 +63,7 @@ export function namesFor(str, callback) {
 export function findName(str, callback) {
 	let strLC = str.toLowerCase();
 	let names = _.filter(_.keys(playerManager.players), function (name) { return (name.toLowerCase().indexOf(strLC) != -1); });
-	database("spy").where("name", "ilike", "%"+str+"%").whereNot({ ip: "0.0.0.0" }).select("name").orderBy("lastseen", "desc").limit(5).then(rows => {
+	database("spy").where("name", "ilike", "%"+escapePostgresLike(str)+"%").whereNot({ ip: "0.0.0.0" }).select("name").orderBy("lastseen", "desc").limit(5).then(rows => {
 		names = _.union(names, _.map(rows, "name"));
 		if (names.length) callback("Most recent name(s) containing \x02\x0303" + str + "\x0F are: \x02\x0302" + _.reduce(names.slice(0, 5), function (memo, name) { return memo + "\x0F, \x02\x0302" + name; }));
 		else callback("No names found with \x02\x0302" + str);

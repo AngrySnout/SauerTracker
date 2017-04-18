@@ -84,6 +84,15 @@ export function assert(condition, msg) {
 }
 
 /**
+ *  Replace all occurrences of '%' with '\%' and '_' with '\_' for use in an [I]LIKE query.
+ *  @param {string} text - String to escape.
+ *  @returns {string}
+ */
+export function escapePostgresLike(text) {
+	return String(text).replace(/[_%]/g, s => `\\${s}`);
+}
+
+/**
  *  Extract the clantag from a player name. If no clantag is found, return undefined.
  *  @param {string} name
  */

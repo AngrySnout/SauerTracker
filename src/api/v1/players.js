@@ -4,6 +4,7 @@ import dgram from 'dgram';
 
 import config from '../../../tracker.json';
 
+import {escapePostgresLike} from "../../util/util";
 import app from '../../util/web';
 import database from '../../util/database';
 import playerManager from '../../tracker/player-manager';
@@ -11,7 +12,7 @@ import Packet from '../../util/packet';
 
 export function findPlayers(name, country) {
 	if (typeof name == 'undefined') name = '';
-	let query = database('players').where('name', 'ilike', '%'+name+'%');
+	let query = database('players').where('name', 'ilike', '%'+escapePostgresLike(name)+'%');
 	if (country) {
 		query.where(function() {
 			if (country == '__') this.where({ country: '' }).orWhereNull('country');

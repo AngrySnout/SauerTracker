@@ -5,11 +5,11 @@ import vars from "../../../vars.json";
 
 import app from '../../util/web';
 import cache from '../../util/cache';
-import {error, ObjectNotFoundError} from '../../util/util';
+import {error, ObjectNotFoundError, escapePostgresLike} from '../../util/util';
 import database from '../../util/database';
 
 function getLatestGames(clan) {
-	return database("games").where("meta", "like", "%"+clan.replace(/\"/g, '\\"')+"%").where({ gametype: "clanwar" }).orderBy("id", "desc").limit(10).then(rows => {
+	return database("games").where("meta", "like", "%"+escapePostgresLike(clan.replace(/\"/g, '\\"'))+"%").where({ gametype: "clanwar" }).orderBy("id", "desc").limit(10).then(rows => {
 		_.each(rows, function (game) {
 			if (game.meta) {
 				try {
@@ -26,7 +26,7 @@ function getLatestGames(clan) {
 }
 
 function getLatestMembers(clan) {
-	return database("spy").where("name", "ilike", "%"+clan+"%").max("lastseen as lastseen").select("name").groupBy("name").orderBy("lastseen", "desc").limit(9);
+	return database("spy").where("name", "ilike", "%"+escapePostgresLike(clan)+"%").max("lastseen as lastseen").select("name").groupBy("name").orderBy("lastseen", "desc").limit(9);
 }
 
 export function getClan(name) {

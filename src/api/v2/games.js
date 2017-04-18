@@ -6,7 +6,7 @@ import geoip from 'geoip-lite';
 
 import config from '../../../tracker.json';
 
-import {log} from '../../util/util';
+import {log, escapePostgresLike} from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 import serverManager from '../../tracker/server-manager';
@@ -17,7 +17,7 @@ var maxPageLimit = 1000;
 export function findGames(params) {
 	let query = database('games');
 
-	if (params.description) query.where('serverdesc', 'ilike', '%'+params.description+'%');
+	if (params.description) query.where('serverdesc', 'ilike', '%'+escapePostgresLike(params.description)+'%');
 	let paramCrit = _.omitBy(_.pick(params, [ 'host', 'port', 'mode', 'type', 'map' ]), _.isEmpty);
 	if (paramCrit.mode) {
 		paramCrit.gamemode = paramCrit.mode;
@@ -32,18 +32,16 @@ export function findGames(params) {
 	if (params.from) query.where('timestamp', '>=', params.from);
 	if (params.to) query.where('timestamp', '<=', moment(params.to, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD'));
 
-	// TODO: params.split
-
 	if (params.players) {
 		let pls = _.trim(params.players).split(' ');
 		if (pls.length > 1 || pls[0] !== '') {
 			_.each(pls, pl => {
 				query.where(function() {
-					if (params.exact) this.where('players', 'like', '% '+pl+' %');
-					else this.where('players', 'ilike', '%'+pl+'%');
+					if (params.exact) this.where('players', 'like', '% '+escapePostgresLike(pl)+' %');
+					else this.where('players', 'ilike', '%'+escapePostgresLike(pl)+'%');
 					if (params.specs) {
-						if (params.exact) this.orWhere('specs', 'like', '% '+pl+' %');
-						else this.orWhere('specs', 'ilike', '%'+pl+'%');
+						if (params.exact) this.orWhere('specs', 'like', '% '+escapePostgresLike(pl)+' %');
+						else this.orWhere('specs', 'ilike', '%'+escapePostgresLike(pl)+'%');
 					}
 				});
 			});

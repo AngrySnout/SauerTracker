@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import config from '../../../tracker.json';
 
-import {log} from '../../util/util';
+import {log, escapePostgresLike} from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 
@@ -15,7 +15,7 @@ var maxPageLimit = 1000;
 export function findGames(params) {
 	let query = database('games');
 
-	if (params.serverdesc) query.where('serverdesc', 'ilike', '%'+params.serverdesc+'%');
+	if (params.serverdesc) query.where('serverdesc', 'ilike', '%'+escapePostgresLike(params.serverdesc)+'%');
 	let paramCrit = _.omitBy(_.pick(params, [ 'host', 'port', 'gamemode', 'gametype', 'map' ]), _.isEmpty);
 	if (paramCrit) query.where(paramCrit);
 
@@ -27,11 +27,11 @@ export function findGames(params) {
 		if (pls.length > 1 || pls[0] !== '') {
 			_.each(pls, pl => {
 				query.where(function() {
-					if (params.exact) this.where('players', 'like', '% '+pl+' %');
-					else this.where('players', 'ilike', '%'+pl+'%');
+					if (params.exact) this.where('players', 'like', '% '+escapePostgresLike(pl)+' %');
+					else this.where('players', 'ilike', '%'+escapePostgresLike(pl)+'%');
 					if (params.specs) {
-						if (params.exact) this.orWhere('specs', 'like', '% '+pl+' %');
-						else this.orWhere('specs', 'ilike', '%'+pl+'%');
+						if (params.exact) this.orWhere('specs', 'like', '% '+escapePostgresLike(pl)+' %');
+						else this.orWhere('specs', 'ilike', '%'+escapePostgresLike(pl)+'%');
 					}
 				});
 			});
