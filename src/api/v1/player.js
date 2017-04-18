@@ -24,7 +24,7 @@ function getTotalGames(name) {
 }
 
 function getDuels(name) {
-	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%${escapePostgresLike(name)}%`)
+	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%"${escapePostgresLike(name)}"%`)
 		.then(rows => {
 			let res = { total: rows.length, wins: 0, losses: 0, ties: 0 };
 			_.each(rows, row => {
