@@ -35,7 +35,7 @@
 		{ "tag": "MyS", "title": "Makes you Sick", "website": "http://myys.bplaced.net" },
 		{ "tag": "|ONI|", "title": "ONI", "website": "http://www.oniclan.enjin.com" },
 		{ "tag": "ww|", "title": "War Wolves", "website": "http://ww-warwolves.enjin.com" },
-		{ "tag": "[SPMC]", "title": "Superior Mappers", "website": "http://superiormappers.forumotion.eu" }
+		{ "tag": "|SM|", "title": "Superior Mappers", "website": "http://superiormappers.forumotion.eu" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
