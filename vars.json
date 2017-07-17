@@ -39,7 +39,8 @@
 		{ "tag": "'eS|", "title": "Essential Smileys" },
 		{ "tag": "s3xy|", "title": "Sexiest Clan", "website": "http://sexysauer.com" },
 		{ "tag": "xS'", "title": "eXperimental Squad", "website": "http://impressivesquad.eu" },
-		{ "tag": "aCe|", "title": "Amazing Cube Events" }
+		{ "tag": "aCe|", "title": "Amazing Cube Events" },
+		{ "tag": "cH'", "title": "Coop Hopes", "website": "https://ch-clan.com" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
