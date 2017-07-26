@@ -75,6 +75,7 @@ function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
 /**
  *  Get type of the game.
  *	@param {object} game - The game to detect. Should have properties 'gameMode', 'masterMode', 'players', and 'teams'.
+ *	@param {number} threshold - Override minimum number of frags to count as a duel.
  *	@returns {array} An array, the first element of which is one of 'duel', 'public', 'other', 'clanwar', 'mix', 'intern'. If the first element if one of 'duel' and 'clanwar', the second element is a string representing the participants and the result. If the first element is 'intern', the second element is a string representing the clan.
  */
 export function getGameType(game, threshold) {
@@ -114,6 +115,10 @@ export function getGameType(game, threshold) {
 				clans.push(dominantClan);
 				let teamScore;
 				if (self.teams) teamScore = self.teams[playerTeam[0].team];
+				if (vars.gameModes[self.gameMode].teamMode && !vars.gameModes[self.gameMode].flagMode) {
+					// Workaround for Remod reporting wrong scores in team modes
+					teamScore = _.sumBy(playerTeam, 'frags');
+				}
 				result.push({'clan': dominantClan, 'score': (self.teams && teamScore)? teamScore: 0});
 			});
 		}
