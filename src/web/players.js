@@ -12,17 +12,17 @@ import {findPlayers} from '../api/v1/players';
 
 cache.set("top-players-daily", 60*60*1000, function() {
 	let start = moment().startOf('day').format("YYYY-MM-DD HH:mm:ss");
-	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNot('stats.state', 5).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
+	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNot('stats.state', 5).whereNot('frags', 0).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
 });
 
 cache.set("top-players-weekly", 2*60*60*1000, function() {
 	var start = moment().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
-	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNot('stats.state', 5).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
+	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNot('stats.state', 5).whereNot('frags', 0).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
 });
 
 cache.set("top-players-monthly", 2*60*60*1000, function() {
 	var start = moment().subtract(30, "days").format("YYYY-MM-DD HH:mm:ss");
-	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNot('stats.state', 5).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
+	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNot('stats.state', 5).whereNot('frags', 0).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
 });
 
 cache.set("top-fraggers-daily", 60*60*1000, function() {
