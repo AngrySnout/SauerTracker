@@ -56,6 +56,22 @@ block content
                                                 td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
                                                 td= player.wins
                                                 td= ""+parseInt(player.wins/player.games*100)+"%"
+                    
+                    br
+                    h4.text-center Top players:
+                    .row
+                        for category in categoriesA
+                            .medium-4.columns
+                                table(width="100%")
+                                    thead
+                                        tr
+                                            td(width="50%")= category
+                                            td(width="50%") Games
+                                    tbody
+                                        for player in topPlayers[category]
+                                            tr
+                                                td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
+                                                td= player.count
                                                 
                     br
                     h4.text-center Top fraggers:

@@ -12,15 +12,30 @@ import {findPlayers} from '../api/v1/players';
 
 cache.set("top-players-daily", 60*60*1000, function() {
 	let start = moment().startOf('day').format("YYYY-MM-DD HH:mm:ss");
-	return database.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
+	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
 });
 
 cache.set("top-players-weekly", 2*60*60*1000, function() {
 	var start = moment().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
-	return database.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
+	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
 });
 
 cache.set("top-players-monthly", 2*60*60*1000, function() {
+	var start = moment().subtract(30, "days").format("YYYY-MM-DD HH:mm:ss");
+	return database.select("stats.name as name").count("*").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("count", "desc").limit(10);
+});
+
+cache.set("top-fraggers-daily", 60*60*1000, function() {
+	let start = moment().startOf('day').format("YYYY-MM-DD HH:mm:ss");
+	return database.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
+});
+
+cache.set("top-fraggers-weekly", 2*60*60*1000, function() {
+	var start = moment().subtract(7, "days").format("YYYY-MM-DD HH:mm:ss");
+	return database.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
+});
+
+cache.set("top-fraggers-monthly", 2*60*60*1000, function() {
 	var start = moment().subtract(30, "days").format("YYYY-MM-DD HH:mm:ss");
 	return database.select("stats.name as name").sum("stats.frags as frags").from("stats").join("games", "games.id", "stats.game").where("games.timestamp", ">", start).whereNotIn("name", _.keys(playerManager.banNames)).groupBy("name").orderBy("frags", "desc").limit(10);
 });
@@ -93,9 +108,10 @@ cache.set("player-countries", 2*60*60*1000, function() {
 });
 
 app.get("/players", function(req, res) {
-	Promise.all([ cache.get("top-players-daily"), cache.get("top-players-weekly"), cache.get("top-players-monthly"),
+	Promise.all([ cache.get("top-fraggers-daily"), cache.get("top-fraggers-weekly"), cache.get("top-fraggers-monthly"),
 			cache.get("top-runners-daily"), cache.get("top-runners-weekly"), cache.get("top-runners-monthly"),
 			cache.get("top-duelists"), cache.get("top-duelists-weekly"), cache.get("top-duelists-monthly"),
+			cache.get("top-players-daily"), cache.get("top-players-weekly"), cache.get("top-players-monthly"),
 			cache.get("player-countries") ])
 		.then(results => {
 			res.render("players", {
@@ -114,7 +130,12 @@ app.get("/players", function(req, res) {
 					"Last 7 days": results[7],
 					"Last 30 days": results[8]
 				},
-				countries: results[9]
+				topPlayers: {
+					"Today": results[9],
+					"Last 7 days": results[10],
+					"Last 30 days": results[11]
+				},
+				countries: results[12]
 			});
 		}).catch(error => {
 			res.status(500).render("error", { status: 500, error: error });
