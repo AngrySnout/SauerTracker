@@ -39,10 +39,10 @@ block content
                                 a(href='/clan/'+player.clanTag) #{player.clan}
                         br
                             
-                        if bannerURL
+                        if vars.bannerURL
                             br
                             a(href="/banners?type=player&name="+encodeURIComponent(player.name))
-                                img#banner(src=bannerURL+"player?theme=default&name="+encodeURIComponent(player.name))
+                                img#banner(src=vars.bannerURL+"player?theme=default&name="+encodeURIComponent(player.name))
                             br
                         br
                     
@@ -115,10 +115,11 @@ block content
                     table.scroll(width="100%")
                         thead
                             tr
-                                td(width="25%") Recent games
-                                td(width="25%") Mode / Map
-                                td(width="25%") Type
-                                td(width="25%") End time
+                                td(width="20%") Recent games
+                                td(width="20%") Mode / Map
+                                td(width="12%") Type
+                                td(width="28%") Result
+                                td(width="20%") End time
                         tbody
                             for game in games
                                 tr
@@ -129,9 +130,23 @@ block content
                                             = game.host+":"+game.port
                                     td= game.gamemode+" "+game.map
                                     td= game.gametype
+                                    td
+                                        if (game.gametype == 'duel')
+                                            - let winner = false;
+                                            - try {
+                                            -   let meta = JSON.parse(game.meta);
+                                            -   if (meta[2] == player.name) winner = true;
+                                            - } catch (e) {
+                                            - }
+                                            = winner? "Winner": "Loser"
+                                        else if (vars.gameModes[game.gamemode].flagMode)
+                                            | #{game.flags} <small>flags</small>, #{game.frags}/#{game.deaths} <small>K/D</small>, #{game.acc}% <small>accuracy</small>
+                                        else
+                                            | #{game.frags}/#{game.deaths} <small>K/D</small>, #{game.acc}% <small>accuracy</small>
                                     td: span.date= (game.timestamp instanceof Date)? game.timestamp.toJSON(): game.timestamp
                             tr
-                                td: a(href=("/games/find?exact=on&players="+encodeURIComponent(player.name))) Find more...
+                                td: a(href=("/games/find?exact=on&players="+encodeURIComponent(player.name))) View all...
+                                td
                                 td
                                 td
                                 td

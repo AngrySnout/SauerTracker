@@ -40,7 +40,7 @@ function getDuels(name) {
 }
 
 function getLastGames(name) {
-	return database.select('games.id', 'games.host', 'games.port', 'games.serverdesc', 'games.gamemode', 'games.map', 'games.gametype', 'games.timestamp').from('stats').join('games', 'games.id', 'stats.game').where('stats.name', name).whereNot('stats.state', 5).orderBy('games.id', 'desc').limit(10);
+	return database.select('games.id', 'games.host', 'games.port', 'games.serverdesc', 'games.gamemode', 'games.map', 'games.gametype', 'games.meta', 'games.timestamp', 'stats.flags', 'stats.frags', 'stats.deaths', 'stats.acc').from('stats').join('games', 'games.id', 'stats.game').where('stats.name', name).whereNot('stats.state', 5).orderBy('games.id', 'desc').limit(10);
 }
 
 export function getPlayer(name) {
