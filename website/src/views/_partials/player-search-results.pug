@@ -2,14 +2,15 @@ if results.length
     table.scroll#search-results(width="100%")
         thead
             tr
-                td(width="20%") Name
-                td(width="10%") Frags
-                td(width="10%") Flags
-                td(width="10%") Deaths
-                td(width="10%") TKs
-                td(width="10%") K/D
-                td(width="10%") Accuracy
-                td(width="20%") Country
+                td(width="19%") Name
+                td(width="9%") Frags
+                td(width="9%") Flags
+                td(width="9%") Deaths
+                td(width="9%") TKs
+                td(width="9%") K/D
+                td(width="9%") Accuracy
+                td(width="9%") Elo
+                td(width="18%") Country
         tbody
             for player in results
                 tr.unclickable
@@ -24,6 +25,7 @@ if results.length
                     td= player.tks
                     td= player.kpd
                     td= _.padStart(parseInt(player.acc).toString(), 2, "0")+"%"
+                    td= player.elo
                     td
                         if player.country
                             img.flag(src=("/images/flags/"+player.country+".png"))
