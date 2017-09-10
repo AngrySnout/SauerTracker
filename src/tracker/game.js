@@ -56,7 +56,7 @@ function saveGame(server, type) {
 }
 
 function getPlayersElo(players) {
-	return database('players').whereIn('name', _.map(players, 'name')).select('name', 'elo').then(rows => {
+	return database('players').whereIn('name', players).select('name', 'elo').then(rows => {
 		return _.keyBy(rows, 'name');
 	});
 }
@@ -178,8 +178,8 @@ export default class Game {
 			debug(`Game saved at '${this.server.description}' (${gameType}).`);
 			if (gameType[0] == 'duel') {
 				let pls = _.reject(this.players, { state: 5 });
-				let plNames = _.map(this.players, 'name');
-				return getPlayersElo(pls).then(elos => {
+				let plNames = _.map(pls, 'name');
+				return getPlayersElo(plNames).then(elos => {
 					let elo = [(elos[plNames[0]]&&elos[plNames[0]].elo)||config.baseElo, (elos[plNames[1]]&&elos[plNames[1]].elo)||config.baseElo];
 					let elod1 = calcEloChange(elo[0], elo[1], pls[0].frags, pls[1].frags);
 					let elod2 = calcEloChange(elo[1], elo[0], pls[1].frags, pls[0].frags);
