@@ -111,7 +111,7 @@ block content
                             table(width="100%")
                                 thead
                                     tr
-                                        td(width="60%") Recent <a href="/games/find?gametype=duel" onclick="return loadPage('/games/find?gametype=duel')")>duels</a>
+                                        td(width="60%") Recent duels
                                         td(width="40%") Mode / Map
                                 tbody
                                     for game in latestDuels
@@ -128,12 +128,13 @@ block content
                                                         = " "+game.meta[0]
                                             td
                                                 | #{game.gamemode} #{game.map}
-                                                
+                                    tr.clickable(onclick=("return loadPage('/games/find?gametype=duel')"))
+                                        td(colspan=2, style='text-align: center') <a href="/games/find?gametype=duel" onclick="return loadPage('/games/find?gametype=duel')")>View all...</a>
                         .medium-12.large-6.columns
                             table(width="100%")
                                 thead
                                     tr
-                                        td(width="60%") Recent <a href="/games/find?gametype=clanwar" onclick="return loadPage('/games/find?gametype=clanwar')">clanwars</a>
+                                        td(width="60%") Recent clanwars
                                         td(width="40%") Mode / Map
                                 tbody
                                     for game in latestClanwars
@@ -150,7 +151,8 @@ block content
                                                         = " "+game.meta[0]
                                             td
                                                 | #{game.gamemode} #{game.map}
-                                                
+                                    tr.clickable(onclick=("return loadPage('/games/find?gametype=clanwar')"))
+                                        td(colspan=2, style='text-align: center') <a href="/games/find?gametype=clanwar" onclick="return loadPage('/games/find?gametype=clanwar')">View all...</a>
     .reveal#connect-info(data-reveal)
         | Copy the following line, paste it in the game, and press Enter to connect to the server:
         br
