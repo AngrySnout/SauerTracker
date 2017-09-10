@@ -20,7 +20,7 @@ var chartDataMonth = {
 };
 var monthOptions = {
     scaleShowGridLines : false,
-    bezierCurve : true,
+    bezierCurve : false,
     bezierCurveTension : 0.4,
     pointDot : true,
     pointDotRadius : 4,
