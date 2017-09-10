@@ -6,7 +6,7 @@ var url = window.url;
 
 var searchResultsTemplate = require('../views/_partials/player-search-results.pug');
 
-var originalURL = window.location.href;
+var originalURL = window.location.pathname + window.location.search + window.location.hash;
 
 function loadPage(url, name) {
 	NProgress.start();
@@ -33,6 +33,17 @@ $("#search-form").on("submit", function(event) {
 
 $(window).bind("popstate", function(event) {
 	let state = event.originalEvent.state;
-	if (!state) loadPage(originalURL);
-	else loadPage(state.url, state.name);
+	if (!state) {
+		if (originalURL === "/players") window.location.reload();
+		else loadPage(originalURL);
+	} else loadPage(state.url, state.name);
 });
+
+window.selectCategory = function(category) {
+	$(".category-body").hide();
+	$("#top-"+category).show();
+	$(".category-title").removeClass("inverted");
+	$("#ct-"+category).addClass("inverted");
+}
+
+window.selectCategory("daily");

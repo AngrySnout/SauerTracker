@@ -22,6 +22,11 @@ a {
 	color: #78CCF0;
 }
 
+a.inverted {
+	background-color: #78CCF0;
+	color: $light-black;
+}
+
 label {
 	color: $body-font-color;
 }

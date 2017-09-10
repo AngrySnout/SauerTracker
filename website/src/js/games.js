@@ -73,8 +73,10 @@ window.loadMore = function(pageURL) {
 
 $(window).bind("popstate", function(event) {
 	let state = event.originalEvent.state;
-	if (!state) loadResults(originalURL);
-	else loadResults(state.url);
+	if (!state) {
+		if (originalURL === "/games") window.location.reload();
+		else loadResults(originalURL);
+	} else loadResults(state.url);
 });
 
 $("#search-form").on("submit", function(event) {

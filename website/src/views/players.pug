@@ -36,18 +36,24 @@ block content
                 else if typeof(results)!="undefined"
                         include ./_partials/player-search-results.pug
                 else
-                    - var categoriesA = ["Today", "Last 7 days", "Last 30 days"];
-                    - var categoriesB = ["Of all time", "Last 7 days", "Last 30 days"];
-                    
+                    - var categories = ["daily", "weekly", "monthly", "alltime"];
+                    - var categoriesNice = ["today", "7 days", "30 days", "beginning of time"];
+                    div(style="text-align: center; font-size: 1.1rem"): span.client-side
+                        | Show leaderboard since 
+                        - for (var i = 0; i < categories.length; i++) {
+                            if i > 0
+                                |  - 
+                            a.category-title(id="ct-"+categories[i], onclick="return selectCategory('"+categories[i]+"')")= categoriesNice[i]
+                        - }
                     br
-                    h4.text-center Top duelists:
-                    .row
-                        for category in categoriesB
-                            .medium-4.columns
+                    for category in categories
+                        .row.category-body(id="top-"+category)
+                            noscript: h3(style="text-align: center")= category.charAt(0).toUpperCase() + category.slice(1) + " leaderboard"
+                            .medium-3.columns
                                 table(width="100%")
                                     thead
                                         tr
-                                            td(width="34%")= category
+                                            td(width="34%") Top dueslists
                                             td(width="33%") Wins
                                             td(width="33%") Win rate
                                     tbody
@@ -56,48 +62,33 @@ block content
                                                 td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
                                                 td= player.wins
                                                 td= ""+parseInt(player.wins/player.games*100)+"%"
-                    
-                    br
-                    h4.text-center Top players:
-                    .row
-                        for category in categoriesA
-                            .medium-4.columns
+                            .medium-3.columns
                                 table(width="100%")
                                     thead
                                         tr
-                                            td(width="50%")= category
+                                            td(width="50%") Top players
                                             td(width="50%") Games
                                     tbody
                                         for player in topPlayers[category]
                                             tr
                                                 td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
                                                 td= player.count
-                                                
-                    br
-                    h4.text-center Top fraggers:
-                    .row
-                        for category in categoriesA
-                            .medium-4.columns
+                            .medium-3.columns
                                 table(width="100%")
                                     thead
                                         tr
-                                            td(width="50%")= category
+                                            td(width="50%") Top fraggers
                                             td(width="50%") Frags
                                     tbody
                                         for player in topFraggers[category]
                                             tr
                                                 td: a(href=("/player/"+encodeURIComponent(player.name)))= player.name
                                                 td= player.frags
-                                                
-                    br
-                    h4.text-center Top flagrunners:
-                    .row
-                        for category in categoriesA
-                            .medium-4.columns
+                            .medium-3.columns
                                 table(width="100%")
                                     thead
                                         tr
-                                            td(width="50%")= category
+                                            td(width="50%") Top flagrunners
                                             td(width="50%") Flags
                                     tbody
                                         for player in topRunners[category]
