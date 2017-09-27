@@ -10,7 +10,7 @@ else
     br
     br
     if server.info.banned
-        span(style="color: red") This server is banned. Reason: #{server.info.banned}.
+        span(style="color: red") This server is not tracked. Reason: #{server.info.banned}.
     else
         a(href=("/games/find?host="+server.host+"&port="+server.port)) View other games from this server...
     br
