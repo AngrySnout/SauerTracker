@@ -14,11 +14,11 @@ class CacheManager {
 	/**
 	 *	Add a cache function.
 	 *	@param {string} id - A unique name for the function.
-	 *	@param {string} maxage - How often, in milliseconds, should the stored value be purged.
+	 *	@param {string} maxage - Approximately, how often, in milliseconds, should the stored value be purged.
 	 *	@param {function} func - A function that returns a promise which resolves to the value that should be stored.
 	 */
 	set(id, maxage, func) {
-		this.entries[id] = { 'maxage': maxage, 'func': func };
+		this.entries[id] = { 'maxage': maxage * (0.7 + (0.6 * Math.random())), 'func': func };
 	}
 
 	/**
@@ -33,7 +33,7 @@ class CacheManager {
 				reject("Cache entry not set");
 				return;
 			}
-			if (!self.cached[id] || (new Date().getTime() - self.cached[id].time) > self.entries[id].maxage) {
+			if (!self.cached[id]) {
 				self.entries[id].func().then(function(res) {
 					self.cached[id] = { 'value': res, 'time': new Date().getTime() };
 					resolve(res);
@@ -51,7 +51,10 @@ class CacheManager {
 	purge() {
 		var time = new Date().getTime();
 		_.each(this.cached, function(cache, id) {
-			if ((time - cache.time) > this.entries[id].maxage) delete this.cached[id];
+			if ((time - cache.time) > this.entries[id].maxage) {
+				delete this.cached[id];
+				this.get(id);
+			}
 		});
 	}
 
