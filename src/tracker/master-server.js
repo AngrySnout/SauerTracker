@@ -14,7 +14,7 @@ export default function getServerList(resolve, reject) {
 	try {
 		var agg = '';
 		let socket = net.connect(config.master.port, config.master.name, function() {
-				socket.write('list\n');
+			socket.write('list\n');
 		});
 		socket.on('data', function(data) {
 			agg += data.toString();
