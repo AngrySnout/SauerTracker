@@ -12,6 +12,13 @@ block content
         .medium-12.columns
             #game
                 include ./_partials/game.pug
+            #similar-games-parent(style="display: none;")
+                label.big Similar Games
+                span#game-meta(style="display: none;")= JSON.stringify(server.meta)
+                span#game-type(style="display: none;")= server.gameType
+                .row
+                    .large-6.columns
+                        #similar-games
                         
     .reveal#connect-info(data-reveal)
         | Copy the following line, paste it in the game, and press Enter to connect to the server:

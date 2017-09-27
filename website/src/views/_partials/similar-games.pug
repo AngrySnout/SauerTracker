@@ -1,0 +1,20 @@
+table.scroll#search-results(width="50%")
+    thead
+        tr
+            td(width="40%") Mode / Map
+            td.text-center(width="60%") Result
+    tbody
+        for game in similarGames
+            tr.clickable(onclick="window.location.replace('/game/"+game.id+"')")
+                td: a.disable-default(href="/game/"+game.id)= game.gamemode + " " + game.map
+                td: a.disable-default(href="/game/"+game.id)
+                    .row
+                        .small-6.columns(style="text-align: right; padding-right: 10;")
+                            = game.meta[2]+" "
+                            span.label(class=(game.draw? "warning": "success"), style="cursor: pointer")
+                                = game.meta[3]
+                        .small-6.columns(style="text-align: left; padding-right: 10;")
+                            span.label(class=(game.draw? "warning": "alert"), style="cursor: pointer")
+                                = game.meta[1]
+                            = " "+game.meta[0]
+        tr: td(colspan=2): a(href=viewAllLink) View all...
