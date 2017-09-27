@@ -37,9 +37,9 @@ export function makeTeams(names, mode, map) {
 	if (names.length > 64) names = names.slice(0, 64);
 
 	// Get average number of frags and of flags per game for each player for selected map and mode
-	let query1 = database.avg('frags as avgFrags').avg('flags as avgFlags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game');
+	let query1 = database.avg('frags as avgFrags').avg('flags as avgFlags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').where('gametype', 'mix');
 	if (mode) query1 = query1.where('gamemode', mode);
-	if (map) query1 = query1.where('map', map);
+	// if (map) query1 = query1.where('map', map);
 	query1 = query1.whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name');
 
 	// Get average number of frags and of flags per game for selected mode and map
