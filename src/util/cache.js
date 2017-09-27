@@ -33,7 +33,7 @@ class CacheManager {
 				reject("Cache entry not set");
 				return;
 			}
-			if (!self.cached[id]) {
+			if (!self.cached[id] || (new Date().getTime() - self.cached[id].time) > self.entries[id].maxage) {
 				self.entries[id].func().then(function(res) {
 					self.cached[id] = { 'value': res, 'time': new Date().getTime() };
 					resolve(res);
