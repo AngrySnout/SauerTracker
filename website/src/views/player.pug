@@ -130,15 +130,18 @@ block content
                                             = game.host+":"+game.port
                                     td= game.gamemode+" "+game.map
                                     td= game.gametype
-                                    td
-                                        if (game.gametype == 'duel')
-                                            - let winner = false;
-                                            - try {
-                                            -   let meta = JSON.parse(game.meta);
-                                            -   if (meta[2] == player.name) winner = true;
-                                            - } catch (e) {
-                                            - }
-                                            = winner? "Winner": "Loser"
+                                    td.text-center
+                                        if (game.gametype === 'duel' || game.gametype == 'clanwar')
+                                            - let meta = JSON.parse(game.meta);
+                                            .row
+                                                .small-6.columns(style="text-align: right; padding-right: 10;")
+                                                    = meta[2]+" "
+                                                    span.label(class=(game.draw? "warning": "success"), style="cursor: pointer")
+                                                        = meta[3]
+                                                .small-6.columns(style="text-align: left; padding-right: 10;")
+                                                    span.label(class=(game.draw? "warning": "alert"), style="cursor: pointer")
+                                                        = meta[1]
+                                                    = " "+meta[0]
                                         else if (vars.gameModes[game.gamemode].flagMode)
                                             | #{game.flags} <small>flags</small>, #{game.frags}/#{game.deaths} <small>K/D</small>, #{game.acc}% <small>accuracy</small>
                                         else
