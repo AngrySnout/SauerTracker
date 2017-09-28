@@ -46,4 +46,4 @@ window.selectCategory = function(category) {
 	$("#ct-"+category).addClass("inverted");
 }
 
-window.selectCategory("daily");
+window.selectCategory("monthly");
