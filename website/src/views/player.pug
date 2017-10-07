@@ -25,7 +25,8 @@ block content
                                 | Country unknown
                             else
                                 img.flag(src="/images/flags/"+player.country+".png")
-                                |  #{player.countryName}
+                                |  
+                                a.no-color(href="/players/find?country="+player.country)= player.countryName
                         br
                         br
                         label.big Games played: 

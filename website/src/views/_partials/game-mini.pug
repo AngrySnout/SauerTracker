@@ -80,7 +80,8 @@ else
                         .small-5.columns.end
                             if player.country
                                 img.flag(src=("/images/flags/"+player.country+".png"))
-                                |  #{player.country}
+                                |  
+                                a.no-color(href="/players/find?country="+player.country)= player.country
 
         if specs
             .medium-6.large-4.columns.end

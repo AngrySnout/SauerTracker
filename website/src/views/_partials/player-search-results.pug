@@ -30,7 +30,7 @@ if results.length
                         if player.country
                             img.flag(src=("/images/flags/"+player.country+".png"))
                             |  
-                            = player.countryName
+                            a.no-color(href="/players/find?country="+player.country)= player.countryName
                         else
                             | Unknown
     

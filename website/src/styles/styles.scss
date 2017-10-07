@@ -27,6 +27,10 @@ a.inverted {
 	color: $light-black;
 }
 
+a.no-color {
+	color: $body-font-color;
+}
+
 label {
 	color: $body-font-color;
 }

@@ -70,7 +70,9 @@ block content
                                     if country.country && country.country != "unknown"
                                         img.flag(src=("/images/flags/"+country.country+".png"))
                                         |  
-                                    = country.name
+                                        a(href="/players/find?country="+country.country)= country.name
+                                    else
+                                        = country.name
                                 td= country["frags"]
         .large-4.columns
             if topServers
