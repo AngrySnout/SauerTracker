@@ -195,3 +195,11 @@ window.onunload = function() {
 	$("#server-info").css("display", "none");
 	openServerHost = "";
 };
+
+$('.banner .x-button').click(function (e) {
+	$('.banner').css('display', 'none');
+	e.stopPropagation();
+	sessionStorage.setItem('hideBanner', 'true');
+});
+
+if (sessionStorage.getItem('hideBanner') == 'true') $('.banner').css('display', 'none');

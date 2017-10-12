@@ -451,3 +451,39 @@ svg {
 	font-weight: bold;
 	color: #BBB;
 }
+
+.banner {
+	padding-top: 1em;
+	font-size: 1.1em;
+	margin-bottom: 1em;
+	position: relative;
+	
+	.x-button {
+		display: block;
+		position: absolute;
+		top: 0;
+		right: 0;
+		background-color: $body-font-color;
+		color: $body-background;
+		width: 20px;
+		height: 20px;
+		text-align: center;
+		padding: 0;
+		line-height: 1;
+	}
+	
+	.x-button:hover {
+		background-color: $body-background;
+		color: $body-font-color;
+	}
+}
+
+.banner.gh:hover {
+	background: $body-font-color !important;
+	color: $body-background;
+	cursor: pointer;
+	
+	a {
+		color: $body-background;
+	}
+}
