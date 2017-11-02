@@ -40,7 +40,8 @@
 		{ "tag": "s3xy|", "title": "Sexiest Clan", "website": "http://sexysauer.com" },
 		{ "tag": "xS'", "title": "eXperimental Squad", "website": "http://impressivesquad.eu" },
 		{ "tag": "aCe|", "title": "Amazing Cube Events" },
-		{ "tag": "cH'", "title": "Coop Hopes", "website": "https://ch-clan.com" }
+		{ "tag": "cH'", "title": "Coop Hopes", "website": "https://ch-clan.com" },
+		{ "tag": "|GM|", "title": "German Masters", "website": "http://germanmasters.clanwebsite.com/" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
