@@ -137,10 +137,10 @@ block content
                                             .row
                                                 .small-6.columns(style="text-align: right; padding-right: 10;")
                                                     = meta[2]+" "
-                                                    span.label(class=(game.draw? "warning": "success"), style="cursor: pointer")
+                                                    span.label(class=(meta[1]===meta[3]? "warning": "success"), style="cursor: pointer")
                                                         = meta[3]
                                                 .small-6.columns(style="text-align: left; padding-right: 10;")
-                                                    span.label(class=(game.draw? "warning": "alert"), style="cursor: pointer")
+                                                    span.label(class=(meta[1]===meta[3]? "warning": "alert"), style="cursor: pointer")
                                                         = meta[1]
                                                     = " "+meta[0]
                                         else if (vars.gameModes[game.gamemode].flagMode)
