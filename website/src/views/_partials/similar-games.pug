@@ -5,7 +5,7 @@ table.scroll#search-results(width="50%")
             td.text-center(width="60%") Result
     tbody
         for game in similarGames
-            tr.clickable(onclick="window.location.replace('/game/"+game.id+"')")
+            tr.clickable(onclick="if (window.history) { history.pushState({}, window.location.href); } window.location.replace('/game/"+game.id+"')")
                 td: a.disable-default(href="/game/"+game.id)= game.gamemode + " " + game.map
                 td: a.disable-default(href="/game/"+game.id)
                     .row
