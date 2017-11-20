@@ -41,8 +41,7 @@
 		{ "tag": "xS'", "title": "eXperimental Squad", "website": "http://impressivesquad.eu" },
 		{ "tag": "aCe|", "title": "Amazing Cube Events" },
 		{ "tag": "cH'", "title": "Coop Hopes", "website": "https://ch-clan.com" },
-		{ "tag": "|GM|", "title": "German Masters", "website": "http://germanmasters.clanwebsite.com/" },
-		{ "tag": "}JC{", "title": "}JC{" }
+		{ "tag": "|GM|", "title": "German Masters", "website": "http://germanmasters.clanwebsite.com/" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
