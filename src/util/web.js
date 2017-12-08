@@ -22,7 +22,7 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.set('views', './website/src/views');
+app.set('views', './website/views');
 app.set('view engine', 'pug');
 
 if (process.env.NODE_ENV !== 'production') app.locals.pretty = true;
@@ -52,8 +52,7 @@ app.use(responseTime(function (req, res, time) {
 	database("requests").insert(_.assign(_.pick(req, [ 'method', 'ip', 'url' ]), { time: time })).then();
 }));
 
-app.use('/', express.static('./website/assets', { maxAge: 7*24*60*60*1000 }));
-app.use('/', express.static('./website/build', { maxAge: 24*60*60*1000 }));
+app.use('/', express.static('./assets', { maxAge: 24*60*60*1000 }));
 
 var server = http.createServer(app.handle.bind(app)).listen(config.serverPort, function(){
 	log("Server listening on port "+config.serverPort);

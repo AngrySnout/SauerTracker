@@ -4,7 +4,7 @@ var foundation = window.Foundation;
 var NProgress = window.NProgress;
 var url = window.url;
 import {loadCharts} from "./_server-charts.js";
-var vars = require("../../../vars.json");
+var vars = require("../../vars.json");
 
 var gameTemplate = require('../views/_partials/game.pug');
 

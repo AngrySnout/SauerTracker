@@ -55,7 +55,7 @@ var codeMirrorPlayer,
 	codeMirrorServer,
 	codeMirrorClan;
 
-var bannerURL = require("../../../vars.json").bannerURL;
+var bannerURL = require("../../vars.json").bannerURL;
 
 // Copied from http://output.jsbin.com/ihunin/385/
 function selectableGutters(codeMirror) {

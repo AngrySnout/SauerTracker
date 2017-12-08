@@ -6,7 +6,7 @@ var dateReflow = window.dateReflow;
 var disableDefault = window.disableDefault;
 var url = window.url;
 
-var vars = require("../../../vars.json");
+var vars = require("../../vars.json");
 
 var gameTemplate = require('../views/_partials/game-mini.pug');
 var gameSearchResultsTemplate = require('../views/_partials/game-search-results.pug');

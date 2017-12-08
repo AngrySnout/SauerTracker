@@ -1,10 +1,9 @@
-website/bower_components/
-website/node_modules/
-build/
+bower_components/
 node_modules/
+build/
 tmp/
 coverage/
 esdoc/
-/tracker.json
-/src/web/compat.js
-/npm-debug.log
+tracker.json
+src/web/compat.js
+npm-debug.log

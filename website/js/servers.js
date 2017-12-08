@@ -3,7 +3,7 @@ var _ = window._;
 var foundation = window.Foundation;
 import {filter} from 'fuzzaldrin';
 
-var vars = require("../../../vars.json");
+var vars = require("../../vars.json");
 
 var serverListTemplate = require('../views/_partials/server-list.pug');
 var clansOnlineTemplate = require('../views/_partials/clans-online.pug');
