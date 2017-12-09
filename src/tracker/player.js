@@ -89,7 +89,7 @@ export default class Player {
 			tks: row.tks||0,
 			kpd: 0,
 			acc: row.acc||0,
-			elo: row.elo||config.baseElo,
+			elo: row.elo||config.tracker.baseElo,
 			country: row.country||'',
 			countryName: row.countryName||'Unknown',
 			instastats: row.instastats||'[0,0,0,0,0,0]',

@@ -100,7 +100,7 @@ class ServerManager {
 			if (config.master.update) {
 				setInterval(() => {
 					this.update();
-				}, config.masterPollingInt*1000);
+				}, config.master.updateInterval*1000);
 				this.update();
 			}
 

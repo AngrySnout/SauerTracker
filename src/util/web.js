@@ -1,7 +1,5 @@
 import express from 'express';
-import fs from 'fs';
 import http from 'http';
-import https from 'https';
 import compression from 'compression';
 import bodyParser from 'body-parser';
 import _ from 'lodash';
@@ -54,19 +52,6 @@ app.use(responseTime(function (req, res, time) {
 
 app.use('/', express.static('./assets', { maxAge: 24*60*60*1000 }));
 
-http.createServer(app.handle.bind(app)).listen(config.serverPort, function(){
-	log('Server listening on port '+config.serverPort);
+http.createServer(app.handle.bind(app)).listen(config.website.serverPort, function(){
+	log('Server listening on port '+config.website.serverPort);
 });
-
-// Run HTTPS server only if a certificate is available
-if (fs.existsSync('ssl/key.pem')) {
-	let options = {
-		key: fs.readFileSync('ssl/key.pem'),
-		cert: fs.readFileSync('ssl/cert.pem'),
-		ca: fs.readFileSync('ssl/ca.pem')
-	};
-
-	https.createServer(options, app.handle.bind(app)).listen(config.secureServerPort, function(){
-		log('Secure server listening on port '+config.secureServerPort);
-	});
-}

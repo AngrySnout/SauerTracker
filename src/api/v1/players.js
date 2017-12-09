@@ -209,5 +209,5 @@ export function startTeamBalanceServer() {
 		log(`Team balance server listening on port ${address.port}`);
 	});
 
-	server.bind(config.teamBalanceServerPort);
+	server.bind(config.tracker.teamBalanceServerPort);
 }

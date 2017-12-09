@@ -55,7 +55,7 @@ class PlayerManager {
 
 		setInterval(() => {
 			this.flushplayers();
-		}, config.savePlayersInt*1000);
+		}, config.tracker.savePlayersInterval*1000);
 	}
 }
 

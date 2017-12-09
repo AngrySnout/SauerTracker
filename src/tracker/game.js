@@ -68,7 +68,7 @@ function setPlayersElo(players, elos) {
 
 function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
 	if (fragsSelf < 1 || fragsOther < 1) return 0;
-	return Math.round(10 * (Math.log(fragsSelf/fragsOther) + Math.log(eloOther/eloSelf)) * (eloSelf / config.baseElo));
+	return Math.round(10 * (Math.log(fragsSelf/fragsOther) + Math.log(eloOther/eloSelf)) * (eloSelf / config.tracker.baseElo));
 }
 
 /**
@@ -179,7 +179,7 @@ export default class Game {
 				let pls = _.reject(this.players, { state: 5 });
 				let plNames = _.map(pls, 'name');
 				return getPlayersElo(plNames).then(elos => {
-					let elo = [(elos[plNames[0]]&&elos[plNames[0]].elo)||config.baseElo, (elos[plNames[1]]&&elos[plNames[1]].elo)||config.baseElo];
+					let elo = [(elos[plNames[0]]&&elos[plNames[0]].elo)||config.tracker.baseElo, (elos[plNames[1]]&&elos[plNames[1]].elo)||config.tracker.baseElo];
 					let elod1 = calcEloChange(elo[0], elo[1], pls[0].frags, pls[1].frags);
 					let elod2 = calcEloChange(elo[1], elo[0], pls[1].frags, pls[0].frags);
 					elo[0] += elod1;

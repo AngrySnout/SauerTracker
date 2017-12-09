@@ -85,13 +85,13 @@ export default class Server {
 	shouldPoll(type, time) {
 		switch (type) {
 		case 'ping': {
-			return (time-this.lastPoll > config.pollingInterval*1000 || this.shouldPoll('extInfo', time));
+			return (time-this.lastPoll > config.pinger.pingInterval*1000 || this.shouldPoll('extInfo', time));
 		}
 		case 'extInfo': {
-			return ((time-this.lastExtInfoPoll > config.extInfoPollingInt*1000 && this.game.clients > 0) || this.shouldPoll('endGame', time));
+			return ((time-this.lastExtInfoPoll > config.pinger.extInfoPingInterval*1000 && this.game.clients > 0) || this.shouldPoll('endGame', time));
 		}
 		case 'endGame': {
-			return (!this.info.banned && this.game.timeLeft < 5 && !this.game.paused && time-this.lastPoll > config.endGamePollingInt*1000 && this.game.clients > 0);
+			return (!this.info.banned && this.game.timeLeft < 5 && !this.game.paused && time-this.lastPoll > config.pinger.endGamePingInterval*1000 && this.game.clients > 0);
 		}
 		}
 	}

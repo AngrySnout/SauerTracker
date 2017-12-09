@@ -1,12 +1,24 @@
 {
 	"debug": true,
-	"pollingInterval": 10,
-	"extInfoPollingInt": 5,
-	"endGamePollingInt": 2,
-	"masterPollingInt": 600,
-	"savePlayersInt": 600,
+	"website": {
+		"enable": true,
+		"serverPort": 80,
+		"teamBalanceServerPort": 36581
+	},
+	"tracker": {
+		"enable": true,
+		"savePlayersInt": 600,
+		"baseElo": 1200,
+	},
+	"pinger": {
+		"enable": true,
+		"pingInterval": 10,
+		"extInfoPingInterval": 5,
+		"endGamePingInterval": 2
+	},
 	"master": {
-		"update": true,
+		"enable": true,
+		"updateInterval": 600,
 		"name": "sauerbraten.org",
 		"port": 28787
 	},
@@ -18,9 +30,6 @@
 		"autoReconnect": 15000,
 		"prefix": "."
 	},
-	"serverPort": 80,
-	"secureServerPort": 443,
-	"teamBalanceServerPort": 36581,
-	"baseElo": 1200,
-	"databaseConnection": "postgres://user:password@server/database"
+	"postgresURL": "postgres://user:password@server/database",
+	"redisURL": "redis://user:password@server/database-number"
 }
