@@ -1,14 +1,11 @@
-import _ from 'lodash';
 import Promise from 'bluebird';
 
-import config from '../../tracker.json';
-
+import redis from '../util/redis';
 import {error} from '../util/util';
 
 class CacheManager {
 	constructor() {
 		this.entries = {};
-		this.cached = {};
 	}
 
 	/**
@@ -18,7 +15,7 @@ class CacheManager {
 	 *	@param {function} func - A function that returns a promise which resolves to the value that should be stored.
 	 */
 	set(id, maxage, func) {
-		this.entries[id] = { 'maxage': maxage * (0.7 + (0.6 * Math.random())), 'func': func };
+		this.entries[id] = { 'maxage': maxage/1000, 'func': func };
 	}
 
 	/**
@@ -30,39 +27,23 @@ class CacheManager {
 		let self = this;
 		return new Promise((resolve, reject) => {
 			if (!self.entries[id]) {
-				reject("Cache entry not set");
+				reject('Cache entry not set');
 				return;
 			}
-			if (!self.cached[id] || (new Date().getTime() - self.cached[id].time) > self.entries[id].maxage) {
-				self.entries[id].func().then(function(res) {
-					self.cached[id] = { 'value': res, 'time': new Date().getTime() };
-					resolve(res);
-				}).catch(err => {
-					error(err);
-					resolve();
+			let key = `cache-${id}`;
+			redis.get(key)
+				.then(reply => {
+					if (reply) {
+						self.entries[id].func().then(function(res) {
+							redis.set(key, JSON.stringify(res), 'EX', self.entries[id].maxage);
+							resolve(res);
+						}).catch(err => {
+							error(err);
+							resolve();
+						});
+					} else resolve(JSON.parse(reply.toString()));
 				});
-			} else resolve(self.cached[id].value);
 		});
-	}
-
-	/**
-	 *	Purge expired cache entries.
-	 */
-	purge() {
-		var time = new Date().getTime();
-		_.each(this.cached, function(cache, id) {
-			if ((time - cache.time) > this.entries[id].maxage) {
-				delete this.cached[id];
-				this.get(id);
-			}
-		});
-	}
-
-	/**
-	 *	Purge cache every config.cachePurgeInt seconds.
-	 */
-	start() {
-		setInterval(this.purge, config.cachePurgeInt*1000);
 	}
 }
 

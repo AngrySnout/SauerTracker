@@ -8,7 +8,7 @@ import cache from '../util/cache';
 import database from '../util/database';
 import {findGames} from '../api/v1/games';
 
-cache.set('latest-duels', 10*60*1000, function(callback) {
+cache.set('latest-duels', 10*60*1000, function() {
 	return database('games').where({ gametype: 'duel' }).orderBy('timestamp', 'desc').limit(10).then(rows => {
 		_.each(rows, function(row) {
 			try {
@@ -22,13 +22,13 @@ cache.set('latest-duels', 10*60*1000, function(callback) {
 	});
 });
 
-cache.set('latest-clanwars', 10*60*1000, function(callback) {
+cache.set('latest-clanwars', 10*60*1000, function() {
 	return database('games').where({ gametype: 'clanwar' }).orderBy('timestamp', 'desc').limit(10).then(rows => {
 		_.each(rows, function(row) {
 			try {
 				row.meta = JSON.parse(row.meta);
 			} catch (error) {
-				ow.meta = [0, 0, 0, 0];
+				row.meta = [0, 0, 0, 0];
 			}
 			if (row.meta[1] == row.meta[3]) row.draw = true;
 		});
@@ -37,29 +37,29 @@ cache.set('latest-clanwars', 10*60*1000, function(callback) {
 });
 
 app.get('/games', (req, res) => {
-    Promise.all([ cache.get('latest-duels'), cache.get('latest-clanwars')/*, cache.get('latest-mixes')*/ ])
-    .then(results => {
-        res.render('games', {vars: vars, _: _, latestDuels: results[0], latestClanwars: results[1]/*, latestMixes: results[2]*/});
-    })
-	.catch(error => {
-		res.status(500).render('error', { status: 500, error: error });
-	});
+	Promise.all([ cache.get('latest-duels'), cache.get('latest-clanwars') ])
+		.then(results => {
+			res.render('games', { vars: vars, _: _, latestDuels: results[0], latestClanwars: results[1] });
+		})
+		.catch(err => {
+			res.status(500).render('error', { status: 500, error: err.message });
+		});
 });
 
 function prevPageURL(req, firstID) {
 	let curURL = url.parse(req.url, true);
 	curURL.query.afterid = firstID;
 	delete curURL.query.beforeid;
-    delete curURL.search;
-    return url.format(curURL);
+	delete curURL.search;
+	return url.format(curURL);
 }
 
 function nextPageURL(req, lastID) {
 	let curURL = url.parse(req.url, true);
 	curURL.query.beforeid = lastID;
 	delete curURL.query.afterid;
-    delete curURL.search;
-    return url.format(curURL);
+	delete curURL.search;
+	return url.format(curURL);
 }
 
 app.get('/games/find', function(req, res) {
@@ -71,11 +71,11 @@ app.get('/games/find', function(req, res) {
 			nextPage = (result.results[result.results.length-1].id > result.stats.min);
 		}
 		res.render('games', _.assign( {
-				vars: vars,
-				_: _,
-				query: req.query,
-				prevPageURL: prevPage? prevPageURL(req, result.results[0].id): null,
-				nextPageURL: nextPage? nextPageURL(req, result.results[result.results.length-1].id): null
-			}, result));
+			vars: vars,
+			_: _,
+			query: req.query,
+			prevPageURL: prevPage? prevPageURL(req, result.results[0].id): null,
+			nextPageURL: nextPage? nextPageURL(req, result.results[result.results.length-1].id): null
+		}, result));
 	});
 });

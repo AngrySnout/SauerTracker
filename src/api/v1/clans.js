@@ -1,14 +1,14 @@
 import _ from 'lodash';
 
-import vars from "../../../vars.json";
+import vars from '../../../vars.json';
 
 import app from '../../util/web';
 import cache from '../../util/cache';
 import {debug, error, round2} from '../../util/util';
 import database from '../../util/database';
 
-cache.set("clans", 60*60*1000, function() {
-	return database("games").where({ gametype: "clanwar" }).select("meta").then(rows => {
+cache.set('clans', 60*60*1000, function() {
+	return database('games').where({ gametype: 'clanwar' }).select('meta').then(rows => {
 		var clans = {};
 		_.each(rows, function (row) {
 			try {
@@ -25,18 +25,18 @@ cache.set("clans", 60*60*1000, function() {
 			}
 		});
 		var wins = _.countBy(rows, function (row) {
-			return (row.meta && row.meta[1]!=row.meta[3])? row.meta[2]: "";
+			return (row.meta && row.meta[1]!=row.meta[3])? row.meta[2]: '';
 		});
 		var losses = _.countBy(rows, function (row) {
-			return (row.meta && row.meta[1]!=row.meta[3])? row.meta[0]: "";
+			return (row.meta && row.meta[1]!=row.meta[3])? row.meta[0]: '';
 		});
 		var clns = _.orderBy(_.map(vars.clans, function (clan) {
 			if (!wins[clan.tag]) wins[clan.tag] = 0;
 			if (!losses[clan.tag]) losses[clan.tag] = 0;
 			var draws = ((clans[clan.tag]||0)-((wins[clan.tag]||0)+(losses[clan.tag]||0)));
 			var rate = (clans[clan.tag]? (wins[clan.tag]+draws/2)/clans[clan.tag]: 0);
-			return { "name": clan.tag, "wins": wins[clan.tag], "losses": losses[clan.tag], "ties": draws, "rate": round2(rate), "points": round2((wins[clan.tag]+draws/2)*rate) };
-		}), "points", "desc");
+			return { 'name': clan.tag, 'wins': wins[clan.tag], 'losses': losses[clan.tag], 'ties': draws, 'rate': round2(rate), 'points': round2((wins[clan.tag]+draws/2)*rate) };
+		}), 'points', 'desc');
 		var rank = 1;
 		_.each(clns, function (clan) {
 			clan.rank = rank++;
@@ -46,10 +46,10 @@ cache.set("clans", 60*60*1000, function() {
 });
 
 export function getClans() {
-	return cache.get("clans");
+	return cache.get('clans');
 }
 
-app.get("/api/clans", function(req, res) {
+app.get('/api/clans', function(req, res) {
 	getClans().then(clans => {
 		res.send({ clans: clans });
 	}).catch(err => {

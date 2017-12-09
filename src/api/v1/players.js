@@ -4,7 +4,7 @@ import dgram from 'dgram';
 
 import config from '../../../tracker.json';
 
-import {escapePostgresLike} from "../../util/util";
+import {log, escapePostgresLike} from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 import playerManager from '../../tracker/player-manager';
@@ -40,7 +40,7 @@ export function makeTeams(names, mode, map) {
 	let query1 = database.avg('frags as avgFrags').avg('flags as avgFlags').select('stats.name').from('stats').join('games', 'games.id', 'stats.game').where('gametype', 'mix');
 	if (mode) query1 = query1.where('gamemode', mode);
 	// if (map) query1 = query1.where('map', map);
-	query1 = query1.whereRaw("games.timestamp > CURRENT_DATE - INTERVAL '3 months'").whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name');
+	query1 = query1.whereRaw('games.timestamp > CURRENT_DATE - INTERVAL \'3 months\'').whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name');
 
 	// Get average number of frags and of flags per game for selected mode and map
 	let query2 = database.avg('frags as avgFrags').avg('flags as avgFlags').from('stats').join('games', 'games.id', 'stats.game');
@@ -170,21 +170,24 @@ export function startTeamBalanceServer() {
 	const server = dgram.createSocket('udp4');
 
 	server.on('error', (err) => {
-		console.log(`server error:\n${err.stack}`);
+		log(`server error:\n${err.stack}`);
 		server.close();
 	});
 
 	server.on('message', (data, rinfo) => {
 		let st = new Packet(data, 0);
-		let s;
+		let s = st.getString();
 		let names = [];
 		let mode;
 		let map;
-		while (s = st.getString()) {
+		while (s) {
 			names.push(s);
+			s = st.getString();
 		}
-		if (s = st.getString()) mode = s;
-		if (s = st.getString()) map = s;
+		s = st.getString();
+		if (s) mode = s;
+		s = st.getString();
+		if (s) map = s;
 
 		makeTeams(names, mode, map)
 			.then(teams => {
@@ -203,7 +206,7 @@ export function startTeamBalanceServer() {
 
 	server.on('listening', () => {
 		var address = server.address();
-		console.log(`Team balance server listening on port ${address.port}`);
+		log(`Team balance server listening on port ${address.port}`);
 	});
 
 	server.bind(config.teamBalanceServerPort);

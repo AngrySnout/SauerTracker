@@ -36,7 +36,7 @@ class PlayerManager {
 				return Promise.all(promises).finally(trx.commit);
 			}).then();
 		}).then(() => {
-			debug("Players flushed");
+			debug('Players flushed');
 		}).catch(error);
 	}
 

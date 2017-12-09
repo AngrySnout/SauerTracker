@@ -29,33 +29,33 @@ if (process.env.NODE_ENV !== 'production') app.locals.pretty = true;
 
 app.use(function(req, res, next) {
 	// If using an old domain, redirect to "sauertracker.net"
-	if (req.get('host') == "uk.cube2.org" || req.get('host') == "tracker.impressivesquad.eu") {
-		res.redirect(req.protocol+"://sauertracker.net"+req.originalUrl);
+	if (req.get('host') == 'uk.cube2.org' || req.get('host') == 'tracker.impressivesquad.eu') {
+		res.redirect(req.protocol+'://sauertracker.net'+req.originalUrl);
 		return;
 	}
 
 	// Enable cross-origin on all routes
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
 	// Disable caching on /api/ routes (fixes bug on Dolphin browser)
 	if (req.path.indexOf('/api/') === 0) {
-		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-		res.setHeader("Pragma", "no-cache");
-		res.setHeader("Expires", "0");
+		res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+		res.setHeader('Pragma', 'no-cache');
+		res.setHeader('Expires', '0');
 	}
 
 	next();
 });
 
 app.use(responseTime(function (req, res, time) {
-	database("requests").insert(_.assign(_.pick(req, [ 'method', 'ip', 'url' ]), { time: time })).then();
+	database('requests').insert(_.assign(_.pick(req, [ 'method', 'ip', 'url' ]), { time: time })).then();
 }));
 
 app.use('/', express.static('./assets', { maxAge: 24*60*60*1000 }));
 
-var server = http.createServer(app.handle.bind(app)).listen(config.serverPort, function(){
-	log("Server listening on port "+config.serverPort);
+http.createServer(app.handle.bind(app)).listen(config.serverPort, function(){
+	log('Server listening on port '+config.serverPort);
 });
 
 // Run HTTPS server only if a certificate is available
@@ -67,6 +67,6 @@ if (fs.existsSync('ssl/key.pem')) {
 	};
 
 	https.createServer(options, app.handle.bind(app)).listen(config.secureServerPort, function(){
-		log("Secure server listening on port "+config.secureServerPort);
+		log('Secure server listening on port '+config.secureServerPort);
 	});
 }

@@ -5,7 +5,6 @@
 	"endGamePollingInt": 2,
 	"masterPollingInt": 600,
 	"savePlayersInt": 600,
-	"cachePurgeInt": 300,
 	"master": {
 		"update": true,
 		"name": "sauerbraten.org",

@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
-import moment from 'moment';
 
 import config from '../../tracker.json';
 import vars from '../../vars.json';
@@ -206,7 +205,7 @@ export default class Game {
 		res.gameType = gameType[0];
 		try {
 			if (gameType[1]) res.meta = JSON.parse(gameType[1]);
-		} catch (e) {}
+		} catch (e) {} // eslint-disable-line no-empty
 		return res;
 	}
 }

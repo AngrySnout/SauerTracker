@@ -14,7 +14,7 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var glob = require('glob');
 var gulpif = require('gulp-if');
-var rename = require("gulp-rename");
+var rename = require('gulp-rename');
 var plumber = require('gulp-plumber');
 
 var sass = require('gulp-sass');
@@ -23,10 +23,9 @@ var cleanCSS = require('gulp-clean-css');
 
 var browserify = require('browserify');
 var watchify = require('watchify');
-var babelify = require('babelify');
 var uglify = require('gulp-uglify');
 
-var dev = (process.env.NODE_ENV !== "production");
+var dev = (process.env.NODE_ENV !== 'production');
 
 gulp.task('sass', function() {
 	return gulp.src('./website/styles/*.scss')
@@ -83,10 +82,6 @@ gulp.task('js', function() {
 		.pipe(plumber())
 		.pipe(sourcemaps.init({ loadMaps: true }))
 		.pipe(babel({presets: ['es2015']}))
-			.on('error', function(e) {
-				console.log(e);
-				this.emit('end');
-			})
 		.pipe(sourcemaps.write('.'))
 		.pipe(gulp.dest('./build/'));
 });

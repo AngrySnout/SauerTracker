@@ -1,11 +1,8 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
-import countries from 'i18n-iso-countries';
 import moment from 'moment';
 
-import config from '../../../tracker.json';
-
-import {log, escapePostgresLike} from '../../util/util';
+import {escapePostgresLike} from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 
@@ -44,7 +41,7 @@ export function findGames(params) {
 	if (params.afterid) query.where('id', '>', params.afterid);
 
 	query.orderBy('id', params.afterid? 'asc': 'desc')
-			.limit(params.limit? Math.min(params.limit, maxPageLimit): pageLimit);
+		.limit(params.limit? Math.min(params.limit, maxPageLimit): pageLimit);
 
 	return Promise.all([ query, pagiQuery ]).then(results => {
 		let games = results[0];
@@ -73,7 +70,7 @@ app.get('/api/games/find', function(req, res) {
 
 app.get('/api/games/players', function(req, res) {
 	if (!req.query.players) {
-		res.status(400).send({ error: "You must provide a 'players' parameter in the query string." });
+		res.status(400).send({ error: 'You must provide a \'players\' parameter in the query string.' });
 		return;
 	}
 	let promises = _.map(req.query.players.split(' '), name => findGames(_.assign({}, req.query, { players: name })));

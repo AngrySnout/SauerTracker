@@ -1,12 +1,10 @@
 import _ from 'lodash';
-import moment from 'moment';
-import Promise from 'bluebird';
 
 import config from '../../tracker.json';
 import vars from '../../vars.json';
 import countryLimits from '../../countryLimits.json';
 
-import {round2} from '../util/util';
+import {log, round2} from '../util/util';
 import database from '../util/database';
 
 export default class Player {
@@ -18,7 +16,7 @@ export default class Player {
 
 	updateState(server, newState, oldState, curTime) {
 		if (countryLimits[this.name] && countryLimits[this.name] != newState.country) {
-			console.log(`Faker found: ${this.name} ${newState.country}`);
+			log(`Faker found: ${this.name} ${newState.country}`);
 			return;
 		}
 
@@ -85,17 +83,17 @@ export default class Player {
 
 		let newStats = this.sumStats();
 		let stats = {	name: row.name||this.name,
-						frags: row.frags||0,
-						flags: row.flags||0,
-						deaths: row.deaths||0,
-						tks: row.tks||0,
-						kpd: 0,
-						acc: row.acc||0,
-						elo: row.elo||config.baseElo,
-						country: row.country||'',
-						countryName: row.countryName||'Unknown',
-					 	instastats: row.instastats||'[0,0,0,0,0,0]',
-					 	efficstats: row.efficstats||'[0,0,0,0,0,0]' };
+			frags: row.frags||0,
+			flags: row.flags||0,
+			deaths: row.deaths||0,
+			tks: row.tks||0,
+			kpd: 0,
+			acc: row.acc||0,
+			elo: row.elo||config.baseElo,
+			country: row.country||'',
+			countryName: row.countryName||'Unknown',
+			instastats: row.instastats||'[0,0,0,0,0,0]',
+			efficstats: row.efficstats||'[0,0,0,0,0,0]' };
 
 		// accuracy must be done first
 		if (newStats.frags+stats.frags === 0) stats.acc = 0;

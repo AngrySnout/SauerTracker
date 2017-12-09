@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import _ from 'lodash';
 
 import config from '../../tracker.json';
@@ -10,7 +12,7 @@ import vars from '../../vars.json';
  *  @returns {string}
  */
 export function ipRepLB(ip, to) {
-	return ip.replace(/\.[\d\*]+$/, '.'+to);
+	return ip.replace(/\.[\d*]+$/, '.'+to);
 }
 
 /**
@@ -59,7 +61,7 @@ export function log(...msg) {
  *  @param {any} msg
  */
 export function error(msg) {
-	log("Error:", msg);
+	log('Error:', msg);
 	if (config.debug) {
 		throw new Error(msg);
 	}
@@ -79,8 +81,8 @@ export function debug(...msg) {
  *  @param {string} msg
  */
 export function assert(condition, msg) {
-	if (config.debug) throw new Error("Assert failed: "+msg);
-	else log("Assert failed: "+msg);
+	if (config.debug) throw new Error('Assert failed: '+msg);
+	else log('Assert failed: '+msg);
 }
 
 /**

@@ -26,12 +26,12 @@ database('players').update({ elo: config.baseElo }).then(() => {
 				
 				newElos[meta[0]] += elod1;
 				newElos[meta[2]] += elod2;
-			} catch (e) { console.log("Error parsing JSON: "+row.meta); }
+			} catch (e) { log('Error parsing JSON: '+row.meta); }
 		});
 		return newElos;
 	}).then(newElos => {
 		return Promise.all(_.keys(newElos).map(player => {
-			return database('players').where({ name: player }).update({ elo: newElos[player] }).then().catch(e => console.log("Error updating player Elo: "+player));
+			return database('players').where({ name: player }).update({ elo: newElos[player] }).then().catch(() => log('Error updating player Elo: '+player));
 		}));
 	}).finally(process.exit);
 });

@@ -1,44 +1,44 @@
-"use strict";
+'use strict';
+/*global module*/
 
-var through = require("through");
-var pug = require("pug");
+var through = require('through');
+var pug = require('pug');
 
 module.exports = function (fileName, options) {
-    if (!/\.pug$/i.test(fileName)) {
-        return through();
-    }
+	if (!/\.pug$/i.test(fileName)) {
+		return through();
+	}
 
-    options.runtimePath = options.runtimePath === undefined ? "pug-runtime" : options.runtimePath;
+	options.runtimePath = options.runtimePath === undefined ? 'pug-runtime' : options.runtimePath;
 
-    var inputString = "";
-    return through(
-        function (chunk) {
-            inputString += chunk;
-        },
-        function () {
-            var self = this;
+	var inputString = '';
+	return through(
+		function (chunk) {
+			inputString += chunk;
+		},
+		function () {
+			var self = this;
 
-            options.filename = fileName;
+			options.filename = fileName;
 			options.compileDebug = false;
 
-            var result;
-            try {
-                result = pug.compileClientWithDependenciesTracked(inputString, options);
-            } catch (e) {
-                self.emit("error", e);
-                return;
-            }
+			var result;
+			try {
+				result = pug.compileClientWithDependenciesTracked(inputString, options);
+			} catch (e) {
+				self.emit('error', e);
+				return;
+			}
 
-            result.dependencies.forEach(function (dep) {
-                self.emit("file", dep);
-            });
+			result.dependencies.forEach(function (dep) {
+				self.emit('file', dep);
+			});
 
-            var moduleBody = "var pug = require(\"" + options.runtimePath + "\");\n\n" +
-                             "module.exports = template;" + result.body + ";";
+			var moduleBody = 'var pug = require(\'' + options.runtimePath + '\');\n\n' +
+							'module.exports = template;' + result.body + ';';
 
-            self.queue(moduleBody);
-            self.queue(null);
-        }
-    );
+			self.queue(moduleBody);
+			self.queue(null);
+		}
+	);
 };
-

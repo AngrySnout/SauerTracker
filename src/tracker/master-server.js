@@ -1,6 +1,5 @@
 import net from 'net';
 import _ from 'lodash';
-import Promise from 'bluebird';
 
 import config from '../../tracker.json';
 
@@ -10,7 +9,6 @@ import config from '../../tracker.json';
  *	@param {function} reject - Called with either an error message, or an array of errors, in case of an error.
  */
 export default function getServerList(resolve, reject) {
-	let self = this;
 	try {
 		var agg = '';
 		let socket = net.connect(config.master.port, config.master.name, function() {
@@ -27,12 +25,12 @@ export default function getServerList(resolve, reject) {
 					if (ts.length == 3 && ts[0] == 'addserver') res.push({host: ts[1], port: parseInt(ts[2])});
 				});
 				resolve(res);
-			} else reject("Masterserver connection failed.");
+			} else reject('Masterserver connection failed.');
 		});
 		socket.on('error', function(err) {
-			reject(["Can't poll masterserver:", err]);
+			reject(['Can\'t poll masterserver:', err]);
 		});
 	} catch(err) {
-		reject(["Can't poll masterserver:", err]);
+		reject(['Can\'t poll masterserver:', err]);
 	}
 }

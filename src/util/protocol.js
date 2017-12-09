@@ -25,12 +25,12 @@ export var gameModes = [
 ];
 
 export var masterModes = [
-  'auth',      		// -1
-  'open',         	// 0
-  'veto',         	// 1
-  'locked',       	// 2
-  'private',      	// 3
-  'password'	    // 4
+	'auth',      // -1
+	'open',      // 0
+	'veto',      // 1
+	'locked',    // 2
+	'private',   // 3
+	'password'	 // 4
 ];
 
 /**

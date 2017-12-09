@@ -12,7 +12,7 @@ export function addServer(host, port) {
 			let server = { host: host, port: parseInt(port) };
 			database('servers').insert(server).then();
 		}
-		return added? "Done!": "Error: server already exists.";
+		return added? 'Done!': 'Error: server already exists.';
 	} catch(e) {
 		return e;
 	}
@@ -25,7 +25,7 @@ export function delServer(host, port) {
 			let query = database('servers').where({ host: host, port: parseInt(port) });
 			query.del().then();
 		}
-		return removed? "Done!": "Error: server not found.";
+		return removed? 'Done!': 'Error: server not found.';
 	} catch(e) {
 		return e;
 	}
@@ -39,7 +39,7 @@ var infos = ['website', 'demourl', 'banned', 'keep'];
 export function setInfo(host, port, key, value) {
 	if (infos.indexOf(key) < 0) throw new Error(`Invalid info param '${key}'.`);
 	var server = serverManager.find(host, port);
-	if (!server) return "Error: server not found.";
+	if (!server) return 'Error: server not found.';
 
 	try {
 		server.setInfo(key, value);
@@ -52,7 +52,7 @@ export function setInfo(host, port, key, value) {
 				database('servers').insert(newserv).then();
 			}
 		});
-		return "Done!";
+		return 'Done!';
 	} catch(e) {
 		return e;
 	}

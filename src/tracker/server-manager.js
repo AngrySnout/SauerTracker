@@ -53,7 +53,6 @@ class ServerManager {
 	}
 
 	cleanUp() {
-		let self = this;
 		let newList = [];
 		let now = new Date().getTime();
 		_.each(this.list, server => {
@@ -87,28 +86,28 @@ class ServerManager {
 
 	start() {
 		database.select().table('servers').then(servers => {
-				_.each(servers, (row) => {
-					this.add(row.host, row.port, row);
-				});
-			}).catch(err => {
-				error(err);
-			}).then(() => {
-				setInterval(() => {
-					this.pollAll();
-				}, 1000);
-				this.pollAll();
-
-				if (config.master.update) {
-					setInterval(() => {
-						this.update();
-					}, config.masterPollingInt*1000);
-					this.update();
-				}
-
-				setInterval(() => {
-					this.cleanUp();
-				}, 60000);
+			_.each(servers, (row) => {
+				this.add(row.host, row.port, row);
 			});
+		}).catch(err => {
+			error(err);
+		}).then(() => {
+			setInterval(() => {
+				this.pollAll();
+			}, 1000);
+			this.pollAll();
+
+			if (config.master.update) {
+				setInterval(() => {
+					this.update();
+				}, config.masterPollingInt*1000);
+				this.update();
+			}
+
+			setInterval(() => {
+				this.cleanUp();
+			}, 60000);
+		});
 	}
 }
 

@@ -1,6 +1,3 @@
-import fs from 'fs';
-import _ from 'lodash';
-import Promise from 'bluebird';
 import knex from 'knex';
 
 import config from '../../tracker.json';
