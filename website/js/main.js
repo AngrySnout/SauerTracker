@@ -1,7 +1,13 @@
+/* eslint-disable no-unused-vars */
+
 import $ from 'jquery';
+import foundation from 'foundation-sites';
 var moment = require('moment');
+var _ = require('lodash');
+var fdatepicker = require('foundation-datepicker');
 import NProgress from 'nprogress';
 var url = require('url');
+var typeahead = require('typeahead.js');
 
 window.NProgress = NProgress;
 window.moment = moment;
