@@ -31,11 +31,11 @@ class CacheManager {
 				return;
 			}
 			let key = `cache-${id}`;
-			redis.get(key)
+			redis.getAsync(key)
 				.then(reply => {
-					if (reply) {
+					if (!reply) {
 						self.entries[id].func().then(function(res) {
-							redis.set(key, JSON.stringify(res), 'EX', self.entries[id].maxage);
+							redis.setAsync(key, JSON.stringify(res), 'EX', self.entries[id].maxage);
 							resolve(res);
 						}).catch(err => {
 							error(err);
