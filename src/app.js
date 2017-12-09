@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 require('source-map-support').install();
 
 import database from './util/database';
@@ -8,7 +10,6 @@ import {startTeamBalanceServer} from './api/v1/players.js';
 import redis from './util/redis';
 
 serverManager.start();
-cache.start();
 playerManager.start();
 startTeamBalanceServer();
 
