@@ -43,9 +43,7 @@ export default function getServerList(resolve, reject) {
 export function start(interval) {
 	setInterval(() => {
 		getServerList(results => {
-			for (let server of results) {
-				redis.sadd('servers', `${server.host}:${server.port}`);
-			}
+			redis.setAsync('servers', JSON.stringify(results));
 		}, err => {
 			log(err);
 		});

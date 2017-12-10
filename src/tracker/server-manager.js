@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Promise from 'bluebird';
 
 import {log, error} from '../util/util';
 import database from '../util/database';
@@ -38,7 +37,6 @@ class ServerManager {
 		let now = new Date().getTime();
 		_.each(this.list, server => {
 			if (!server.shouldClean(now)) newList.push(server);
-			else redis.sremAsync('servers', `${server.host}:${server.port}`).then();
 		});
 		if (this.list.length > newList.length) log(`Clean up removed ${this.list.length - newList.length} server(s)`);
 		this.list = newList;
@@ -46,13 +44,11 @@ class ServerManager {
 
 	update() {
 		let self = this;
-		redis.smembersAsync('servers')
+		redis.getAsync('servers')
 			.then(servers => {
+				servers = JSON.parse(servers);
 				for (let server of servers) {
-					let sa = server.split(':');
-					let host = sa[0],
-						port = sa[1];
-					self.add(host, port);
+					self.add(server.host, server.port);
 				}
 			});
 	}
@@ -65,17 +61,16 @@ class ServerManager {
 		return list;
 	}
 	
-	updateServerList() {
+	updateServerListJSON() {
 		redis.setAsync('server-list', JSON.stringify(this.serialize()));
 	}
 
 	start() {
 		let self = this;
 		database.select().table('servers').then(servers => {
-			return Promise.all(servers.map(server => {
+			_.each(servers, server => {
 				self.add(server.host, server.port, server);
-				return redis.sadd('servers', `${server.host}:${server.port}`);
-			}));
+			});
 		}).catch(err => {
 			error(err);
 		}).then(() => {
@@ -94,7 +89,7 @@ class ServerManager {
 			}, 60000);
 
 			setInterval(() => {
-				this.updateServerList();
+				this.updateServerListJSON();
 			}, 5000);
 		});
 	}
