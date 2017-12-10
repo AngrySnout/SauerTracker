@@ -38,14 +38,19 @@ export default function getServerList(resolve, reject) {
 }
 
 /**
- *	Periodically update the server list from the master server and save it in cache.
+ *	Get the server list from the master server and save it in cache.
+ */
+function updateServerList() {
+	getServerList(results => {
+		redis.setAsync('servers', JSON.stringify(results));
+	}, err => {
+		log(err);
+	});
+}
+
+/**
+ *	Run updateServerList every interval milliseconds.
  */
 export function start(interval) {
-	setInterval(() => {
-		getServerList(results => {
-			redis.setAsync('servers', JSON.stringify(results));
-		}, err => {
-			log(err);
-		});
-	}, interval);
+	setInterval(updateServerList, interval);
 }
