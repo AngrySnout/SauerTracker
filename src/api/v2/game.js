@@ -46,7 +46,7 @@ export function getGame(id) {
 
 		try {
 			if (results[0].meta) locals.meta = JSON.parse(results[0].meta);
-		} catch (e) {};
+		} catch (e) {} // eslint-disable-line no-empty
 
 		locals.teams = _.mapValues(_.keyBy(results[1], 'team'), 'score');
 		locals.players = results[2];
@@ -58,6 +58,6 @@ export function getGame(id) {
 app.get('/api/v2/game/:id', function(req, res) {
 	getGame(req.params.id)
 		.then(result => { res.send(result); })
-		.catch(ObjectNotFoundError, () => { res.status(404).send({ error: "Game not found." }); })
+		.catch(ObjectNotFoundError, () => { res.status(404).send({ error: 'Game not found.' }); })
 		.catch(err => { res.status(500).send({ error: err.message }); });
 });
