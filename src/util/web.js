@@ -50,7 +50,9 @@ app.use(responseTime(function (req, res, time) {
 	database('requests').insert(_.assign(_.pick(req, [ 'method', 'ip', 'url' ]), { time: time })).then();
 }));
 
-app.use('/', express.static('./assets', { maxAge: 24*60*60*1000 }));
+if (config.website.serveStaticFiles) {
+	app.use('/', express.static('./assets', { maxAge: 24*60*60*1000 }));
+}
 
 http.createServer(app.handle.bind(app)).listen(config.website.serverPort, function(){
 	log('Server listening on port '+config.website.serverPort);

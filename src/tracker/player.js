@@ -6,6 +6,7 @@ import countryLimits from '../../countryLimits.json';
 
 import {log, round2} from '../util/util';
 import database from '../util/database';
+import redis from '../util/redis';
 
 export default class Player {
 	constructor(name) {
@@ -125,6 +126,8 @@ export default class Player {
 
 		if (this.modes.insta) stats.instastats = JSON.stringify(calcModeStats(this, 'insta'));
 		if (this.modes.effic) stats.efficstats = JSON.stringify(calcModeStats(this, 'effic'));
+		
+		redis.zincrbyAsync('top-countries', newStats.frags, row.country);
 
 		if (row.name) return database('players').where('name', this.name).update(stats).transacting(trx).then();
 		else return database('players').insert(stats).transacting(trx).then();

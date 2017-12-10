@@ -2,6 +2,7 @@
 	"debug": true,
 	"website": {
 		"enable": true,
+		"serverStaticFiles": true,
 		"serverPort": 80,
 		"teamBalanceServerPort": 36581
 	},
@@ -23,7 +24,8 @@
 		"port": 28787
 	},
 	"irc": {
-		"server": null,
+		"enable": false,
+		"server": "irc.gamesurge.net",
 		"port": 6667,
 		"nick": "MyTracker",
 		"chan": "#mychannel",

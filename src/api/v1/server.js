@@ -1,33 +1,37 @@
 import moment from 'moment';
+import Promise from 'bluebird';
 
 import app from '../../util/web';
 import {error, ObjectNotFoundError} from '../../util/util';
 
 import database from '../../util/database';
+import redis from '../../util/redis';
 import serverManager from '../../tracker/server-manager';
 
 function populateRanks() {
-	database.raw('BEGIN; CREATE TABLE serverranks2 AS SELECT ranked.*, rank() OVER (ORDER BY count DESC) AS rank FROM (SELECT host, port, count(*) FROM games GROUP BY host, port) AS ranked ORDER BY rank ASC; CREATE INDEX ON serverranks2 (host, port); DROP TABLE IF EXISTS serverranks; ALTER TABLE serverranks2 RENAME TO serverranks; COMMIT;').catch(err => {
-		error(err);
-	});
+	database('games')
+		.select('host', 'port')
+		.count('*')
+		.groupBy('host', 'port')
+		.then(rows => {
+			for (let row of rows) {
+				redis.zaddAsync('server-ranks', row.count, `${row.host}:${row.port}`);
+			}
+		});
 }
 populateRanks();
-setInterval(populateRanks, 10*60*1000);
 
 export function findServer(host, port) {
 	port = parseInt(port);
 	let server = serverManager.find(host, port);
 	if (server) {
 		server = server.game.serialize();
-		return database('serverranks').where({ host: host, port: port }).select('count', 'rank').then(result => {
-			if (result.length) {
-				server.totalGames = result[0].count;
-				server.rank = result[0].rank;
-			}
-			return server;
-		}).finally(() => {
-			return Promise.resolve(server);
-		});
+		return Promise.join(redis.zrevrankAsync('server-ranks', `${host}:${port}`), redis.zscoreAsync('server-ranks', `${host}:${port}`),
+			(rank, score) => {
+				if (rank) server.rank = rank;
+				if (score) server.totalGames = score;
+				return server;
+			}).finally(() => server);
 	} else return Promise.reject(new ObjectNotFoundError());
 }
 

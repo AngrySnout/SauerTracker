@@ -64,16 +64,16 @@ block content
                             td(width="50%") Top countries
                             td(width="50%") Frags
                     tbody
-                        for country in topCountries
+                        - for (var i = 0; i < topCountries.length; i += 2)
                             tr
                                 td
-                                    if country.country && country.country != "unknown"
-                                        img.flag(src=("/images/flags/"+country.country+".png"))
+                                    if topCountries[i] && topCountries[i] != "unknown"
+                                        img.flag(src=("/images/flags/"+topCountries[i]+".png"))
                                         |  
-                                        a(href="/players/find?country="+country.country)= country.name
+                                        a(href="/players/find?country="+topCountries[i])= countryName(topCountries[i], 'en')
                                     else
-                                        = country.name
-                                td= country["frags"]
+                                        = countryName(topCountries[i], 'en')
+                                td= topCountries[i+1]
         .large-4.columns
             if topServers
                 table(width="100%")
@@ -82,7 +82,8 @@ block content
                             td(width="50%") Top servers
                             td(width="50%") # of games
                     tbody
-                        for server in topServers
+                        - for (var i = 0; i < topServers.length; i += 2)
+                            - var serverParts = topServers[i].split(':');
                             tr
-                                td: a(href=("/server/"+server.host+"/"+server.port))= server.serverdesc
-                                td= server.count
+                                td: a(href=("/server/"+serverParts[0]+"/"+serverParts[1]))= serverNames[topServers[i]]
+                                td= topServers[i+1]

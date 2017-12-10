@@ -2,20 +2,24 @@
 
 require('source-map-support').install();
 
+import config from '../tracker.json';
 import database from './util/database';
-import serverManager from './tracker/server-manager';
 import cache from './util/cache';
-import playerManager from './tracker/player-manager';
-import {startTeamBalanceServer} from './api/v1/players.js';
-import redis from './util/redis';
 
-serverManager.start();
-playerManager.start();
-startTeamBalanceServer();
+if (config.tracker.enable) {
+	require('./tracker/server-manager').default.start();
+	require('./tracker/player-manager').default.start();
+}
 
-require('./util/admin');
-require('./web/main');
+if (config.master.enable) {
+	require('./tracker/master').start(config.master.updateInterval);
+}
 
-process.on('SIGINT', () => {
-	playerManager.flushplayers().finally(process.exit);
-});
+if (config.irc.enable) {
+	require('./util/admin');
+}
+
+if (config.website.enable) {
+	require('./web/main');
+	require('./api/v1/players.js').startTeamBalanceServer();
+}

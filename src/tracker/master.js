@@ -2,6 +2,8 @@ import net from 'net';
 import _ from 'lodash';
 
 import config from '../../tracker.json';
+import redis from '../util/redis';
+import {log} from '../util/util';
 
 /**
  *	Poll the master server.
@@ -33,4 +35,19 @@ export default function getServerList(resolve, reject) {
 	} catch(err) {
 		reject(['Can\'t poll masterserver:', err]);
 	}
+}
+
+/**
+ *	Periodically update the server list from the master server and save it in cache.
+ */
+export function start(interval) {
+	setInterval(() => {
+		getServerList(results => {
+			for (let server of results) {
+				redis.sadd('servers', `${server.host}:${server.port}`);
+			}
+		}, err => {
+			log(err);
+		});
+	}, interval);
 }

@@ -6,6 +6,7 @@ import vars from '../../vars.json';
 
 import {round2, debug, error, getClan} from '../util/util';
 import database from '../util/database';
+import redis from '../util/redis';
 
 function saveTeamStats(gameID, team, score) {
 	return database('scores').insert({ game: gameID, team: team, score: score });
@@ -136,18 +137,18 @@ export function getGameType(game, threshold) {
  */
 export default class Game {
 	/**
-     *  @constructor
-     *  @param {server} server - the server object to which this game belongs.
-     */
+	 *  @constructor
+	 *  @param {server} server - the server object to which this game belongs.
+	 */
 	constructor(server) {
 		this.server = server;
 		this.reset();
 	}
 
 	/**
-     *  Reset the game.
-     *  @memberof Game
-     */
+	 *  Reset the game.
+	 *  @memberof Game
+	 */
 	reset() {
 		this.players = {};
 		this.teams = {};
@@ -165,16 +166,17 @@ export default class Game {
 	}
 
 	/**
-     *  Save the game in the database.
-	 *	@returns {Promise} Resolves when the game is saved or rejects with an error.
-     *  @memberof Game
-     */
+	 *  Save the game in the database.
+	 *  @returns {Promise} Resolves when the game is saved or rejects with an error.
+	 *  @memberof Game
+	 */
 	save() {
 		if (!this || this.saved || this.zombie) return;
 		this.saved = true;
 		let gameType = getGameType(this);
 		return saveGame(this.server, gameType).then(() => {
 			debug(`Game saved at '${this.server.description}' (${gameType}).`);
+			redis.zincrbyAsync('top-servers', 1, `${this.server.host}:${this.server.port}:${this.server.description}`);
 			if (gameType[0] == 'duel') {
 				let pls = _.reject(this.players, { state: 5 });
 				let plNames = _.map(pls, 'name');
@@ -186,15 +188,22 @@ export default class Game {
 					elo[1] += elod2;
 					return setPlayersElo(plNames, elo).then();
 				});
+			} else if (gameType[0] == 'clanwar') {
+				redis.hincrbyAsync('clan-games', gameType[1][0], 1);
+				redis.hincrbyAsync('clan-games', gameType[1][2], 1);
+				if (gameType[1][3] > gameType[1][1]) {
+					redis.hincrbyAsync('clan-losses', gameType[1][0], 1);
+					redis.hincrbyAsync('clan-wins', gameType[1][2], 1);
+				}
 			}
 		}).catch(error);
 	}
 
 	/**
-     *  Get a serialized object to send to clients.
-	 *	@returns {object} An object representing the game.
-     *  @memberof Game
-     */
+	 *  Get a serialized object to send to clients.
+	 *  @returns {object} An object representing the game.
+	 *  @memberof Game
+	 */
 	serialize() {
 		let res = this.server.serialize(false);
 		res.zombie = this.zombie;
