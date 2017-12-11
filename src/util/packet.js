@@ -59,7 +59,7 @@ var cube2colors = [ 'green', 'blue', 'yellow', 'red', 'grey', 'magenta', 'orange
  *  @param {string} str - The Cube 2 string to process.
  *  @returns {string} The UTF8 string.
  */
-function cube2uni(str) {
+export function cube2uni(str) {
 	var res = '';
 	for (var i = 0; i < str.length; i++) res += String.fromCharCode(cube2unichars[str[i].charCodeAt()]);
 	return res;
@@ -70,7 +70,7 @@ function cube2uni(str) {
  *  @param {string} str - The UTF8 string to process.
  *  @returns {string} The Cube 2 string.
  */
-function uni2cube(str) {
+export function uni2cube(str) {
 	var res = '';
 	for (var i = 0; i < str.length; i++) {
 		var c = str[i].charCodeAt();
@@ -104,7 +104,7 @@ var entityMap = {
 	'`': '&#x60;',
 	'=': '&#x3D;'
 };
-function escapeHtml(string) {
+export function escapeHtml(string) {
 	return String(string).replace(/[&<>"'`=/]/g, function (s) {
 		return entityMap[s];
 	});
@@ -117,25 +117,35 @@ function escapeHtml(string) {
  */
 export function cube2colorHTML(str) {
 	str = escapeHtml(str);
-	var res = '';
-	if (str.length && str[0] != '\f') res += '<span style="color: lightgrey">';
-	else res += '<span>';
+	let res = '';
+	let inSpan = false;
+	if (str.length && str[0] != '\f') {
+		res += '<span style="color: lightgrey">';
+		inSpan = true;
+	}
 	var curc = -1;
 	var savedc = -1;
 	for (var i = 0; i < str.length; i++) {
 		if (str[i] == '\f') {
 			var cl = str[++i];
-			if (cl == 's') savedc = cl;
+			if (cl == 's') savedc = curc;
 			else {
-				if (cl == 'r') cl = savedc;
-				if (curc != cl) res += '</span><span style="color: ' + cube2colors[cl] + '">';
+				if (cl == 'r') cl = savedc||'lightgrey';
+				if (curc != cl) {
+					if (inSpan) res += '</span>';
+					res += '<span style="color: ' + cube2colors[cl] + '">';
+					inSpan = true;
+				}
 				curc = cl;
 			}
 		} else {
 			res += str[i];
 		}
 	}
-	res += '</span>';
+	if (inSpan) {
+		res += '</span>';
+		inSpan = false;
+	}
 	return res;
 }
 
