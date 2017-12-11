@@ -33,6 +33,7 @@ export function isValidIP(ip) {
 	let parts = ip.split('.');
 	if (parts.length != 4) return false;
 	for (let i = 0; i < 4; i++) {
+		if (isNaN(parts[i])) return false;
 		let n = Number(parts[i]);
 		if (n < 0 || n > 255) return false;
 	}
