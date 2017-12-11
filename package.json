@@ -2,13 +2,13 @@
   "name": "sauer-tracker",
   "version": "2.4.0",
   "description": "Server and stats tracker for Cube 2: Sauerbraten.",
-  "main": "main.js",
+  "main": "index.js",
   "repository": "https://github.com/AngrySnout/SauerTracker",
   "scripts": {
     "postinstall": "cd website && npm install && bower install",
     "build": "NODE_ENV=production knex migrate:latest && NODE_ENV=production gulp build && cd website && NODE_ENV=production gulp build",
     "stop": "NODE_ENV=production forever stop sauertracker",
-    "start": "NODE_ENV=production forever -a --uid \"sauertracker\" start --killSignal=SIGINT main.js",
+    "start": "NODE_ENV=production forever -a --uid \"sauertracker\" start --killSignal=SIGINT index.js",
     "bumpv": "npm version patch",
     "test": "mocha"
   },
