@@ -35,8 +35,9 @@ class CacheManager {
 				.then(reply => {
 					if (!reply) {
 						self.entries[id].func().then(function(res) {
-							redis.setAsync(key, JSON.stringify(res), 'EX', self.entries[id].maxage);
-							resolve(res);
+							redis.setAsync(key, JSON.stringify(res), 'EX', self.entries[id].maxage).then(() => {
+								resolve(res);
+							});
 						}).catch(err => {
 							error(err);
 							resolve();
