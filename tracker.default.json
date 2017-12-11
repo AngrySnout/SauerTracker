@@ -29,7 +29,7 @@
 		"port": 6667,
 		"nick": "MyTracker",
 		"chan": "#mychannel",
-		"autoReconnect": 15000,
+		"autoReconnect": 15,
 		"prefix": "."
 	},
 	"postgresURL": "postgres://user:password@server/database",
