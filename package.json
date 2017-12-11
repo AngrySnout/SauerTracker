@@ -9,7 +9,6 @@
     "build": "NODE_ENV=production knex migrate:latest && NODE_ENV=production gulp build && cd website && NODE_ENV=production gulp build",
     "stop": "NODE_ENV=production forever stop sauertracker",
     "start": "NODE_ENV=production forever -a --uid \"sauertracker\" start --killSignal=SIGINT index.js",
-    "bumpv": "npm version patch",
     "test": "mocha"
   },
   "browser": {
