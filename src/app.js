@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars,global-require,import/first */
 
 require('source-map-support').install();
 

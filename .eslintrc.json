@@ -14,8 +14,15 @@
     "Buffer": true
   },
   "rules": {
+    "prefer-promise-reject-errors": 0,
+    "no-mixed-operators" : 0,
+    "import/prefer-default-export": 0,
+    "no-plusplus": 0,
+    "func-names": 0,
     "no-tabs": 0,
     "no-param-reassign": 0,
+    "no-use-before-define": 0,
+    "prefer-rest-params": 0,
     "indent": [
       "error",
       "tab"

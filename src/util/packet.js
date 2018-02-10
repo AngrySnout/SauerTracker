@@ -1,4 +1,5 @@
-var cube2unichars =
+/* eslint-disable max-len,eqeqeq,no-bitwise,radix */
+const cube2unichars =
 [
 	0, 192, 193, 194, 195, 196, 197, 198, 199, 9, 10, 11, 12, 13, 200, 201,
 	202, 203, 204, 205, 206, 207, 209, 210, 211, 212, 213, 214, 216, 217, 218, 219,
@@ -15,13 +16,13 @@ var cube2unichars =
 	0x161, 0x164, 0x165, 0x16E, 0x16F, 0x170, 0x171, 0x178, 0x179, 0x17A, 0x17B, 0x17C, 0x17D, 0x17E, 0x404, 0x411,
 	0x413, 0x414, 0x416, 0x417, 0x418, 0x419, 0x41B, 0x41F, 0x423, 0x424, 0x426, 0x427, 0x428, 0x429, 0x42A, 0x42B,
 	0x42C, 0x42D, 0x42E, 0x42F, 0x431, 0x432, 0x433, 0x434, 0x436, 0x437, 0x438, 0x439, 0x43A, 0x43B, 0x43C, 0x43D,
-	0x43F, 0x442, 0x444, 0x446, 0x447, 0x448, 0x449, 0x44A, 0x44B, 0x44C, 0x44D, 0x44E, 0x44F, 0x454, 0x490, 0x491
+	0x43F, 0x442, 0x444, 0x446, 0x447, 0x448, 0x449, 0x44A, 0x44B, 0x44C, 0x44D, 0x44E, 0x44F, 0x454, 0x490, 0x491,
 ];
-var uni2cubeoffsets =
+const uni2cubeoffsets =
 [
-	0, 256, 658, 658, 512, 658, 658, 658
+	0, 256, 658, 658, 512, 658, 658, 658,
 ];
-var uni2cubechars =
+const uni2cubechars =
 [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 10, 11, 12, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
@@ -50,9 +51,9 @@ var uni2cubechars =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
-var cube2colors = [ 'green', 'blue', 'yellow', 'red', 'grey', 'magenta', 'orange', 'white', 'black', 'cyan' ];
+const cube2colors = ['green', 'blue', 'yellow', 'red', 'grey', 'magenta', 'orange', 'white', 'black', 'cyan'];
 
 /**
  *  Convert Cube 2 string to its UTF8 equivalent.
@@ -60,8 +61,8 @@ var cube2colors = [ 'green', 'blue', 'yellow', 'red', 'grey', 'magenta', 'orange
  *  @returns {string} The UTF8 string.
  */
 export function cube2uni(str) {
-	var res = '';
-	for (var i = 0; i < str.length; i++) res += String.fromCharCode(cube2unichars[str[i].charCodeAt()]);
+	let res = '';
+	for (let i = 0; i < str.length; i++) res += String.fromCharCode(cube2unichars[str[i].charCodeAt()]);
 	return res;
 }
 
@@ -71,10 +72,10 @@ export function cube2uni(str) {
  *  @returns {string} The Cube 2 string.
  */
 export function uni2cube(str) {
-	var res = '';
-	for (var i = 0; i < str.length; i++) {
-		var c = str[i].charCodeAt();
-		res += String.fromCharCode((c <= 0x7FF)? uni2cubechars[uni2cubeoffsets[c>>8] + (c&0xFF)]: 0);
+	let res = '';
+	for (let i = 0; i < str.length; i++) {
+		const c = str[i].charCodeAt();
+		res += String.fromCharCode((c <= 0x7FF) ? uni2cubechars[uni2cubeoffsets[c >> 8] + (c & 0xFF)] : 0);
 	}
 	return res;
 }
@@ -85,8 +86,8 @@ export function uni2cube(str) {
  *  @returns {string} Filtered string.
  */
 export function filterString(str) {
-	var res = '';
-	for (var i = 0; i < str.length; i++) {
+	let res = '';
+	for (let i = 0; i < str.length; i++) {
 		if (str[i] == '\f') i++;
 		else res += str[i];
 	}
@@ -94,7 +95,7 @@ export function filterString(str) {
 }
 
 // https://github.com/janl/mustache.js/blob/master/mustache.js#L60
-var entityMap = {
+const entityMap = {
 	'&': '&amp;',
 	'<': '&lt;',
 	'>': '&gt;',
@@ -102,12 +103,10 @@ var entityMap = {
 	'\'': '&#39;',
 	'/': '&#x2F;',
 	'`': '&#x60;',
-	'=': '&#x3D;'
+	'=': '&#x3D;',
 };
 export function escapeHtml(string) {
-	return String(string).replace(/[&<>"'`=/]/g, function (s) {
-		return entityMap[s];
-	});
+	return String(string).replace(/[&<>"'`=/]/g, s => entityMap[s]);
 }
 
 /**
@@ -123,17 +122,17 @@ export function cube2colorHTML(str) {
 		res += '<span style="color: lightgrey">';
 		inSpan = true;
 	}
-	var curc = -1;
-	var savedc = -1;
-	for (var i = 0; i < str.length; i++) {
+	let curc = -1;
+	let savedc = -1;
+	for (let i = 0; i < str.length; i++) {
 		if (str[i] == '\f') {
-			var cl = str[++i];
+			let cl = str[++i];
 			if (cl == 's') savedc = curc;
 			else {
-				if (cl == 'r') cl = savedc||'lightgrey';
+				if (cl == 'r') cl = savedc || 'lightgrey';
 				if (curc != cl) {
 					if (inSpan) res += '</span>';
-					res += '<span style="color: ' + cube2colors[cl] + '">';
+					res += `<span style="color: ${cube2colors[cl]}">`;
 					inSpan = true;
 				}
 				curc = cl;
@@ -161,7 +160,7 @@ export default class Packet {
 	*/
 	constructor(buffer, offset) {
 		this.buffer = buffer;
-		this.offset = offset||0;
+		this.offset = offset || 0;
 	}
 
 	/**
@@ -169,13 +168,13 @@ export default class Packet {
 	 *  @returns {number} The integer.
 	 */
 	getInt() {
-		var ch = this.buffer.readInt8(this.offset);
-		var res;
+		const ch = this.buffer.readInt8(this.offset);
+		let res;
 		if (ch == -128) {
-			res = this.buffer.readUInt8(this.offset+1) | (this.buffer.readInt8(this.offset+2)<<8);
+			res = this.buffer.readUInt8(this.offset + 1) | (this.buffer.readInt8(this.offset + 2) << 8);
 			this.offset += 3;
 		} else if (ch == -127) {
-			res = this.buffer.readUInt8(this.offset+1) | (this.buffer.readUInt8(this.offset+2)<<8) | (this.buffer.readUInt8(this.offset+3)<<16) | (this.buffer.readInt8(this.offset+4)<<24);
+			res = this.buffer.readUInt8(this.offset + 1) | (this.buffer.readUInt8(this.offset + 2) << 8) | (this.buffer.readUInt8(this.offset + 3) << 16) | (this.buffer.readInt8(this.offset + 4) << 24);
 			this.offset += 5;
 		} else {
 			res = ch;
@@ -191,19 +190,19 @@ export default class Packet {
 	putInt(num) {
 		num = parseInt(num);
 		if (num < 128 && num > -127) {
-			this.buffer.writeUInt8(num&0xFF, this.offset);
+			this.buffer.writeUInt8(num & 0xFF, this.offset);
 			this.offset++;
 		} else if (num < 0x8000 && num >= -0x8000) {
 			this.buffer.writeUInt8(0x80, this.offset);
-			this.buffer.writeUInt8(num&0xFF, this.offset+1);
-			this.buffer.writeUInt8((num>>8)&0xFF, this.offset+2);
+			this.buffer.writeUInt8(num & 0xFF, this.offset + 1);
+			this.buffer.writeUInt8((num >> 8) & 0xFF, this.offset + 2);
 			this.offset += 3;
 		} else {
 			this.buffer.writeUInt8(0x81, this.offset);
-			this.buffer.writeUInt8((num)&0xFF, this.offset+1);
-			this.buffer.writeUInt8((num>>8)&0xFF, this.offset+2);
-			this.buffer.writeUInt8((num>>16)&0xFF, this.offset+3);
-			this.buffer.writeUInt8((num>>24)&0xFF, this.offset+4);
+			this.buffer.writeUInt8((num) & 0xFF, this.offset + 1);
+			this.buffer.writeUInt8((num >> 8) & 0xFF, this.offset + 2);
+			this.buffer.writeUInt8((num >> 16) & 0xFF, this.offset + 3);
+			this.buffer.writeUInt8((num >> 24) & 0xFF, this.offset + 4);
 			this.offset += 5;
 		}
 	}
@@ -213,7 +212,7 @@ export default class Packet {
 	 *  @returns {string} The string.
 	 */
 	getString() {
-		var res = '';
+		let res = '';
 		while (this.offset < this.buffer.length && this.buffer[this.offset] !== 0) {
 			res += String.fromCharCode(this.getInt() & 0xFF);
 		}
@@ -226,37 +225,37 @@ export default class Packet {
 	 *  @param {string} str - The string to write.
 	 */
 	putString(str) {
-		var lastoffset = this.offset;
-		var cubestr = uni2cube(str);
-		var i = 0;
+		const lastoffset = this.offset;
+		const cubestr = uni2cube(str);
+		let i = 0;
 		while (i < cubestr.length) {
 			this.putInt(cubestr[i++].charCodeAt());
 		}
 		this.putInt(0);
-		return this.offset-lastoffset;
+		return this.offset - lastoffset;
 	}
 
 	/**
 	 *  Get number of remaining bytes in buffer.
 	 *  @returns {number}
 	 */
-	remaining () {
-		return this.buffer.length-this.offset;
+	remaining() {
+		return this.buffer.length - this.offset;
 	}
 
 	/**
 	 *  Check whether the end of the buffer is reached.
 	 *  @returns {boolean}
 	 */
-	overread () {
-		return this.buffer.length<=this.offset;
+	overread() {
+		return this.buffer.length <= this.offset;
 	}
 
 	/**
 	 *  Get a sliced/trimmed buffer, eg for sending over the network.
 	 *  @returns {buffer}
 	 */
-	finalize () {
+	finalize() {
 		return this.buffer.slice(0, this.offset);
 	}
 }

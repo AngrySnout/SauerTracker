@@ -4,22 +4,22 @@ import _ from 'lodash';
 
 import config from '../../tracker.json';
 import redis from '../util/redis';
-import {log} from '../util/util';
+import { log } from '../util/util';
 
 function pollMasterServer() {
 	return new Promise((resolve, reject) => {
-		var agg = '';
-		let socket = net.connect(config.master.port, config.master.name, function() {
+		let agg = '';
+		const socket = net.connect(config.master.port, config.master.name, () => {
 			socket.write('list\n');
 		});
-		socket.on('data', function(data) {
+		socket.on('data', (data) => {
 			agg += data.toString();
 		});
-		socket.on('end', function() {
+		socket.on('end', () => {
 			if (!agg) reject('Masterserver connection failed.');
 			resolve(agg);
 		});
-		socket.on('error', function(err) {
+		socket.on('error', (err) => {
 			reject(['Can\'t poll masterserver:', err]);
 		});
 	});
@@ -27,15 +27,15 @@ function pollMasterServer() {
 
 /**
  *	Poll the master server.
- *	@returns {Promise} Resolves with an array containing object of the form `{ host: "x.x.x.x", port: 12345 }`.
-
+ *	@returns {Promise} Resolves with an array containing objects of the form
+ *  `{ host: "x.x.x.x", port: 12345 }`.
  */
 export function getServerList() {
-	return pollMasterServer().then(result => {
-		let servers = [];
-		_.each(result.split('\n'), line => {
-			let ts = line.split(' ');
-			if (ts.length == 3 && ts[0] == 'addserver') servers.push({host: ts[1], port: parseInt(ts[2])});
+	return pollMasterServer().then((result) => {
+		const servers = [];
+		_.each(result.split('\n'), (line) => {
+			const ts = line.split(' ');
+			if (ts.length === 3 && ts[0] === 'addserver') servers.push({ host: ts[1], port: parseInt(ts[2], 10) });
 		});
 		return servers;
 	});
@@ -45,9 +45,7 @@ export function getServerList() {
  *	Get the server list from the master server and save it in cache.
  */
 export function updateServerList() {
-	return getServerList().then(results => {
-		return redis.setAsync('servers', JSON.stringify(results));
-	}).catch(err => {
+	return getServerList().then(results => redis.setAsync('servers', JSON.stringify(results))).catch((err) => {
 		log(err);
 		return err;
 	});

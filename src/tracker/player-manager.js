@@ -3,10 +3,10 @@ import Promise from 'bluebird';
 
 import config from '../../tracker.json';
 
-import {log} from '../util/util';
+import { log } from '../util/util';
 import database from '../util/database';
 import Player from './player';
-import {saveSpy} from './spy';
+import { saveSpy } from './spy';
 
 class PlayerManager {
 	constructor() {
@@ -15,27 +15,29 @@ class PlayerManager {
 		this.banNames = {};
 	}
 
-	updatePlayer(gameMode, newState, oldState) {
-		let name = newState.name;
+	updatePlayer(server, newState, oldState) {
+		const { name } = newState;
 		if (this.banNames[name] || this.bans[newState.ip]) return;
 		if (!this.players[name]) this.players[name] = new Player(name);
 		this.players[name].updateState(gameMode, newState, oldState);
 	}
 
 	flushplayers() {
-		let self = this;
-		return database('players').whereIn('name', _.map(self.players, 'name')).then(rows => {
+		const self = this;
+		return database('players').whereIn('name', _.map(self.players, 'name')).then((rows) => {
 			rows = _.keyBy(rows, 'name');
-			let numPlayers = self.players.length;
-			return database.transaction(function(trx) {
-				return Promise.all(self.players.map(player => player.saveStats(rows[player.name], trx))).finally(trx.commit);
-			}).then(() => {
-				self.players = {};
-				return numPlayers;
-			});
-		}).then(numPlayers => {
+			const numPlayers = self.players.length;
+			return database.transaction(trx =>
+				Promise.all(self.players.map(player => player.saveStats(rows[player.name], trx)))
+					.finally(trx.commit))
+				.then(() => {
+					self.players = {};
+					return numPlayers;
+				});
+		}).then((numPlayers) => {
 			log(`Players flushed, ${numPlayers} players updated`);
-		}).then(saveSpy);
+		})
+			.then(saveSpy);
 	}
 
 	isOnline(name) {
@@ -44,9 +46,9 @@ class PlayerManager {
 	}
 
 	start() {
-		let self = this;
-		database.select().table('bans').then(bans => {
-			_.each(bans, function (ban) {
+		const self = this;
+		database.select().table('bans').then((bans) => {
+			_.each(bans, (ban) => {
 				if (ban.ip) self.bans[ban.ip] = true;
 				if (ban.name) self.banNames[ban.name] = true;
 			});
@@ -54,9 +56,9 @@ class PlayerManager {
 
 		setInterval(() => {
 			this.flushplayers();
-		}, config.tracker.savePlayersInterval*1000);
+		}, config.tracker.savePlayersInterval * 1000);
 	}
 }
 
-var playerManager = new PlayerManager();
+const playerManager = new PlayerManager();
 export default playerManager;

@@ -21,9 +21,9 @@ class ServerMetric {
 	 */
 	polled() {
 		this.totalPolls++;
-		var now = new Date().getTime();
+		const now = new Date().getTime();
 		if (this.lastPollTime > -1) {
-			this.totalPollTime += now-this.lastPollTime;
+			this.totalPollTime += now - this.lastPollTime;
 		}
 		this.lastPollTime = now;
 	}
@@ -33,9 +33,9 @@ class ServerMetric {
 	 */
 	replied() {
 		this.totalReplies++;
-		var now = new Date().getTime();
+		const now = new Date().getTime();
 		if (this.lastReplyTime > -1) {
-			this.totalReplyTime += now-this.lastReplyTime;
+			this.totalReplyTime += now - this.lastReplyTime;
 		}
 		this.lastReplyTime = now;
 	}
@@ -46,9 +46,9 @@ class ServerMetric {
 	 */
 	get() {
 		return {
-			averagePollTime: (this.totalPollTime/(this.totalPolls-1))/1000,
-			averageReplyTime: (this.totalReplyTime/(this.totalReplies-1))/1000,
-			loss: 100-((this.totalReplies/this.totalPolls)*100)
+			averagePollTime: (this.totalPollTime / (this.totalPolls - 1)) / 1000,
+			averageReplyTime: (this.totalReplyTime / (this.totalReplies - 1)) / 1000,
+			loss: 100 - ((this.totalReplies / this.totalPolls) * 100),
 		};
 	}
 }
@@ -64,8 +64,8 @@ class MetricsManager {
 	 *  @param {number} port - Port of the server.
 	 */
 	polled(host, port) {
-		if (!this.servers[host+':'+port]) this.servers[host+':'+port] = new ServerMetric();
-		this.servers[host+':'+port].polled();
+		if (!this.servers[`${host}:${port}`]) this.servers[`${host}:${port}`] = new ServerMetric();
+		this.servers[`${host}:${port}`].polled();
 	}
 
 	/**
@@ -74,25 +74,26 @@ class MetricsManager {
 	 *  @param {number} port - Port of the server.
 	 */
 	replied(host, port) {
-		if (!this.servers[host+':'+port]) this.servers[host+':'+port] = new ServerMetric();
-		this.servers[host+':'+port].replied();
+		if (!this.servers[`${host}:${port}`]) this.servers[`${host}:${port}`] = new ServerMetric();
+		this.servers[`${host}:${port}`].replied();
 	}
 
 	/**
 	 *  Get all stats.
-	 *  @returns {array} An array containing object that have properties name and stats, where stats is an object with properties averagePollTime, averageReplyTime, and loss.
+	 *  @returns {array} An array containing object that have properties name and stats,
+	 *  where stats is an object with properties averagePollTime, averageReplyTime, and loss.
 	 */
 	getAll() {
-		var res = [];
+		const res = [];
 		_.each(this.servers, (metric, name) => {
 			res.push({
-				name: name,
-				stats: metric.get()
+				name,
+				stats: metric.get(),
 			});
 		});
 		return res;
 	}
 }
 
-var metrics = new MetricsManager();
+const metrics = new MetricsManager();
 export default metrics;

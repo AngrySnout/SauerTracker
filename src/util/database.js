@@ -2,9 +2,9 @@ import knex from 'knex';
 
 import config from '../../tracker.json';
 
-var database = knex({
+const database = knex({
 	client: 'pg',
 	connection: config.postgresURL,
-	searchPath: 'knex,public'
+	searchPath: 'knex,public',
 });
 export default database;
