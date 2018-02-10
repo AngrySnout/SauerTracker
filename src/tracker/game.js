@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
+import countries from 'i18n-iso-countries';
 
 import config from '../../tracker.json';
 import vars from '../../vars.json';
@@ -20,13 +21,12 @@ function saveGame(server, type) {
 	let data = {
 		host: server.host,
 		port: server.port,
-		serverdesc:
-		server.description,
+		serverdesc: server.description,
 		map: server.game.mapName,
 		gamemode: server.game.gameMode,
 		numplayers: server.game.clients,
 		gametype: type[0],
-		meta: type[1],
+		meta: JSON.stringify(type[1]),
 		players: ' '+_.map(_.reject(server.game.players, { state: 5 }), 'name').join(' ')+' ',
 		specs: ' '+_.map(_.filter(server.game.players, { state: 5 }), 'name').join(' ')+' '
 	};
@@ -67,7 +67,7 @@ function setPlayersElo(players, elos) {
 	}));
 }
 
-function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
+export function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
 	if (fragsSelf < 1 || fragsOther < 1) return 0;
 	return Math.round(10 * (Math.log(fragsSelf/fragsOther) + Math.log(eloOther/eloSelf)) * (eloSelf / config.tracker.baseElo));
 }
@@ -75,7 +75,7 @@ function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
 /**
  *  Get type of the game.
  *	@param {object} game - The game to detect. Should have properties 'gameMode', 'masterMode', 'players', and 'teams'.
- *	@param {number} threshold - Override minimum number of frags to count as a duel.
+ *	@param {number} threshold - Override minimum number of frags to count as a duel. Optional.
  *	@returns {array} An array, the first element of which is one of 'duel', 'public', 'other', 'clanwar', 'mix', 'intern'. If the first element if one of 'duel' and 'clanwar', the second element is a string representing the participants and the result. If the first element is 'intern', the second element is a string representing the clan.
  */
 export function getGameType(game, threshold) {
@@ -85,7 +85,7 @@ export function getGameType(game, threshold) {
 
 	if (pls.length == 2 && vars.duelModes.indexOf(self.gameMode) >= 0 && vars.lockedMModes.indexOf(self.masterMode) >= 0 && !(vars.gameModes[self.gameMode].teamMode && pls[0].team == pls[1].team) && (pls[0].frags > threshold && pls[1].frags > threshold)) {
 		pls = _.sortBy(pls, 'frags');
-		return ['duel', JSON.stringify([pls[0].name, pls[0].frags, pls[1].name, pls[1].frags])];
+		return ['duel', [pls[0].name, pls[0].frags, pls[1].name, pls[1].frags]];
 	}
 
 	if (vars.lockedMModes.indexOf(self.masterMode) < 0) return ['public'];
@@ -96,7 +96,7 @@ export function getGameType(game, threshold) {
 
 	let playerClans = _.countBy(pls, function (pl) { return getClan(pl.name)||'random'; });
 	let clanNames = _.keys(playerClans);
-	if (clanNames.length == 1 && clanNames[0] != 'random') return ['intern', JSON.stringify([clanNames[0]])];
+	if (clanNames.length == 1 && clanNames[0] != 'random') return ['intern', [clanNames[0]]];
 
 	if (pls.length >= 4) {
 		let isCW = true;
@@ -124,11 +124,17 @@ export function getGameType(game, threshold) {
 		}
 		if (isCW && result.length == 2 && clans[0] != clans[1] && clans[0] != 'random' && clans[1] != 'random') {
 			result = _.sortBy(result, 'score');
-			return ['clanwar', JSON.stringify([result[0].clan, result[0].score, result[1].clan, result[1].score])];
+			return ['clanwar', [result[0].clan, result[0].score, result[1].clan, result[1].score]];
 		}
 	}
 
 	return ['mix'];
+}
+	
+function serializePlayer(pl) {
+	let ret = _.pick(pl, ['name', 'frags', 'team', 'flags', 'deaths', 'kpd', 'acc', 'tks', 'state', 'country', 'ping']);
+	ret.countryName = countries.getName(pl.country, 'en');
+	return ret;
 }
 
 /**
@@ -138,10 +144,8 @@ export function getGameType(game, threshold) {
 export default class Game {
 	/**
 	 *  @constructor
-	 *  @param {server} server - the server object to which this game belongs.
 	 */
-	constructor(server) {
-		this.server = server;
+	constructor() {
 		this.reset();
 	}
 
@@ -163,20 +167,22 @@ export default class Game {
 		this.timeLeft = 1000;
 		this.intermission = false;
 		this.saved = false;
+		this.zombie = false;
 	}
 
 	/**
 	 *  Save the game in the database.
+	 *  @param {Server} server - The server on which this game was played.
 	 *  @returns {Promise} Resolves when the game is saved or rejects with an error.
 	 *  @memberof Game
 	 */
-	save() {
+	save(server) {
 		if (!this || this.saved || this.zombie) return;
 		this.saved = true;
 		let gameType = getGameType(this);
-		return saveGame(this.server, gameType).then(() => {
-			debug(`Game saved at '${this.server.description}' (${gameType}).`);
-			redis.zincrbyAsync('top-servers', 1, `${this.server.host}:${this.server.port}:${this.server.description}`);
+		return saveGame(server, gameType).then(() => {
+			debug(`Game saved at '${server.description}' (${gameType}).`);
+			redis.zincrbyAsync('top-servers', 1, `${server.host}:${server.port}:${server.description}`);
 			if (gameType[0] == 'duel') {
 				let pls = _.reject(this.players, { state: 5 });
 				let plNames = _.map(pls, 'name');
@@ -201,20 +207,32 @@ export default class Game {
 
 	/**
 	 *  Get a serialized object to send to clients.
-	 *  @returns {object} An object representing the game.
+	 *  @param {boolean} expanded - Whether to return full player and team info.
+	 *  @returns {object} A serialized version of the game.
 	 *  @memberof Game
 	 */
-	serialize() {
-		let res = this.server.serialize(false);
-		res.zombie = this.zombie;
-		res.info = this.server.info;
-		res.players = _.map(this.players, pl => _.pick(pl, ['name', 'frags', 'team', 'flags', 'deaths', 'kpd', 'acc', 'tks', 'state', 'country', 'countryName', 'ping']));
-		res.teams = this.teams;
-		let gameType = getGameType(this, -1000);
-		res.gameType = gameType[0];
-		try {
-			if (gameType[1]) res.meta = JSON.parse(gameType[1]);
-		} catch (e) {} // eslint-disable-line no-empty
+	serialize(expanded) {
+		let res = {
+			clients: this.clients,
+			maxClients: this.maxClients,
+			gameMode: this.gameMode,
+			mapName: this.mapName,
+			masterMode: this.masterMode,
+			isFull: (this.clients >= this.maxClients),
+			timeLeft: this.timeLeft,
+			timeLeftString: this.timeLeftString,
+			zombie: this.zombie
+		};
+		
+		if (expanded) {
+			res.players = _.map(this.players, serializePlayer);
+			res.teams = this.teams;
+			let gameType = getGameType(this, -1000);
+			res.gameType = gameType[0];
+			if (gameType[1]) res.meta = gameType[1];
+		} else {
+			res.players = _.map(this.players, pl => pl.name);
+		}
 		return res;
 	}
 }

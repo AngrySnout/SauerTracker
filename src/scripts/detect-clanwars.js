@@ -32,7 +32,7 @@ database.raw(`
 		database.raw();
 		if (gameType[0] != row.gametype) {
 			count++;
-			return database('games').where('id', row.id).update({ gametype: gameType[0], meta: gameType[1] }).then();
+			return database('games').where('id', row.id).update({ gametype: gameType[0], meta: JSON.stringify(gameType[1]) }).then();
 		}
 	}).then(() => {
 		log(`Updated ${count} games`);

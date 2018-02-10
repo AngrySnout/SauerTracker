@@ -29,9 +29,9 @@ else
                     span(style=("color: "+vars.materModeColors[server.masterMode]))  #{server.masterMode}
                 if server.gameType
                     |  | #{server.gameType}
-                if server.timeLeftS
-                    |  | #{server.timeLeftS}
-                    if server.timeLeftS != "intermission"
+                if server.timeLeftString
+                    |  | #{server.timeLeftString}
+                    if server.timeLeftString != "intermission"
                         |  left
                 |  |
                 span(style=(server.clients==server.maxClients? "color: yellow": ""))  #{server.clients}

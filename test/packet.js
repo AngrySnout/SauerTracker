@@ -65,7 +65,7 @@ describe('packet', function() {
 			expect(p.getInt()).to.equal(200);
 			expect(p.getInt()).to.equal(-999999);
 			expect(p.remaining()).to.equal(12);
-			expect(p.finalize().toString('hex')).to.equal('0f80c80081c1bdf0ff')
+			expect(p.finalize().toString('hex')).to.equal('0f80c80081c1bdf0ff');
 			expect(p.getString()).to.equal('hello');
 			expect(p.overread()).to.equal(false);
 			expect(p.getString()).to.equal('world');

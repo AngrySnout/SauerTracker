@@ -5,11 +5,7 @@ import _ from 'lodash';
 import database from '../util/database';
 import config from '../../tracker.json';
 import {log} from '../util/util';
-
-function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
-	if (fragsSelf < 1 || fragsOther < 1) return 0;
-	return Math.round(10 * (Math.log(fragsSelf/fragsOther) + Math.log(eloOther/eloSelf)) * (eloSelf / config.baseElo));
-}
+import {calcEloChange} from '../tracker/game';
 
 database('players').update({ elo: config.baseElo }).then(() => {
 	database('games').where({ gametype: 'duel' }).orderBy('id', 'asc').then(rows => {

@@ -5,8 +5,8 @@ var util = require('../build/util/util');
 var vars = require('../vars.json');
 
 vars.clans = [
-	{ "tag": "ab]" },
-	{ "tag": "|cd|" }
+	{ 'tag': 'ab]' },
+	{ 'tag': '|cd|' }
 ];
 
 describe('util', function() {

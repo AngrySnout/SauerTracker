@@ -10,7 +10,7 @@ export function findServer(host, port) {
 	port = parseInt(port);
 	let server = serverManager.find(host, port);
 	if (server) {
-		server = server.game.serialize();
+		server = server.serialize(true);
 
 		server.website = null;
 		server.banned = null;

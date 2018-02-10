@@ -25,7 +25,7 @@ export function findServer(host, port) {
 	port = parseInt(port);
 	let server = serverManager.find(host, port);
 	if (server) {
-		server = server.game.serialize();
+		server = server.serialize(true);
 		return Promise.join(redis.zrevrankAsync('server-ranks', `${host}:${port}`), redis.zscoreAsync('server-ranks', `${host}:${port}`),
 			(rank, score) => {
 				if (rank) server.rank = rank;

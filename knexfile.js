@@ -4,7 +4,7 @@ var config = require('./tracker.json');
 
 var database = {
 	'client': 'pg',
-	'connection': config.databaseConnection,
+	'connection': config.postgresURL,
 	'searchPath': 'knex,public'
 };
 
