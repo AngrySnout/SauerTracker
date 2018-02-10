@@ -195,8 +195,8 @@ export default class Server {
 
 					// save player info and stats
 					if (oldPlayer && player.name && oldPlayer.name === player.name &&
-						oldPlayer.ip === player.ip && !this.game.zombie && !this.banned &&
-						player.cn < 128 && this.game.gameMode !== 'coop_edit') {
+							oldPlayer.ip === player.ip && !this.game.zombie && !this.banned &&
+							player.cn < 128 && this.game.gameMode !== 'coop_edit') {
 						playerManager.updatePlayer(this.game.gameMode, player, oldPlayer);
 					}
 

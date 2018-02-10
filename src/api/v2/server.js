@@ -33,7 +33,8 @@ export function findServer(host, port) {
 
 			return server;
 		});
-	} return Promise.reject(new ObjectNotFoundError());
+	}
+	return Promise.reject(new ObjectNotFoundError());
 }
 
 app.get('/api/v2/server/:host/:port', (req, res) => {

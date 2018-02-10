@@ -1,4 +1,5 @@
 var chai = require('chai');
+
 var expect = chai.expect;
 
 var util = require('../build/util/util');

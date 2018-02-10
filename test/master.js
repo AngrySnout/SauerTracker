@@ -7,6 +7,7 @@ var expect = chai.expect;
 var mitm = Mitm();
 
 var config = require('../tracker.json');
+
 mitm.on('connect', function(socket, opts) {
 	if (opts.host != config.master.name || opts.port != config.master.port) socket.bypass();
 });

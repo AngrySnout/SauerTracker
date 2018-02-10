@@ -1,4 +1,5 @@
 var chai = require('chai');
+
 var expect = chai.expect;
 
 var protocol = require('../build/util/protocol');

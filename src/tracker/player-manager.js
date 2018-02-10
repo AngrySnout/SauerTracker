@@ -15,7 +15,7 @@ class PlayerManager {
 		this.banNames = {};
 	}
 
-	updatePlayer(server, newState, oldState) {
+	updatePlayer(gameMode, newState, oldState) {
 		const { name } = newState;
 		if (this.banNames[name] || this.bans[newState.ip]) return;
 		if (!this.players[name]) this.players[name] = new Player(name);

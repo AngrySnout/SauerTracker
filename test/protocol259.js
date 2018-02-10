@@ -1,4 +1,5 @@
 var chai = require('chai');
+
 var expect = chai.expect;
 
 var protocol259 = require('../build/tracker/protocols/259');
