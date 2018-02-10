@@ -9,7 +9,9 @@
     "build": "NODE_ENV=production knex migrate:latest && NODE_ENV=production gulp build && cd website && NODE_ENV=production gulp build",
     "stop": "NODE_ENV=production forever stop sauertracker",
     "start": "NODE_ENV=production forever -a --uid \"sauertracker\" start --killSignal=SIGINT index.js",
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "./node_modules/.bin/eslint .",
+    "lint-fix": "./node_modules/.bin/eslint . --fix"
   },
   "browser": {
     "jquery": "./bower_components/jquery/dist/jquery.js",
@@ -52,6 +54,9 @@
     "debowerify": "^1.4.1",
     "del": "^2.2.0",
     "esdoc": "^0.4.7",
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
     "fuzzaldrin": "^2.1.0",
     "glob": "^7.0.3",
     "gulp": "^3.9.1",
