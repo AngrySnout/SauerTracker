@@ -1,8 +1,9 @@
-'use strict';
-/*global module*/
 
-var through = require('through');
-var pug = require('pug');
+/* global module */
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const through = require('through');
+const pug = require('pug');
 
 module.exports = function (fileName, options) {
 	if (!/\.pug$/i.test(fileName)) {
@@ -11,18 +12,18 @@ module.exports = function (fileName, options) {
 
 	options.runtimePath = options.runtimePath === undefined ? 'pug-runtime' : options.runtimePath;
 
-	var inputString = '';
+	let inputString = '';
 	return through(
-		function (chunk) {
+		(chunk) => {
 			inputString += chunk;
 		},
 		function () {
-			var self = this;
+			const self = this;
 
 			options.filename = fileName;
 			options.compileDebug = false;
 
-			var result;
+			let result;
 			try {
 				result = pug.compileClientWithDependenciesTracked(inputString, options);
 			} catch (e) {
@@ -30,15 +31,15 @@ module.exports = function (fileName, options) {
 				return;
 			}
 
-			result.dependencies.forEach(function (dep) {
+			result.dependencies.forEach((dep) => {
 				self.emit('file', dep);
 			});
 
-			var moduleBody = 'var pug = require(\'' + options.runtimePath + '\');\n\n' +
-							'module.exports = template;' + result.body + ';';
+			const moduleBody = `var pug = require('${options.runtimePath}');\n\n` +
+							`module.exports = template;${result.body};`;
 
 			self.queue(moduleBody);
 			self.queue(null);
-		}
+		},
 	);
 };

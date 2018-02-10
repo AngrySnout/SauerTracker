@@ -1,4 +1,4 @@
-export var gameModes = [
+export const gameModes = [
 	'ffa',
 	'coop_edit',
 	'teamplay',
@@ -21,16 +21,16 @@ export var gameModes = [
 	'effic_hold',
 	'collect',
 	'insta_collect',
-	'effic_collect'
+	'effic_collect',
 ];
 
-export var masterModes = [
-	'auth',      // -1
-	'open',      // 0
-	'veto',      // 1
-	'locked',    // 2
-	'private',   // 3
-	'password'	 // 4
+export const masterModes = [
+	'auth', // -1
+	'open', // 0
+	'veto', // 1
+	'locked', // 2
+	'private', // 3
+	'password',	 // 4
 ];
 
 /**
@@ -39,7 +39,7 @@ export var masterModes = [
  *	@returns {string} name - Name of the mode.
  */
 export function getGameMode(code) {
-	return gameModes[code]||'unknown';
+	return gameModes[code] || 'unknown';
 }
 
 /**
@@ -48,5 +48,5 @@ export function getGameMode(code) {
  *	@returns {string} name - Name of the mastermode.
  */
 export function getMasterMode(code) {
-	return masterModes[code+1]||'unknown';
+	return masterModes[code + 1] || 'unknown';
 }

@@ -1,17 +1,17 @@
-var _ = window._;
-var $ = window.$;
-var Chart = require('Chart.js');
-var moment = window.moment;
+const { _, $, moment } = window;
+// eslint-disable-next-line import/no-unresolved,import/no-extraneous-dependencies
+const Chart = require('Chart.js');
+
 
 // TODO: this file could use some cleaning up
 
-var clampTimes = [];
-var tmm = moment('00:00', 'HH:mm');
-for (var i = 0; i < 48; i++) {
+const clampTimes = [];
+const tmm = moment('00:00', 'HH:mm');
+for (let i = 0; i < 48; i++) {
 	clampTimes.push(tmm.format('HH:mm'));
 	tmm.add(30, 'minutes');
 }
-var chartDataDay = {
+const chartDataDay = {
 	labels: clampTimes,
 	datasets: [
 		{
@@ -22,11 +22,11 @@ var chartDataDay = {
 			pointStrokeColor: '#fff',
 			pointHighlightFill: '#fff',
 			pointHighlightStroke: 'rgba(220,220,220,1)',
-			data: []
-		}
-	]
+			data: [],
+		},
+	],
 };
-var chartDataMonth = {
+const chartDataMonth = {
 	labels: [],
 	datasets: [
 		{
@@ -37,21 +37,21 @@ var chartDataMonth = {
 			pointStrokeColor: '#fff',
 			pointHighlightFill: '#fff',
 			pointHighlightStroke: 'rgba(220,220,220,1)',
-			data: []
-		}
-	]
+			data: [],
+		},
+	],
 };
-var dayOptions = {
-	scaleShowGridLines : false,
-	bezierCurve : false,
-	bezierCurveTension : 0.4,
-	pointDot : true,
-	pointDotRadius : 3,
-	pointDotStrokeWidth : 1,
-	pointHitDetectionRadius : 5,
-	datasetStroke : true,
-	datasetStrokeWidth : 2,
-	datasetFill : true,
+const dayOptions = {
+	scaleShowGridLines: false,
+	bezierCurve: false,
+	bezierCurveTension: 0.4,
+	pointDot: true,
+	pointDotRadius: 3,
+	pointDotStrokeWidth: 1,
+	pointHitDetectionRadius: 5,
+	datasetStroke: true,
+	datasetStrokeWidth: 2,
+	datasetFill: true,
 
 	animationSteps: 60,
 	scaleFontColor: '#aaa',
@@ -59,19 +59,19 @@ var dayOptions = {
 	maintainAspectRatio: true,
 	scaleBeginAtZero: true,
 
-	tooltipTemplate: '<%if (label){%><%=label%> : <%}%><%= value %> players'
+	tooltipTemplate: '<%if (label){%><%=label%> : <%}%><%= value %> players',
 };
-var monthOptions = {
-	scaleShowGridLines : false,
-	bezierCurve : false,
-	bezierCurveTension : 0.4,
-	pointDot : true,
-	pointDotRadius : 4,
-	pointDotStrokeWidth : 1,
-	pointHitDetectionRadius : 5,
-	datasetStroke : true,
-	datasetStrokeWidth : 2,
-	datasetFill : true,
+const monthOptions = {
+	scaleShowGridLines: false,
+	bezierCurve: false,
+	bezierCurveTension: 0.4,
+	pointDot: true,
+	pointDotRadius: 4,
+	pointDotStrokeWidth: 1,
+	pointHitDetectionRadius: 5,
+	datasetStroke: true,
+	datasetStrokeWidth: 2,
+	datasetFill: true,
 
 	animationSteps: 60,
 	scaleFontColor: '#aaa',
@@ -79,35 +79,38 @@ var monthOptions = {
 	maintainAspectRatio: true,
 	scaleBeginAtZero: true,
 
-	tooltipTemplate: '<%if (label){%><%=label%> : <%}%><%= value %> games'
+	tooltipTemplate: '<%if (label){%><%=label%> : <%}%><%= value %> games',
 };
 
 function updateDayChartData(activity) {
 	chartDataDay.datasets[0].data = [];
 
-	var curp = 0;
-	_.each(clampTimes, function (time) {
-		var doBefore = moment(time, 'HH:mm').add(30, 'minutes'); //, 'hh:mma'
-		var sum = 0, cnt = 0;
+	let curp = 0;
+	_.each(clampTimes, (time) => {
+		const doBefore = moment(time, 'HH:mm').add(30, 'minutes'); // , 'hh:mma'
+		let sum = 0;
+		let	cnt = 0;
 		while (curp < activity.length && moment(activity[curp].timestamp).isBefore(doBefore)) {
 			sum += activity[curp].numplayers;
 			cnt++;
 			curp++;
 		}
-		if (cnt) chartDataDay.datasets[0].data.push(parseInt(sum/cnt));
+		if (cnt) chartDataDay.datasets[0].data.push(parseInt(sum / cnt, 10));
 		else chartDataDay.datasets[0].data.push(0);
 
 		if (curp >= activity.length) {
-			var nowm = moment().subtract(moment().utcOffset(), 'minutes');
+			const nowm = moment().subtract(moment().utcOffset(), 'minutes');
 			while (doBefore.isBefore(nowm)) {
 				doBefore.add(30, 'minutes');
 				chartDataDay.datasets[0].data.push(0);
 			}
 			return false;
 		}
+
+		return undefined;
 	});
 
-	var ctx = $('#server-activity-day').get(0).getContext('2d');
+	const ctx = $('#server-activity-day').get(0).getContext('2d');
 	new Chart(ctx).Line(chartDataDay, dayOptions);
 }
 
@@ -115,9 +118,13 @@ function updateMonthChartData(activity) {
 	chartDataMonth.datasets[0].data = [];
 	chartDataMonth.labels = [];
 
-	var lm = moment().utc().startOf('day').subtract(15, 'days').add(1, 'minute'), tsm = lm;
-	_.each(activity, function (day) {
-		tsm = moment(day.date).startOf('day'); //, 'YYYY-MM-DD HH:mm:ss'
+	let lm = moment().utc().startOf('day').subtract(15, 'days')
+		.add(1, 'minute');
+
+	let	tsm = lm;
+
+	_.each(activity, (day) => {
+		tsm = moment(day.date).startOf('day'); // , 'YYYY-MM-DD HH:mm:ss'
 		lm.add(1, 'days');
 		while (lm.isBefore(tsm)) {
 			chartDataMonth.labels.push(lm.format('ddd, DD/MM'));
@@ -136,12 +143,12 @@ function updateMonthChartData(activity) {
 		tsm.add(1, 'days');
 	}
 
-	var ctx = $('#server-activity-month').get(0).getContext('2d');
+	const ctx = $('#server-activity-month').get(0).getContext('2d');
 	new Chart(ctx).Line(chartDataMonth, monthOptions);
 }
 
 export function loadCharts(host, port) {
-	$.get('/api/server/activity/'+host+'/'+port, function(result) {
+	$.get(`/api/server/activity/${host}/${port}`, (result) => {
 		updateDayChartData(result.day);
 		updateMonthChartData(result.month);
 	});
