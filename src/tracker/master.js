@@ -27,8 +27,8 @@ function pollMasterServer() {
 
 /**
  *	Poll the master server.
- *	@param {function} resolve - Called with the new list. The list is an array of objects containing members 'host' and 'port'.
- *	@param {function} reject - Called with either an error message, or an array of errors, in case of an error.
+ *	@returns {Promise} Resolves with an array containing object of the form `{ host: "x.x.x.x", port: 12345 }`.
+
  */
 export function getServerList() {
 	return pollMasterServer().then(result => {
