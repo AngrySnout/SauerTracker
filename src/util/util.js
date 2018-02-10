@@ -10,7 +10,7 @@ import vars from '../../vars.json';
  *  @returns {string}
  */
 export function ipRepLB(ip, to) {
-	return ip.replace(/\.[\d\*]+$/, '.'+to);
+  return ip.replace(/\.[\d\*]+$/, `.${to}`);
 }
 
 /**
@@ -19,7 +19,7 @@ export function ipRepLB(ip, to) {
  *  @returns {number}
  */
 export function round2(val) {
-	return Math.round(val*100)/100;
+  return Math.round(val * 100) / 100;
 }
 
 /**
@@ -28,13 +28,13 @@ export function round2(val) {
  *  @returns {boolean}
  */
 export function isValidIP(ip) {
-	let parts = ip.split('.');
-	if (parts.length != 4) return false;
-	for (let i = 0; i < 4; i++) {
-		let n = Number(parts[i]);
-		if (n < 0 || n > 255) return false;
-	}
-	return true;
+  const parts = ip.split('.');
+  if (parts.length != 4) return false;
+  for (let i = 0; i < 4; i++) {
+    const n = Number(parts[i]);
+    if (n < 0 || n > 255) return false;
+  }
+  return true;
 }
 
 /**
@@ -43,7 +43,7 @@ export function isValidIP(ip) {
  *  @returns {boolean}
  */
 export function isValidPort(port) {
-	return port>0 && port<65535;
+  return port > 0 && port < 65535;
 }
 
 /**
@@ -51,7 +51,7 @@ export function isValidPort(port) {
  *  @param {any} msg
  */
 export function log(...msg) {
-	console.log(...msg);
+  console.log(...msg);
 }
 
 /**
@@ -59,10 +59,10 @@ export function log(...msg) {
  *  @param {any} msg
  */
 export function error(msg) {
-	log("Error:", msg);
-	if (config.debug) {
-		throw new Error(msg);
-	}
+  log('Error:', msg);
+  if (config.debug) {
+    throw new Error(msg);
+  }
 }
 
 /**
@@ -70,7 +70,7 @@ export function error(msg) {
  *  @param {any} msg
  */
 export function debug(...msg) {
-	if (config.debug) log(...msg);
+  if (config.debug) log(...msg);
 }
 
 /**
@@ -79,8 +79,8 @@ export function debug(...msg) {
  *  @param {string} msg
  */
 export function assert(condition, msg) {
-	if (config.debug) throw new Error("Assert failed: "+msg);
-	else log("Assert failed: "+msg);
+  if (config.debug) throw new Error(`Assert failed: ${msg}`);
+  else log(`Assert failed: ${msg}`);
 }
 
 /**
@@ -89,7 +89,7 @@ export function assert(condition, msg) {
  *  @returns {string}
  */
 export function escapePostgresLike(text) {
-	return String(text).replace(/[_%]/g, s => `\\${s}`);
+  return String(text).replace(/[_%]/g, s => `\\${s}`);
 }
 
 /**
@@ -97,8 +97,8 @@ export function escapePostgresLike(text) {
  *  @param {string} name
  */
 export function getClan(name) {
-	let clan = _.find(vars.clans, clan => (name.indexOf(clan.tag) >= 0));
-	return clan&&clan.tag;
+  const clan = _.find(vars.clans, clan => (name.indexOf(clan.tag) >= 0));
+  return clan && clan.tag;
 }
 
 /**
