@@ -12,7 +12,7 @@ import vars from '../../vars.json';
  *  @returns {string}
  */
 export function ipRepLB(ip, to) {
-	return ip.replace(/\.[\d*]+$/, '.'+to);
+	return ip.replace(/\.[\d*]+$/, `.${to}`);
 }
 
 /**
@@ -21,7 +21,7 @@ export function ipRepLB(ip, to) {
  *  @returns {number}
  */
 export function round2(val) {
-	return Math.round(val*100)/100;
+	return Math.round(val * 100) / 100;
 }
 
 /**
@@ -30,11 +30,11 @@ export function round2(val) {
  *  @returns {boolean}
  */
 export function isValidIP(ip) {
-	let parts = ip.split('.');
-	if (parts.length != 4) return false;
+	const parts = ip.split('.');
+	if (parts.length !== 4) return false;
 	for (let i = 0; i < 4; i++) {
-		if (isNaN(parts[i])) return false;
-		let n = Number(parts[i]);
+		if (Number.isNaN(parts[i])) return false;
+		const n = Number(parts[i]);
 		if (n < 0 || n > 255) return false;
 	}
 	return true;
@@ -46,7 +46,7 @@ export function isValidIP(ip) {
  *  @returns {boolean}
  */
 export function isValidPort(port) {
-	return port>0 && port<65535;
+	return port > 0 && port < 65535;
 }
 
 /**
@@ -77,13 +77,14 @@ export function debug(...msg) {
 }
 
 /**
- *  If condition is not truthful, if in debug mode; print stack trace and exits, otherwise; print error message.
+ *  If condition is not truthful, if in debug mode; print stack trace and exits,
+ *  otherwise; print error message.
  *  @param {any} condition
  *  @param {string} msg
  */
 export function assert(condition, msg) {
-	if (config.debug) throw new Error('Assert failed: '+msg);
-	else log('Assert failed: '+msg);
+	if (config.debug) throw new Error(`Assert failed: ${msg}`);
+	else log(`Assert failed: ${msg}`);
 }
 
 /**
@@ -100,8 +101,8 @@ export function escapePostgresLike(text) {
  *  @param {string} name
  */
 export function getClan(name) {
-	let clan = _.find(vars.clans, clan => (name.indexOf(clan.tag) >= 0));
-	return clan&&clan.tag;
+	const clan = _.find(vars.clans, c => (name.indexOf(c.tag) >= 0));
+	return clan && clan.tag;
 }
 
 /**

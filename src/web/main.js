@@ -17,6 +17,8 @@ require('./stats');
 require('./banners');
 
 try {
-	// compat.js provides backwards compatibily for certain routes, and is not necessary for the Tracker
+	// compat.js provides backwards compatibily for certain routes,
+	// and is not necessary for the Tracker
+// eslint-disable-next-line import/no-unresolved,global-require
 	require('./compat');
 } catch (e) {} // eslint-disable-line no-empty
