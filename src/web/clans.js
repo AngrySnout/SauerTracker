@@ -2,8 +2,6 @@ import _ from 'lodash';
 import Promise from 'bluebird';
 import moment from 'moment';
 
-import vars from '../../vars.json';
-
 import app from '../util/web';
 import cache from '../util/cache';
 import { debug } from '../util/util';
@@ -28,14 +26,14 @@ function clanwarsSince(date) {
           debug(e);
         }
       });
-      const wins = _.countBy(rows, row => ((row.meta && row.meta[1] != row.meta[3]) ? row.meta[2] : ''));
-      const losses = _.countBy(rows, row => ((row.meta && row.meta[1] != row.meta[3]) ? row.meta[0] : ''));
+      const wins = _.countBy(rows, row => ((row.meta && row.meta[1] !== row.meta[3]) ? row.meta[2] : ''));
+      const losses = _.countBy(rows, row => ((row.meta && row.meta[1] !== row.meta[3]) ? row.meta[0] : ''));
       return _.take(_.orderBy(_.map(clans, (games, clan) => {
-        const draws_2 = (games - ((wins[clan] || 0) + (losses[clan] || 0))) / 2;
+        const draws2 = (games - ((wins[clan] || 0) + (losses[clan] || 0))) / 2;
         return {
           name: clan,
           wins: wins[clan] || 0,
-          rate: games ? ((wins[clan] || 0) + draws_2) / games : 0,
+          rate: games ? ((wins[clan] || 0) + draws2) / games : 0,
         };
       }), ['wins', 'rate'], ['desc', 'desc']), 10);
     });

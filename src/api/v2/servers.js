@@ -1,8 +1,4 @@
-import Promise from 'bluebird';
-
 import app from '../../util/web';
-import cache from '../../util/cache';
-import serverManager from '../../tracker/server-manager';
 import { getServerList } from '../v1/servers';
 
 app.get('/api/v2/servers', (req, res) => {

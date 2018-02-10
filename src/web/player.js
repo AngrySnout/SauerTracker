@@ -3,7 +3,7 @@ import _ from 'lodash';
 import vars from '../../vars.json';
 
 import app from '../util/web';
-import { error, ObjectNotFoundError, ObjectBannedError } from '../util/util';
+import { ObjectNotFoundError, ObjectBannedError } from '../util/util';
 import { getPlayer } from '../api/v1/player';
 
 app.get('/player/:name', (req, res) => {

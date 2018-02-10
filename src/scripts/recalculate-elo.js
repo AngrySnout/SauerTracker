@@ -5,7 +5,6 @@ import _ from 'lodash';
 
 import database from '../util/database';
 import config from '../../tracker.json';
-import { log } from '../util/util';
 
 function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
   if (fragsSelf < 1 || fragsOther < 1) return 0;

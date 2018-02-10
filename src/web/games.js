@@ -8,7 +8,10 @@ import cache from '../util/cache';
 import database from '../util/database';
 import { findGames } from '../api/v1/games';
 
-cache.set('latest-duels', 10 * 60 * 1000, callback => database('games').where({ gametype: 'duel' }).orderBy('timestamp', 'desc').limit(10)
+cache.set('latest-duels', 10 * 60 * 1000, () => database('games')
+  .where({ gametype: 'duel' })
+  .orderBy('timestamp', 'desc')
+  .limit(10)
   .then((rows) => {
     _.each(rows, (row) => {
       try {
@@ -16,20 +19,23 @@ cache.set('latest-duels', 10 * 60 * 1000, callback => database('games').where({ 
       } catch (error) {
         row.meta = [0, 0, 0, 0];
       }
-      if (row.meta[1] == row.meta[3]) row.draw = true;
+      if (row.meta[1] === row.meta[3]) row.draw = true;
     });
     return rows;
   }));
 
-cache.set('latest-clanwars', 10 * 60 * 1000, callback => database('games').where({ gametype: 'clanwar' }).orderBy('timestamp', 'desc').limit(10)
+cache.set('latest-clanwars', 10 * 60 * 1000, () => database('games')
+  .where({ gametype: 'clanwar' })
+  .orderBy('timestamp', 'desc')
+  .limit(10)
   .then((rows) => {
     _.each(rows, (row) => {
       try {
         row.meta = JSON.parse(row.meta);
       } catch (error) {
-        ow.meta = [0, 0, 0, 0];
+        row.meta = [0, 0, 0, 0];
       }
-      if (row.meta[1] == row.meta[3]) row.draw = true;
+      if (row.meta[1] === row.meta[3]) row.draw = true;
     });
     return rows;
   }));
@@ -38,7 +44,11 @@ app.get('/games', (req, res) => {
   Promise.all([cache.get('latest-duels'), cache.get('latest-clanwars')])
     .then((results) => {
       res.render('games', {
-        vars, _, latestDuels: results[0], latestClanwars: results[1]/* , latestMixes: results[2] */ });
+        vars,
+        _,
+        latestDuels: results[0],
+        latestClanwars: results[1], /* , latestMixes: results[2] */
+      });
     })
     .catch((error) => {
       res.status(500).render('error', { status: 500, error });
@@ -67,14 +77,18 @@ app.get('/games/find', (req, res) => {
     let nextPage;
     if (result.results.length) {
       prevPage = (result.results[0].id < result.stats.max);
-      nextPage = (result.results[result.results.length - 1].id > result.stats.min);
+      nextPage = (result.results[result.results.length - 1].id >
+        result.stats.min);
     }
     res.render('games', _.assign({
       vars,
       _,
       query: req.query,
       prevPageURL: prevPage ? prevPageURL(req, result.results[0].id) : null,
-      nextPageURL: nextPage ? nextPageURL(req, result.results[result.results.length - 1].id) : null,
+      nextPageURL: nextPage ? nextPageURL(
+        req,
+        result.results[result.results.length - 1].id,
+      ) : null,
     }, result));
   });
 });

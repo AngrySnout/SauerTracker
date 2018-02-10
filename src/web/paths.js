@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import vars from '../../vars.json';
 
-export var apiPaths = [
+const apiPaths = [
   {
     name: 'servers',
     title: '/servers',
@@ -88,3 +88,5 @@ export var apiPaths = [
     example: '/api/clan/!s]',
   },
 ];
+
+export default apiPaths;

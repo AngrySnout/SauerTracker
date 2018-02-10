@@ -1,11 +1,8 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
-import countries from 'i18n-iso-countries';
 import moment from 'moment';
 
-import config from '../../../tracker.json';
-
-import { log, escapePostgresLike } from '../../util/util';
+import { escapePostgresLike } from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 
@@ -50,15 +47,15 @@ export function findGames(params) {
     let games = results[0];
     if (params.afterid) games = games.reverse();
     _.each(games, (gm) => {
-      if (gm.gametype == 'intern') gm.isintern = true;
-      else if (gm.gametype == 'duel' || gm.gametype == 'clanwar') gm.iswar = true;
+      if (gm.gametype === 'intern') gm.isintern = true;
+      else if (gm.gametype === 'duel' || gm.gametype === 'clanwar') gm.iswar = true;
       if (gm.meta) {
         try {
           gm.meta = JSON.parse(gm.meta);
         } catch (error) {
           gm.meta = [0, 0, 0, 0];
         }
-        if (gm.meta[1] == gm.meta[3]) gm.draw = true;
+        if (gm.meta[1] === gm.meta[3]) gm.draw = true;
       }
     });
     return { results: games, stats: results[1][0] };

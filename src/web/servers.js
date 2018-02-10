@@ -1,11 +1,8 @@
 import _ from 'lodash';
-import Promise from 'bluebird';
 
 import vars from '../../vars.json';
 
 import app from '../util/web';
-import cache from '../util/cache';
-import serverManager from '../tracker/server-manager';
 import { getServerList } from '../api/v1/servers';
 
 app.get('/', (req, res) => {

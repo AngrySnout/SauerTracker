@@ -21,9 +21,11 @@ const typeBuffers = [
 
 export default class Server {
   constructor(host, port, info) {
-    if (!isValidIP(host)) throw new Error(`Invalid host ${host} provided to Server().`);
+    if (!isValidIP(host)) {
+      throw new Error(`Invalid host ${host} provided to Server().`);
+    }
     port = parseInt(port);
-    if (!isValidPort(port)) throw new Error(`Invalid port ${port} provided to Server().`);
+    if (!isValidPort(port)) { throw new Error(`Invalid port ${port} provided to Server().`); }
 
     this.host = host;
     this.port = port;
@@ -85,13 +87,17 @@ export default class Server {
   shouldPoll(type, time) {
     switch (type) {
       case 'ping': {
-        return (time - this.lastPoll > config.pollingInterval * 1000 || this.shouldPoll('extInfo', time));
+        return (time - this.lastPoll > config.pollingInterval * 1000 ||
+          this.shouldPoll('extInfo', time));
       }
       case 'extInfo': {
-        return ((time - this.lastExtInfoPoll > config.extInfoPollingInt * 1000 && this.game.clients > 0) || this.shouldPoll('endGame', time));
+        return ((time - this.lastExtInfoPoll > config.extInfoPollingInt *
+          1000 && this.game.clients > 0) || this.shouldPoll('endGame', time));
       }
       case 'endGame': {
-        return (!this.info.banned && this.game.timeLeft < 5 && !this.game.paused && time - this.lastPoll > config.endGamePollingInt * 1000 && this.game.clients > 0);
+        return (!this.info.banned && this.game.timeLeft < 5 &&
+          !this.game.paused && time - this.lastPoll > config.endGamePollingInt *
+          1000 && this.game.clients > 0);
       }
     }
   }
@@ -113,10 +119,10 @@ export default class Server {
     }
 
     if (!this.info.banned &&
-				this.game.timeLeft <= 0 &&
-				!this.game.intermission &&
-				this.game.gameMode != 'coop_edit' &&
-				_.countBy(this.game.players, pl => pl.state != 5).true > 1) {
+      this.game.timeLeft <= 0 &&
+      !this.game.intermission &&
+      this.game.gameMode !== 'coop_edit' &&
+      _.countBy(this.game.players, pl => pl.state !== 5).true > 1) {
       this.game.intermission = true;
       const self = this;
       setTimeout(() => {
@@ -133,14 +139,13 @@ export default class Server {
 
   parseReply(data, type, time) {
     try {
-      const st = new Packet(data, (type == 1) ? 3 : 2);
+      const st = new Packet(data, (type === 1) ? 3 : 2);
 
       switch (type) {
         case 0: { // game info
           metrics.replied(this.host, this.port);
           if (st.remaining() < 5) return;
 
-          const date = new Date();
           this.game.clients = st.getInt();
           if (this.game.clients === 0 || !this.game.players) {
             this.game.players = {};
@@ -158,9 +163,16 @@ export default class Server {
 
           this.game.gameMode = getGameMode(st.getInt());
           this.game.timeLeft = st.getInt();
-          if (this.game.gameMode == 'coop_edit' && this.game.timeLeft <= 0) this.game.timeLeftS = '';
-          else if (this.game.timeLeft <= 0) this.game.timeLeftS = 'intermission';
-          else this.game.timeLeftS = `${_.padStart(Math.floor(this.game.timeLeft / 60), 2, '0')}:${_.padStart(this.game.timeLeft % 60, 2, '0')}`;
+          if (this.game.gameMode == 'coop_edit' &&
+            this.game.timeLeft <= 0) this.game.timeLeftS = '';
+          else if (this.game.timeLeft <=
+            0) this.game.timeLeftS = 'intermission';
+          else {
+            this.game.timeLeftS = `${_.padStart(
+              Math.floor(this.game.timeLeft / 60), 2,
+              '0',
+            )}:${_.padStart(this.game.timeLeft % 60, 2, '0')}`;
+          }
           this.game.maxClients = st.getInt();
           this.game.masterMode = getMasterMode(st.getInt());
 
@@ -173,7 +185,8 @@ export default class Server {
           }
 
           this.game.mapName = st.getString() || '[new map]';
-          if (this.game.mapName.length > 20) this.game.mapName = `${this.game.mapName.slice(0, 20)}...`;
+          if (this.game.mapName.length >
+            20) this.game.mapName = `${this.game.mapName.slice(0, 20)}...`;
 
           const description = st.getString();
           this.description = filterString(description);
@@ -191,7 +204,7 @@ export default class Server {
           const ack = st.getInt();
           const ver = st.getInt();
           const iserr = st.getInt();
-          if (ack != -1 || ver != 105 || iserr !== 0) return;
+          if (ack !== -1 || ver !== 105 || iserr !== 0) return;
 
           const respType = st.getInt();
 
@@ -216,11 +229,13 @@ export default class Server {
             player.kpd = round2(player.frags / Math.max(player.deaths, 1));
             player.tks = st.getInt();
             player.acc = st.getInt();
-            st.getInt(); st.getInt(); st.getInt();
+            st.getInt();
+            st.getInt();
+            st.getInt();
             player.privilege = st.getInt();
             player.state = st.getInt();
 
-            if (player.name.toLowerCase() == 'zombie' && player.cn >= 128) {
+            if (player.name.toLowerCase() === 'zombie' && player.cn >= 128) {
               this.game.zombie = true;
             }
 
@@ -232,22 +247,30 @@ export default class Server {
             const gipl = geoip.lookup(ip);
 
             // work-around for spaghettimod falsely giving US player's an IP from Singapore
-            player.country = gipl ? ((player.ip == '220.232.59.0') ? 'US' : gipl.country) : '';
-            player.countryName = gipl ? countries.getName(player.country, 'en') : 'Unknown';
+            player.country = gipl ? ((player.ip === '220.232.59.0')
+              ? 'US'
+              : gipl.country) : '';
+            player.countryName = gipl
+              ? countries.getName(player.country, 'en')
+              : 'Unknown';
 
             const oldPlayer = this.game.players[player.cn];
             this.game.players[player.cn] = player;
 
             // save player info and stats
             const curtime = moment().format('YYYY-MM-DD HH:mm:ss');
-            if (oldPlayer && oldPlayer.name == player.name && oldPlayer.ip == player.ip) {
+            if (oldPlayer && oldPlayer.name === player.name &&
+              oldPlayer.ip === player.ip) {
               playerManager.updatePlayer(this, player, oldPlayer, curtime);
             }
           } else if (respType == -10) { // EXT_PLAYERSTATS_RESP_IDS
             const newCNs = [];
             while (st.remaining() > 0) newCNs.push(st.getInt());
 
-            const oldCNs = _.pullAll(_.map(_.keys(this.game.players), Number), newCNs);
+            const oldCNs = _.pullAll(
+              _.map(_.keys(this.game.players), Number),
+              newCNs,
+            );
             _.each(oldCNs, (cn) => { delete this.game.players[cn]; });
           }
 
@@ -259,9 +282,10 @@ export default class Server {
           const ack = st.getInt();
           const ver = st.getInt();
           const iserr = st.getInt();
-          if (ack != -1 || ver != 105 || iserr !== 0) return;
+          if (ack !== -1 || ver !== 105 || iserr !== 0) return;
 
-          st.getInt(); st.getInt();
+          st.getInt();
+          st.getInt();
           this.game.teams = {};
 
           while (st.remaining() > 0) {

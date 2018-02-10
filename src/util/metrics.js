@@ -80,7 +80,8 @@ class MetricsManager {
 
   /**
      *  Get all stats.
-     *  @returns {array} An array containing object that have properties name and stats, where stats is an object with properties averagePollTime, averageReplyTime, and loss.
+     *  @returns {array} An array containing object that have properties name and stats,
+     *  where stats is an object with properties averagePollTime, averageReplyTime, and loss.
      */
   getAll() {
     const res = [];

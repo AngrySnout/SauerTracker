@@ -2,8 +2,6 @@ import _ from 'lodash';
 import Promise from 'bluebird';
 import moment from 'moment';
 
-import config from '../../tracker.json';
-
 import app from '../util/web';
 import database from '../util/database';
 
