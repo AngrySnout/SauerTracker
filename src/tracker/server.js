@@ -172,6 +172,11 @@ export default class Server {
 					this.descriptionStyled = serverInfo.descriptionStyled;
 					if (oldGame && oldGame.players && nclients > 0) this.game.players = oldGame.players;
 					if (oldGame && oldGame.teams) this.game.teams = oldGame.teams;
+					if (oldGame && oldGame.mapName === this.game.mapName &&
+							oldGame.gameMode === this.game.gameMode &&
+							oldGame.timeLeft >= this.game.timeLeft) {
+						this.game.saved = oldGame.saved;
+					}
 				} else {
 					this.game = null;
 				}
