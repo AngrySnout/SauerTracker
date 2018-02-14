@@ -13,10 +13,3 @@ app.get('/stats', (req, res) => {
 			res.render('stats', { stats, today: moment().format('MM-DD'), yesterday: moment().subtract(1, 'days').format('MM-DD') });
 		});
 });
-
-function reapRequests() {
-	const weekAgo = moment().endOf('day').subtract(8, 'days').format('YYYY-MM-DD');
-	database('requests').where('timestamp', '<', weekAgo).del().then();
-}
-setInterval(reapRequests, 5 * 60 * 60 * 1000);
-reapRequests();
