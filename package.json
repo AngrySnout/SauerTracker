@@ -11,7 +11,8 @@
     "start": "NODE_ENV=production forever -a --uid \"sauertracker\" start --killSignal=SIGINT index.js",
     "test": "mocha",
     "lint": "./node_modules/.bin/eslint .",
-    "lint-fix": "./node_modules/.bin/eslint . --fix"
+    "lint-fix": "./node_modules/.bin/eslint . --fix",
+    "doc": "./node_modules/.bin/esdoc"
   },
   "browser": {
     "jquery": "./bower_components/jquery/dist/jquery.js",
@@ -52,7 +53,8 @@
     "chai-as-promised": "^7.1.1",
     "debowerify": "^1.4.1",
     "del": "^2.2.0",
-    "esdoc": "^0.4.7",
+    "esdoc": "^1.0.4",
+    "esdoc-standard-plugin": "^1.0.0",
     "eslint": "^4.17.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
