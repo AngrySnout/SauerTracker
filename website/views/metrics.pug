@@ -1,22 +1,31 @@
-doctype html
-html
-    head
-        title Metrics
-        
-    body
-        | Total servers: #{metrics.length}
-        br
-        table
-            thead
-                tr
-                    td(width="200px") Server
-                    td(width="200px") Avg Poll Time
-                    td(width="200px") Avg Reply Time
-                    td(width="200px") Loss
-            tbody
-                for metric in metrics
+extends ./_layout.pug
+
+block vars
+    - section = "home";
+    - title = "Stats";
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li.current= title
+        .medium-12.columns.end
+            label.big Number of servers: #{Object.keys(metrics).length}
+            br
+            label.big Server poll stats:
+            table
+                thead
                     tr
-                        td #{metric.name}
-                        td #{Math.floor(metric.stats.averagePollTime*10)/10} s
-                        td #{Math.floor(metric.stats.averageReplyTime*10)/10} s
-                        td #{Math.floor(metric.stats.loss)}%
+                        td(width="200px") Server
+                        td(width="200px", style="text-align: right;") Total Polls
+                        td(width="200px", style="text-align: right;") Total Replies
+                        td(width="200px", style="text-align: right;") Loss
+                tbody
+                    for metric, key in metrics
+                        tr
+                            td #{key}
+                            td(style="text-align: right;") #{metric.polls || 0}
+                            td(style="text-align: right;") #{metric.replies || 0}
+                            if metric.polls > 0
+                                td(style="text-align: right;") #{Math.floor(100 - 100 * ((metric.replies || 0) / metric.polls))}%
+                            else
+                                td(style="text-align: right;") 100%

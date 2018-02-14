@@ -1,6 +1,6 @@
 import app from '../util/web';
-import metrics from '../util/metrics';
+import { getAllMetrics } from '../util/metrics';
 
 app.get('/metrics', (req, res) => {
-	res.render('metrics', { metrics: metrics.getAll() });
+	getAllMetrics().then((metrics) => { res.render('metrics', { metrics }); });
 });

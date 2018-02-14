@@ -11,6 +11,7 @@ import Packet from '../util/packet';
 import playerManager from '../tracker/player-manager';
 import { addPlayerSpy } from './spy';
 import { parseGameInfo259, parsePlayerExtInfo105, parseTeamsExtInfo105 } from './protocols/259';
+import { serverPolled, serverReplied } from '../util/metrics';
 
 const typeBuffers = [
 	new Buffer('8001', 'hex'),
@@ -68,6 +69,7 @@ export default class Server {
 			});
 
 			socket.send(buf, 0, buf.length, this.port + 1, this.host);
+			if (type === 0) serverPolled(this.host, this.port);
 
 			(sock => setTimeout(() => {
 				if (sock !== null) {
@@ -158,6 +160,7 @@ export default class Server {
 			switch (type) {
 			case 0: { // game info
 				if (st.remaining() < 5) return;
+				serverReplied(this.host, this.port);
 
 				const nclients = st.getInt();
 				const nattr = st.getInt();

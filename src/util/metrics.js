@@ -1,99 +1,40 @@
 import _ from 'lodash';
+import Promise from 'bluebird';
+
+import redis from './redis';
 
 /**
- *  @private
- *  @class ServerMetric
- *  Provides simple stats on server pings.
+ *  Server has been polled.
+ *  @param {string} host - Server's IP address.
+ *  @param {number} port - Server's port number.
  */
-class ServerMetric {
-	constructor() {
-		this.totalPolls = 0;
-		this.totalPollTime = 0;
-		this.lastPollTime = -1;
-
-		this.totalReplies = 0;
-		this.totalReplyTime = 0;
-		this.lastReplyTime = -1;
-	}
-
-	/**
-	 *  The server has been polled.
-	 */
-	polled() {
-		this.totalPolls++;
-		const now = new Date().getTime();
-		if (this.lastPollTime > -1) {
-			this.totalPollTime += now - this.lastPollTime;
-		}
-		this.lastPollTime = now;
-	}
-
-	/**
-	 *  The server has replied.
-	 */
-	replied() {
-		this.totalReplies++;
-		const now = new Date().getTime();
-		if (this.lastReplyTime > -1) {
-			this.totalReplyTime += now - this.lastReplyTime;
-		}
-		this.lastReplyTime = now;
-	}
-
-	/**
-	 *  Get server stats.
-	 *  @returns {object} Contains prperties averagePollTime, averageReplyTime, and loss.
-	 */
-	get() {
-		return {
-			averagePollTime: (this.totalPollTime / (this.totalPolls - 1)) / 1000,
-			averageReplyTime: (this.totalReplyTime / (this.totalReplies - 1)) / 1000,
-			loss: 100 - ((this.totalReplies / this.totalPolls) * 100),
-		};
-	}
+export function serverPolled(host, port) {
+	return redis.hincrbyAsync('servers-polled', `${host}:${port}`, 1);
 }
 
-class MetricsManager {
-	constructor() {
-		this.servers = {};
-	}
-
-	/**
-	 *  Server has been polled.
-	 *  @param {string} host - Host IP of the server.
-	 *  @param {number} port - Port of the server.
-	 */
-	polled(host, port) {
-		if (!this.servers[`${host}:${port}`]) this.servers[`${host}:${port}`] = new ServerMetric();
-		this.servers[`${host}:${port}`].polled();
-	}
-
-	/**
-	 *  Server has been replied.
-	 *  @param {string} host - Host IP of the server.
-	 *  @param {number} port - Port of the server.
-	 */
-	replied(host, port) {
-		if (!this.servers[`${host}:${port}`]) this.servers[`${host}:${port}`] = new ServerMetric();
-		this.servers[`${host}:${port}`].replied();
-	}
-
-	/**
-	 *  Get all stats.
-	 *  @returns {array} An array containing object that have properties name and stats,
-	 *  where stats is an object with properties averagePollTime, averageReplyTime, and loss.
-	 */
-	getAll() {
-		const res = [];
-		_.each(this.servers, (metric, name) => {
-			res.push({
-				name,
-				stats: metric.get(),
-			});
-		});
-		return res;
-	}
+/**
+ *  Server has replied.
+ *  @param {string} host - Server's IP address.
+ *  @param {number} port - Server's port number.
+ */
+export function serverReplied(host, port) {
+	return redis.hincrbyAsync('servers-replied', `${host}:${port}`, 1);
 }
 
-const metrics = new MetricsManager();
-export default metrics;
+/**
+ *  Get all stats.
+ *  @returns {object} An object whose keys correspond to `host:port` values of servers,
+ *  and whose values are objects containing the properties `polls` and `replies`,
+ *  representing the total number of times the server was polled and the total number of
+ *  times it replied, respectively.
+ */
+export function getAllMetrics() {
+	return Promise.join(
+		redis.hgetallAsync('servers-polled'), redis.hgetallAsync('servers-replied'),
+		(serversPolled, serversReplied) => _.merge(
+			{},
+			_.mapValues(serversPolled, polls => ({ polls: Number(polls) })),
+			_.mapValues(serversReplied, replies => ({ replies: Number(replies) })),
+		),
+	);
+}
