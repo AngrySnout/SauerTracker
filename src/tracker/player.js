@@ -33,8 +33,6 @@ export function sumModeStats(newModeStats, oldModeStatsString) {
 export function updateRow(name, row, modeStats, country) {
 	const newStats = totalStats(modeStats);
 
-	// TODO update database schema (remove acc, kpd, and countryName fields,
-	// remove 5th element from *stats and multiply last one by frags)
 	const stats = {
 		name: row.name || name,
 		frags: row.frags || 0,
@@ -90,9 +88,9 @@ export default class Player {
 	saveStats(row, trx) {
 		const stats = updateRow(this.name, row || {}, this.modeStats, this.country);
 
-		redis.zincrbyAsync('top-countries', _.sum(_.map(this.modeStats, 'frags')), row.country);
+		redis.zincrbyAsync('top-countries', _.sum(_.map(this.modeStats, 'frags')), this.country);
 
-		if (row.name) {
+		if (this.name) {
 			return database('players').where('name', this.name).update(stats).transacting(trx)
 				.then();
 		}

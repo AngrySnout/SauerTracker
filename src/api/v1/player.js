@@ -5,7 +5,7 @@ import moment from 'moment';
 import vars from '../../../vars.json';
 
 import app from '../../util/web';
-import { getClan, error, ObjectNotFoundError, ObjectBannedError, escapePostgresLike } from '../../util/util';
+import { getClan, error, ObjectNotFoundError, ObjectBannedError, escapePostgresLike, round2 } from '../../util/util';
 import playerManager from '../../tracker/player-manager';
 import database from '../../util/database';
 
@@ -57,15 +57,25 @@ export function getPlayer(name) {
 		} else {
 			const row = rows[0];
 			try {
-				row.efficstats = (row.efficstats) ? JSON.parse(row.efficstats) : [0, 0, 0, 0, 0, 0];
-				row.instastats = (row.instastats) ? JSON.parse(row.instastats) : [0, 0, 0, 0, 0, 0];
+				row.efficstats = (row.efficstats) ? JSON.parse(row.efficstats) : [0, 0, 0, 0, 0];
+				row.instastats = (row.instastats) ? JSON.parse(row.instastats) : [0, 0, 0, 0, 0];
 			} catch (e) {
 				error(e);
-				row.efficstats = [0, 0, 0, 0, 0, 0];
-				row.instastats = [0, 0, 0, 0, 0, 0];
+				row.efficstats = [0, 0, 0, 0, 0];
+				row.instastats = [0, 0, 0, 0, 0];
 			}
-			if (!row.efficstats) row.efficstats = [0, 0, 0, 0, 0, 0];
-			if (!row.instastats) row.instastats = [0, 0, 0, 0, 0, 0];
+			if (!row.efficstats) row.efficstats = [0, 0, 0, 0, 0];
+			if (!row.instastats) row.instastats = [0, 0, 0, 0, 0];
+
+			// Added for backwards compatibility. Fill kpd and accuracy fields
+			if (row.frags) row.acc = row.accFrags / row.frags;
+			if (row.efficstats[0] > 0) row.efficstats.push(row.efficstats[4] / row.efficstats[0]);
+			if (row.instastats[0] > 0) row.instastats.push(row.instastats[4] / row.instastats[0]);
+			row.efficstats[4] = round2(row.efficstats[0] / (row.efficstats[2] || 1));
+			row.instastats[4] = round2(row.instastats[0] / (row.instastats[2] || 1));
+			row.kpd = round2(row.frags / (row.deaths || 1));
+			delete row.accFrags;
+
 			const pclan = _.find(vars.clans, { tag: getClan(row.name) });
 			if (pclan) {
 				row.clan = pclan.title;
