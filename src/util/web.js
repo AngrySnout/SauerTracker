@@ -2,13 +2,10 @@ import express from 'express';
 import http from 'http';
 import compression from 'compression';
 import bodyParser from 'body-parser';
-import _ from 'lodash';
-import responseTime from 'response-time';
 
 import config from '../../tracker.json';
 
 import { log } from '../util/util';
-import database from '../util/database';
 
 const app = express();
 export default app;
@@ -45,10 +42,6 @@ app.use((req, res, next) => {
 
 	next();
 });
-
-app.use(responseTime((req, res, time) => {
-	database('requests').insert(_.assign(_.pick(req, ['method', 'ip', 'url']), { time })).then();
-}));
 
 if (config.website.serveStaticFiles) {
 	app.use('/', express.static('./assets', { maxAge: 24 * 60 * 60 * 1000 }));
