@@ -33,7 +33,8 @@ export function isValidIP(ip) {
 	const parts = ip.split('.');
 	if (parts.length !== 4) return false;
 	for (let i = 0; i < 4; i++) {
-		if (Number.isNaN(parts[i])) return false;
+		// eslint-disable-next-line no-restricted-globals
+		if (isNaN(parts[i])) return false;
 		const n = Number(parts[i]);
 		if (n < 0 || n > 255) return false;
 	}
