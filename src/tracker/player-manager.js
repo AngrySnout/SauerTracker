@@ -22,14 +22,14 @@ class PlayerManager {
 		this.players[name].updateState(gameMode, newState, oldState);
 	}
 
-	flushplayers() {
+	flushPlayers() {
 		const self = this;
 		return database('players').whereIn('name', _.map(self.players, 'name')).then((rows) => {
 			rows = _.keyBy(rows, 'name');
-			const numPlayers = self.players.length;
+			const players = _.values(self.players);
+			const numPlayers = players.length;
 			return database.transaction(trx =>
-				Promise.all(self.players.map(player => player.saveStats(rows[player.name], trx)))
-					.finally(trx.commit))
+				Promise.all(_.map(players, player => player.saveStats(rows[player.name], trx))))
 				.then(() => {
 					self.players = {};
 					return numPlayers;
@@ -55,8 +55,12 @@ class PlayerManager {
 		});
 
 		setInterval(() => {
-			this.flushplayers();
+			this.flushPlayers();
 		}, config.tracker.savePlayersInterval * 1000);
+
+		process.on('SIGINT', () => {
+			self.flushPlayers().finally(process.exit);
+		});
 	}
 }
 
