@@ -14,13 +14,13 @@ block content
                 thead
                     tr
                         td(width="25%") Day
-                        td(width="25%") Games
-                        td(width="25%") Visitors
-                        td(width="25%") Requests
+                        td(width="25%", style="text-align: right;") Games
+                        td(width="25%", style="text-align: right;") Visitors
+                        td(width="25%", style="text-align: right;") Requests
                 tbody
                     for row in stats
                         tr
                             td= (row.date==today)? "Today": ((row.date==yesterday)? "Yesterday": row.date)
-                            td= row.games||0
-                            td= row.visitors||0
-                            td= row.requests||0
+                            td(style="text-align: right;")= row.games||0
+                            td(style="text-align: right;")= row.visitors||0
+                            td(style="text-align: right;")= row.requests||0
