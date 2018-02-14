@@ -10,17 +10,13 @@ block content
             li.current= title
         .medium-12.columns.end
             label.big Last 7 days' statistics:
-            table(width="100%")
+            table
                 thead
                     tr
                         td(width="25%") Day
                         td(width="25%", style="text-align: right;") Games
-                        td(width="25%", style="text-align: right;") Visitors
-                        td(width="25%", style="text-align: right;") Requests
                 tbody
-                    for row in stats
+                    for day in stats
                         tr
-                            td= (row.date==today)? "Today": ((row.date==yesterday)? "Yesterday": row.date)
-                            td(style="text-align: right;")= row.games||0
-                            td(style="text-align: right;")= row.visitors||0
-                            td(style="text-align: right;")= row.requests||0
+                            td= (day.date==today)? "Today": ((day.date==yesterday)? "Yesterday": day.date)
+                            td(style="text-align: right;")= day.games||0
