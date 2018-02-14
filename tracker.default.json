@@ -2,20 +2,17 @@
 	"debug": true,
 	"website": {
 		"enable": true,
-		"serverStaticFiles": true,
+		"serveStaticFiles": true,
 		"serverPort": 80,
 		"teamBalanceServerPort": 36581
 	},
 	"tracker": {
 		"enable": true,
-		"savePlayersInt": 600,
 		"baseElo": 1200,
-	},
-	"pinger": {
-		"enable": true,
 		"pingInterval": 10,
 		"extInfoPingInterval": 5,
-		"endGamePingInterval": 2
+		"endGamePingInterval": 2,
+		"savePlayersInterval": 600
 	},
 	"master": {
 		"enable": true,
