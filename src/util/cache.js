@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 
-import redis from '../util/redis';
-import { error } from '../util/util';
+import redis from './redis';
+import { error } from './util';
 
 class CacheManager {
 	constructor() {
