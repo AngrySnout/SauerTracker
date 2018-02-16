@@ -31,26 +31,50 @@ describe('Server', function() {
 	
 	describe('#shouldPoll()', function() {
 		it('should', function() {
+			// TODO
 		});
 	});
 	
 	describe('#tryPoll()', function() {
 		it('should', function() {
+			// TODO
 		});
 	});
 	
 	describe('#shouldClean()', function() {
-		it('should', function() {
+		it('should report that the server shouldn\'t be cleaned', function() {
+			server.lastReply = 1000;
+			expect(server.shouldClean(10000)).to.equal(false);
+		});
+		
+		it('should report that the server shouldn be cleaned', function() {
+			server.lastReply = 1000;
+			expect(server.shouldClean(31001)).to.equal(true);
 		});
 	});
 	
 	describe('#parseReply()', function() {
 		it('should', function() {
+			// TODO
 		});
 	});
 	
 	describe('#serialize()', function() {
-		it('should', function() {
+		it('should serialize a Server object', function() {
+			server.lastSeen = 4321;
+			server.descriptionStyled = '<b>My Server</b>';
+			server.description = 'My Server';
+			server.country = 'de';
+			server.game = null;
+			expect(server.serialize(false)).to.eql({
+				'country': 'de',
+				'countryName': 'Germany',
+				'description': 'My Server',
+				'descriptionStyled': '<b>My Server</b>',
+				'host': '1.2.3.4',
+				'lastSeen': 4321,
+				'port': 1234
+			});
 		});
 	});
 });
