@@ -58,6 +58,7 @@ class ServerManager {
 			})
 			.then((count) => {
 				logInfo(`${count} servers added`);
+				return count;
 			});
 	}
 

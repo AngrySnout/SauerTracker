@@ -47,7 +47,7 @@ export function getServerList() {
 export function updateServerList() {
 	return getServerList().then((results) => {
 		logInfo(`Updated server list from master server (${results.length} servers)`);
-		redis.setAsync('servers', JSON.stringify(results));
+		return redis.setAsync('servers', JSON.stringify(results));
 	}).catch((err) => {
 		logError(err);
 		return err;
