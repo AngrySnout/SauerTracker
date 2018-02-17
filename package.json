@@ -7,8 +7,8 @@
   "scripts": {
     "postinstall": "bower install",
     "build": "NODE_ENV=production knex migrate:latest && NODE_ENV=production gulp build",
-    "stop": "NODE_ENV=production forever stop sauertracker",
-    "start": "NODE_ENV=production forever -a --uid \"sauertracker\" start --killSignal=SIGINT index.js",
+    "stop": "NODE_ENV=production pm2 stop ecosystem.config.js",
+    "start": "NODE_ENV=production pm2 start ecosystem.config.js",
     "test": "mocha",
     "lint": "./node_modules/.bin/eslint .",
     "lint-fix": "./node_modules/.bin/eslint . --fix",
@@ -30,7 +30,6 @@
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",
     "express": "^4.13.4",
-    "forever": "^0.15.1",
     "fuzzaldrin": "^2.1.0",
     "geoip-lite": "1.x",
     "i18n-iso-countries": "^1.8.0",
@@ -39,9 +38,11 @@
     "lodash": "^4.11.2",
     "moment": "^2.13.0",
     "pg": "^6.1.2",
+    "pm2": "^2.9.3",
     "pug": "^2.0.0-beta6",
     "redis": "^2.8.0",
-    "source-map-support": "^0.4.0"
+    "source-map-support": "^0.4.0",
+    "winston": "^3.0.0-rc1"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.4.1",
