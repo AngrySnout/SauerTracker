@@ -23,7 +23,7 @@ if (config.irc.server) {
 		username: config.irc.nick,
 		realname: config.irc.nick,
 		nick: config.irc.nick,
-		autoRejoin: config.irc.autoReconnect * 1000,
+		autoRejoin: 15000,
 	});
 
 	bot.connect();

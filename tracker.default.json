@@ -26,9 +26,8 @@
 		"port": 6667,
 		"nick": "MyTracker",
 		"chan": "#mychannel",
-		"autoReconnect": 15,
 		"prefix": "."
 	},
 	"postgresURL": "postgres://user:password@server/database",
-	"redisURL": "redis://user:password@server/database-number"
+	"redisURL": "redis://user:password@server"
 }
