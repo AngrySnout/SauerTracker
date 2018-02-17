@@ -35,7 +35,7 @@ export default class Server {
 		this.lastPoll = 0;
 		this.lastExtInfoPoll = 0;
 		this.game = null;
-		this.info = {};
+		this.info = { website: '', demourl: '', banned: '' };
 		this.description = '';
 		this.descriptionStyled = '';
 
@@ -43,14 +43,14 @@ export default class Server {
 		this.country = gipl ? gipl.country : '';
 
 		if (info) {
-			this.info.website = info.website;
-			this.info.demourl = info.demourl;
-			this.info.banned = info.banned;
+			this.info.website = info.website || '';
+			this.info.demourl = info.demourl || '';
+			this.info.banned = info.banned || '';
 		}
 	}
 
 	setInfo(key, value) {
-		this.info[key] = value;
+		this.info[key] = value || '';
 	}
 
 	poll(type, time) {
@@ -239,7 +239,6 @@ export default class Server {
 
 	serialize(expanded) {
 		let res = {
-			lastSeen: this.lastSeen,
 			descriptionStyled: this.descriptionStyled,
 			description: this.description,
 			country: this.country,
@@ -247,7 +246,8 @@ export default class Server {
 			host: this.host,
 			port: this.port,
 		};
-		if (expanded) res.info = this.info || {};
+		if (expanded) res.info = this.info;
+
 		if (this.game) res = Object.assign(res, this.game.serialize(expanded));
 		return res;
 	}
