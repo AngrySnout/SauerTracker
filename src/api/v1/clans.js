@@ -29,15 +29,18 @@ export function initialize() {
 		});
 		const wins = _.countBy(rows, row => ((row.meta && row.meta[1] !== row.meta[3]) ? row.meta[2] : ''));
 		const losses = _.countBy(rows, row => ((row.meta && row.meta[1] !== row.meta[3]) ? row.meta[0] : ''));
-		for (const clan in clans) {
-			redis.hset('clan-games', clan, clans[clan]);
-		}
-		for (const clan in wins) {
-			redis.hset('clan-wins', clan, wins[clan]);
-		}
-		for (const clan in losses) {
-			redis.hset('clan-losses', clan, losses[clan]);
-		}
+		Promise.all([redis.delAsync('clan-games'), redis.delAsync('clan-wins'), redis.delAsync('clan-losses')])
+			.then(() => {
+				for (const clan in clans) {
+					redis.hset('clan-games', clan, clans[clan] || 0);
+				}
+				for (const clan in wins) {
+					redis.hset('clan-wins', clan, wins[clan] || 0);
+				}
+				for (const clan in losses) {
+					redis.hset('clan-losses', clan, losses[clan] || 0);
+				}
+			});
 	});
 }
 initialize();
