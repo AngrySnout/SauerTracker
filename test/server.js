@@ -61,7 +61,6 @@ describe('Server', function() {
 	
 	describe('#serialize()', function() {
 		it('should serialize a Server object', function() {
-			server.lastSeen = 4321;
 			server.descriptionStyled = '<b>My Server</b>';
 			server.description = 'My Server';
 			server.country = 'de';
@@ -72,7 +71,6 @@ describe('Server', function() {
 				'description': 'My Server',
 				'descriptionStyled': '<b>My Server</b>',
 				'host': '1.2.3.4',
-				'lastSeen': 4321,
 				'port': 1234
 			});
 		});
