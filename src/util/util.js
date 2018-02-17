@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 
 import _ from 'lodash';
+import winston from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 import config from '../../tracker.json';
 import vars from '../../vars.json';
@@ -51,44 +53,6 @@ export function isValidPort(port) {
 }
 
 /**
- *  Prints log message.
- *  @param {any} msg
- */
-export function log(...msg) {
-	console.log(...msg);
-}
-
-/**
- *  If in debug mode print stack stace and exits. Otherwise print error message.
- *  @param {any} msg
- */
-export function error(msg) {
-	log('Error:', msg);
-	if (config.debug) {
-		throw new Error(msg);
-	}
-}
-
-/**
- *  If in debug mode prints msg.
- *  @param {any} msg
- */
-export function debug(...msg) {
-	if (config.debug) log(...msg);
-}
-
-/**
- *  If condition is not truthful, if in debug mode; print stack trace and exits,
- *  otherwise; print error message.
- *  @param {any} condition
- *  @param {string} msg
- */
-export function assert(condition, msg) {
-	if (config.debug) throw new Error(`Assert failed: ${msg}`);
-	else log(`Assert failed: ${msg}`);
-}
-
-/**
  *  Replace all occurrences of '%' with '\%' and '_' with '\_' for use in an [I]LIKE query.
  *  @param {string} text - String to escape.
  *  @returns {string}
@@ -117,3 +81,64 @@ ObjectNotFoundError.prototype = Object.create(Error.prototype);
  */
 export function ObjectBannedError() {}
 ObjectBannedError.prototype = Object.create(Error.prototype);
+
+const logger = winston.createLogger({
+	format: winston.format.combine(
+		winston.format.timestamp(),
+		winston.format.printf(info => `${info.timestamp} (${info.level}): ${info.message}`),
+	),
+	transports: [
+		new winston.transports.Console(),
+		new DailyRotateFile({ filename: './logs/log' }),
+	],
+});
+
+/**
+ *  Log error message.
+ */
+export function logError(message) {
+	logger.log({
+		level: 'error',
+		...message.join(' '),
+	});
+}
+
+/**
+ *  Log warning message.
+ */
+export function logWarn(message) {
+	logger.log({
+		level: 'warn',
+		...message.join(' '),
+	});
+}
+
+/**
+ *  Log info message.
+ */
+export function logInfo(message) {
+	logger.log({
+		level: 'info',
+		...message.join(' '),
+	});
+}
+
+/**
+ *  Log verbose message.
+ */
+export function logVerbose(message) {
+	logger.log({
+		level: 'verbose',
+		...message.join(' '),
+	});
+}
+
+/**
+ *  Log debug message.
+ */
+export function logDebug(message) {
+	logger.log({
+		level: 'debug',
+		...message.join(' '),
+	});
+}

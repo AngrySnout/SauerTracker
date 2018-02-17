@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { log } from '../util/util';
+import { logInfo } from '../util/util';
 import database from '../util/database';
 import redis from '../util/redis';
 import Server from './server';
@@ -39,7 +39,7 @@ class ServerManager {
 			if (!server.shouldClean(now)) newList.push(server);
 		});
 		const cleaned = this.list.length - newList.length;
-		if (cleaned > 0) log(`Clean up removed ${cleaned} server(s)`);
+		if (cleaned > 0) logInfo(`${cleaned} servers removed`);
 		this.list = newList;
 		return cleaned;
 	}
@@ -57,7 +57,7 @@ class ServerManager {
 				return count;
 			})
 			.then((count) => {
-				log(`${count} servers added`);
+				logInfo(`${count} servers added`);
 			});
 	}
 

@@ -4,7 +4,7 @@ import dgram from 'dgram';
 
 import config from '../../../tracker.json';
 
-import { log, round2, escapePostgresLike } from '../../util/util';
+import { logInfo, logError, round2, escapePostgresLike } from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 import playerManager from '../../tracker/player-manager';
@@ -187,7 +187,7 @@ export function startTeamBalanceServer() {
 	const server = dgram.createSocket('udp4');
 
 	server.on('error', (err) => {
-		log(`server error:\n${err.stack}`);
+		logError(`server error:\n${err.stack}`);
 		server.close();
 	});
 
@@ -224,7 +224,7 @@ export function startTeamBalanceServer() {
 
 	server.on('listening', () => {
 		const address = server.address();
-		log(`Team balance server listening on port ${address.port}`);
+		logInfo(`Team balance server listening on port ${address.port}`);
 	});
 
 	server.bind(config.tracker.teamBalanceServerPort);

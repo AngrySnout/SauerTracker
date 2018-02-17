@@ -5,7 +5,7 @@ import countries from 'i18n-iso-countries';
 import config from '../../tracker.json';
 import vars from '../../vars.json';
 
-import { round2, debug, error, getClan } from '../util/util';
+import { round2, logInfo, logError, getClan } from '../util/util';
 import database from '../util/database';
 import redis from '../util/redis';
 
@@ -189,7 +189,7 @@ export default class Game {
 		const gameType = getGameType(this);
 		// eslint-disable-next-line consistent-return
 		return saveGame(server, gameType).then(() => {
-			debug(`Game saved at '${server.description}' (${gameType}).`);
+			logInfo(`Game saved at '${server.description}' (${gameType}).`);
 			redis.zincrbyAsync('top-servers', 1, `${server.host}:${server.port}:${server.description}`);
 			if (gameType[0] === 'duel') {
 				const pls = _.reject(this.players, { state: 5 });
@@ -211,7 +211,7 @@ export default class Game {
 					redis.hincrbyAsync('clan-wins', gameType[1][2], 1);
 				}
 			}
-		}).catch(error);
+		}).catch(logError);
 	}
 
 	/**

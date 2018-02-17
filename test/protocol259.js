@@ -6,7 +6,9 @@ var protocol259 = require('../build/tracker/protocols/259');
 var Packet = require('../build/util/packet');
 var util = require('../build/util/util');
 
-util.log = function() {};
+util.logInfo = function() {};
+util.logWarn = function() {};
+util.logError = function() {};
 
 describe('protocol259', function() {
 	describe('#parseGameInfo259()', function() {

@@ -5,7 +5,6 @@ import _ from 'lodash';
 
 import database from '../util/database';
 import { getGameType } from '../tracker/game';
-import { log } from '../util/util';
 
 let count = 0;
 
@@ -42,6 +41,6 @@ database.raw(`
 			return database('games').where('id', row.id).update({ gametype: gameType[0], meta: JSON.stringify(gameType[1]) }).then();
 		}
 	}).then(() => {
-		log(`Updated ${count} games`);
+		console.log(`Updated ${count} games`); // eslint-disable-line no-console
 		process.exit();
 	});

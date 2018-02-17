@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 
 import redis from './redis';
-import { error } from './util';
+import { logError } from './util';
 
 class CacheManager {
 	constructor() {
@@ -44,7 +44,7 @@ class CacheManager {
 								resolve(res);
 							});
 						}).catch((err) => {
-							error(err);
+							logError(err);
 							resolve();
 						});
 					} else resolve(JSON.parse(reply.toString()));

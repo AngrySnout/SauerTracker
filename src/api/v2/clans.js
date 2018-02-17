@@ -6,7 +6,7 @@ import vars from '../../../vars.json';
 
 import app from '../../util/web';
 import cache from '../../util/cache';
-import { error, round2 } from '../../util/util';
+import { logError, round2 } from '../../util/util';
 import redis from '../../util/redis';
 import { validateClans } from './schema';
 
@@ -49,7 +49,7 @@ app.get('/api/v2/clans', (req, res) => {
 		validateClans(clans);
 		res.send({ clans });
 	}).catch((err) => {
-		error(err);
+		logError(err);
 		res.status(500).send({ error: err.message });
 	});
 });

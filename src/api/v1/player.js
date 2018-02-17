@@ -5,13 +5,13 @@ import moment from 'moment';
 import vars from '../../../vars.json';
 
 import app from '../../util/web';
-import { getClan, error, ObjectNotFoundError, ObjectBannedError, escapePostgresLike, round2 } from '../../util/util';
+import { getClan, logError, logWarn, ObjectNotFoundError, ObjectBannedError, escapePostgresLike, round2 } from '../../util/util';
 import playerManager from '../../tracker/player-manager';
 import database from '../../util/database';
 
 function populateRanks() {
 	database.raw('BEGIN; CREATE TABLE playerranks2 AS SELECT ranked.*, rank() OVER (ORDER BY frags DESC) AS rank FROM (SELECT name, frags FROM players) AS ranked ORDER BY rank ASC; CREATE INDEX ON playerranks2 (name); DROP TABLE IF EXISTS playerranks; ALTER TABLE playerranks2 RENAME TO playerranks; COMMIT;').catch((err) => {
-		error(err);
+		logError(err);
 	});
 }
 populateRanks();
@@ -60,7 +60,7 @@ export function getPlayer(name) {
 				row.efficstats = (row.efficstats) ? JSON.parse(row.efficstats) : [0, 0, 0, 0, 0];
 				row.instastats = (row.instastats) ? JSON.parse(row.instastats) : [0, 0, 0, 0, 0];
 			} catch (e) {
-				error(e);
+				logWarn(e);
 				row.efficstats = [0, 0, 0, 0, 0];
 				row.instastats = [0, 0, 0, 0, 0];
 			}
@@ -113,7 +113,7 @@ app.get('/api/player/activity/:name', (req, res) => {
 			res.send({ activity: rows });
 		})
 		.catch((err) => {
-			error(err);
+			logError(err);
 			res.status(500).send({ error: err.message });
 		});
 });

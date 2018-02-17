@@ -42,7 +42,8 @@
     "pug": "^2.0.0-beta6",
     "redis": "^2.8.0",
     "source-map-support": "^0.4.0",
-    "winston": "^3.0.0-rc1"
+    "winston": "^3.0.0-rc1",
+    "winston-daily-rotate-file": "^2.0.0-rc.2"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.4.1",

@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 
 import config from '../../tracker.json';
 
-import { log } from '../util/util';
+import { logInfo } from '../util/util';
 
 const app = express();
 export default app;
@@ -48,5 +48,5 @@ if (config.website.serveStaticFiles) {
 }
 
 http.createServer(app.handle.bind(app)).listen(config.website.serverPort, () => {
-	log(`Server listening on port ${config.website.serverPort}`);
+	logInfo(`Server listening on port ${config.website.serverPort}`);
 });

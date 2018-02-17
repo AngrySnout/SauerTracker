@@ -11,7 +11,9 @@ var util = require('../build/util/util');
 
 redis.unref();
 database.destroy();
-util.log = function() {};
+util.logInfo = function() {};
+util.logWarn = function() {};
+util.logError = function() {};
 
 describe('ServerManager', function() {
 	describe('#add()', function() {

@@ -4,7 +4,7 @@ import countries from 'i18n-iso-countries';
 
 import app from '../util/web';
 import cache from '../util/cache';
-import { error } from '../util/util';
+import { logError } from '../util/util';
 import database from '../util/database';
 import redis from '../util/redis';
 
@@ -53,7 +53,7 @@ app.get('/about', (req, res) => {
 			countryName: countries.getName,
 		});
 	}).catch((err) => {
-		error(err);
+		logError(err);
 		res.render('about');
 	});
 });

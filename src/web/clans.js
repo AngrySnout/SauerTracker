@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import app from '../util/web';
 import cache from '../util/cache';
-import { debug, error } from '../util/util';
+import { logWarn, logError } from '../util/util';
 import database from '../util/database';
 import { getClans } from '../api/v1/clans';
 
@@ -23,7 +23,7 @@ function clanwarsSince(date) {
 					clans[row.meta[2]] = clans[row.meta[2]] && clans[row.meta[2]] + 1 || 1;
 				} catch (e) {
 					row.meta = null;
-					debug(e);
+					logWarn(e);
 				}
 			});
 			const wins = _.countBy(rows, row => ((row.meta && row.meta[1] !== row.meta[3]) ? row.meta[2] : ''));
@@ -47,7 +47,7 @@ app.get('/clans', (req, res) => {
 	Promise.all([getClans(), cache.get('clans-weekly'), cache.get('clans-monthly')]).then().spread((clans, weekly, monthly) => {
 		res.render('clans', { clans, weeklyClans: weekly, monthlyClans: monthly });
 	}).catch((err) => {
-		error(err);
+		logError(err);
 		res.status(500).render('error', { status: 500, error: err.message });
 	});
 });

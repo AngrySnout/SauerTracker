@@ -6,7 +6,6 @@ import _ from 'lodash';
 
 import database from '../util/database';
 import config from '../../tracker.json';
-import { log } from '../util/util';
 import { calcEloChange } from '../tracker/game';
 
 database('players').update({ elo: config.baseElo }).then(() => {
@@ -24,11 +23,11 @@ database('players').update({ elo: config.baseElo }).then(() => {
 
 				newElos[meta[0]] += elod1;
 				newElos[meta[2]] += elod2;
-			} catch (e) { log(`Error parsing JSON: ${row.meta}`); }
+			} catch (e) { console.log(`Error parsing JSON: ${row.meta}`); } // eslint-disable-line no-console
 		});
 		return newElos;
 	})
 		.then(newElos => Promise.all(_.keys(newElos).map(player => database('players').where({ name: player }).update({ elo: newElos[player] }).then()
-			.catch(() => log(`Error updating player Elo: ${player}`)))))
+			.catch(() => console.log(`Error updating player Elo: ${player}`))))) // eslint-disable-line no-console
 		.finally(process.exit);
 });

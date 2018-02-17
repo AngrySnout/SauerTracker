@@ -3,7 +3,7 @@ import Promise from 'bluebird';
 
 import config from '../../tracker.json';
 
-import { log } from '../util/util';
+import { logInfo, logError } from '../util/util';
 import database from '../util/database';
 import Player from './player';
 import { saveSpy } from './spy';
@@ -35,9 +35,12 @@ class PlayerManager {
 					return numPlayers;
 				});
 		}).then((numPlayers) => {
-			log(`Players flushed, ${numPlayers} players updated`);
+			logInfo(`Players flushed, ${numPlayers} players updated`);
 		})
-			.then(saveSpy);
+			.then(saveSpy)
+			.catch((error) => {
+				logError(`${error}`);
+			});
 	}
 
 	isOnline(name) {

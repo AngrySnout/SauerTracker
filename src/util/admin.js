@@ -2,7 +2,7 @@ import _ from 'lodash';
 import IRC from 'internet-relay-chat';
 
 import config from '../../tracker.json';
-import { log } from '../util/util';
+import { logInfo } from '../util/util';
 
 const playersAdmin = require('../admin/players');
 const serversAdmin = require('../admin/servers');
@@ -29,7 +29,7 @@ if (config.irc.server) {
 	bot.connect();
 
 	bot.on('connect', () => {
-		log('IRC Bot connected');
+		logInfo('IRC Bot connected');
 	});
 
 	bot.on('registered', () => {
@@ -62,9 +62,9 @@ if (config.irc.server) {
 		}
 	});
 
-	bot.on('error', log);
+	bot.on('error', logInfo);
 } else {
-	bot = { message() { log.apply(this, _.map(arguments, arg => arg).slice(1)); } };
+	bot = { message() { logInfo.apply(this, _.map(arguments, arg => arg).slice(1)); } };
 
 	const stdin = process.openStdin();
 

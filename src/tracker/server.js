@@ -6,7 +6,7 @@ import countries from 'i18n-iso-countries';
 
 import config from '../../tracker.json';
 
-import { isValidIP, isValidPort, debug } from '../util/util';
+import { isValidIP, isValidPort, logWarn } from '../util/util';
 import Packet from '../util/packet';
 import playerManager from '../tracker/player-manager';
 import { addPlayerSpy } from './spy';
@@ -78,8 +78,8 @@ export default class Server {
 				}
 			}, 1000))(socket);
 		} catch (err) {
-			debug(`Error: Server query failed with uncaught error: ${err}`);
-			debug(err.stack);
+			logWarn(`Error: Server query failed with uncaught error: ${err}`);
+			logWarn(err.stack);
 			if (socket !== null) {
 				socket.close();
 				socket = null;
@@ -232,8 +232,8 @@ export default class Server {
 			}
 			}
 		} catch (err) {
-			debug(`Error: Server response parsing failed: ${err} ${this.description} ${this.host} ${this.port} ${type} ${data}`);
-			debug(err.stack);
+			logWarn(`Error: Server response parsing failed: ${err} ${this.description} ${this.host} ${this.port} ${type} ${data}`);
+			logWarn(err.stack);
 		}
 	}
 

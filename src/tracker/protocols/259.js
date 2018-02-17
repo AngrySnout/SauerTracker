@@ -3,7 +3,7 @@ import geoip from 'geoip-lite';
 
 import { getGameMode, getMasterMode } from '../../util/protocol';
 import { filterString, cube2colorHTML } from '../../util/packet';
-import { log, round2 } from '../../util/util';
+import { logWarn, round2 } from '../../util/util';
 import Game from '../game';
 
 export function parseGameInfo259(p, nclients, nattr) {
@@ -47,13 +47,13 @@ export function parsePlayerExtInfo105(p) {
 	player.ping = p.getInt();
 	player.name = p.getString();
 	if (player.name.length > 15) {
-		log(`Warning: player name longer than 15 characters. Truncating. Name: ${player.name}`);
+		logWarn(`Warning: player name longer than 15 characters. Truncating. Name: ${player.name}`);
 		player.name = player.name.substring(0, 15);
 	}
 	if (!player.name) player.name = 'unnamed';
 	player.team = p.getString();
 	if (player.team.length > 4) {
-		log(`Warning: team name longer than 4 characters. Truncating. Name: ${player.team}`);
+		logWarn(`Warning: team name longer than 4 characters. Truncating. Name: ${player.team}`);
 		player.team = player.team.substring(0, 15);
 	}
 	player.frags = p.getInt();
@@ -91,7 +91,7 @@ export function parseTeamsExtInfo105(p) {
 	while (p.remaining() > 0) {
 		let name = p.getString();
 		if (name.length > 4) {
-			log(`Warning: team name longer than 4 characters. Truncating. Name: ${name}`);
+			logWarn(`Warning: team name longer than 4 characters. Truncating. Name: ${name}`);
 			name = name.substring(0, 15);
 		}
 		const score = p.getInt();

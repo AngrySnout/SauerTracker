@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import config from '../../tracker.json';
 import redis from '../util/redis';
-import { log } from '../util/util';
+import { logInfo, logError } from '../util/util';
 
 function pollMasterServer() {
 	return new Promise((resolve, reject) => {
@@ -45,8 +45,11 @@ export function getServerList() {
  *	Get the server list from the master server and save it in cache.
  */
 export function updateServerList() {
-	return getServerList().then(results => redis.setAsync('servers', JSON.stringify(results))).catch((err) => {
-		log(err);
+	return getServerList().then((results) => {
+		logInfo(`Updated server list from master server (${results.length} servers)`);
+		redis.setAsync('servers', JSON.stringify(results));
+	}).catch((err) => {
+		logError(err);
 		return err;
 	});
 }

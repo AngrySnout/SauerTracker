@@ -5,7 +5,7 @@ import vars from '../../../vars.json';
 
 import app from '../../util/web';
 import cache from '../../util/cache';
-import { error, ObjectNotFoundError, escapePostgresLike } from '../../util/util';
+import { logError, ObjectNotFoundError, escapePostgresLike } from '../../util/util';
 import database from '../../util/database';
 
 function getLatestGames(clan) {
@@ -52,7 +52,7 @@ app.get('/api/clan/:name', (req, res) => {
 		.then((result) => { res.send(result); })
 		.catch(ObjectNotFoundError, () => { res.status(404).send({ error: 'Clan not found.' }); })
 		.catch((err) => {
-			error(err);
+			logError(err);
 			res.status(500).send({ error: err.message });
 		});
 });

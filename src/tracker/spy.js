@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import database from '../util/database';
 
-const players = {};
+let players = {};
 
 export function addPlayerSpy(name, ip, server) {
 	if (!players[name]) players[name] = {};
@@ -11,5 +11,7 @@ export function addPlayerSpy(name, ip, server) {
 }
 
 export function saveSpy() {
-	return _.map(players, (player, name) => _.map(player.ips, (info, ip) => database.raw('insert into spy (name, ip, lastseen, lshost, lsport) values (?, ?, ?, ?, ?) on conflict (name, ip) do update set lastseen = excluded.lastseen, lshost = excluded.lshost, lsport = excluded.lsport', name, ip, info.time, info.host, info.port)));
+	const oldPlayer = players;
+	players = {};
+	return _.map(oldPlayer, (player, name) => _.map(player.ips, (info, ip) => database.raw('insert into spy (name, ip, lastseen, lshost, lsport) values (?, ?, ?, ?, ?) on conflict (name, ip) do update set lastseen = excluded.lastseen, lshost = excluded.lshost, lsport = excluded.lsport', name, ip, info.time, info.host, info.port)));
 }

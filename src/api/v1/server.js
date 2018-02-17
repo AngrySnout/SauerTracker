@@ -2,7 +2,7 @@ import moment from 'moment';
 import Promise from 'bluebird';
 
 import app from '../../util/web';
-import { error, ObjectNotFoundError } from '../../util/util';
+import { logError, ObjectNotFoundError } from '../../util/util';
 
 import database from '../../util/database';
 import redis from '../../util/redis';
@@ -65,7 +65,7 @@ app.get('/api/server/activity/:host/:port', (req, res) => {
 			res.send({ day: results[0], month: results[1] });
 		})
 		.catch((err) => {
-			error(err);
+			logError(err);
 			res.status(500).send({ error: err.message });
 		});
 });

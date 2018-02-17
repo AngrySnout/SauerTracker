@@ -6,7 +6,7 @@ import vars from '../../../vars.json';
 
 import app from '../../util/web';
 import cache from '../../util/cache';
-import { debug, error, round2 } from '../../util/util';
+import { logWarn, logError, round2 } from '../../util/util';
 import database from '../../util/database';
 import redis from '../../util/redis';
 
@@ -24,7 +24,7 @@ export function initialize() {
 				clans[row.meta[2]] = clans[row.meta[2]] && clans[row.meta[2]] + 1 || 1;
 			} catch (e) {
 				row.meta = null;
-				debug(e);
+				logWarn(e);
 			}
 		});
 		const wins = _.countBy(rows, row => ((row.meta && row.meta[1] !== row.meta[3]) ? row.meta[2] : ''));
@@ -81,7 +81,7 @@ app.get('/api/clans', (req, res) => {
 	getClans().then((clans) => {
 		res.send({ clans });
 	}).catch((err) => {
-		error(err);
+		logError(err);
 		res.status(500).send({ error: err.message });
 	});
 });

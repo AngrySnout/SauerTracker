@@ -1,5 +1,4 @@
 {
-	"debug": true,
 	"website": {
 		"enable": true,
 		"serveStaticFiles": true,
