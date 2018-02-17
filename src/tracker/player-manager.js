@@ -11,6 +11,7 @@ import { saveSpy } from './spy';
 class PlayerManager {
 	constructor() {
 		this.players = {};
+		this.oldPlayers = {};
 		this.bans = {};
 		this.banNames = {};
 	}
@@ -31,6 +32,7 @@ class PlayerManager {
 			return database.transaction(trx =>
 				Promise.all(_.map(players, player => player.saveStats(rows[player.name], trx))))
 				.then(() => {
+					self.oldPlayers = self.players;
 					self.players = {};
 					return numPlayers;
 				});
@@ -44,8 +46,7 @@ class PlayerManager {
 	}
 
 	isOnline(name) {
-		// FIXME can have short window of error after flushing
-		return !!this.players[name];
+		return !!(this.players[name] || this.oldPlayers[name]);
 	}
 
 	start() {
