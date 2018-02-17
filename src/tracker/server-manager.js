@@ -55,6 +55,9 @@ class ServerManager {
 					if (self.add(server.host, server.port)) count++;
 				}
 				return count;
+			})
+			.then((count) => {
+				log(`${count} servers added`);
 			});
 	}
 
