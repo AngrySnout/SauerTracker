@@ -4,7 +4,7 @@ import dgram from 'dgram';
 
 import config from '../../../tracker.json';
 
-import { log, escapePostgresLike } from '../../util/util';
+import { log, round2, escapePostgresLike } from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 import playerManager from '../../tracker/player-manager';
@@ -22,6 +22,9 @@ export function findPlayers(name, country) {
 	return query.orderBy('frags', 'desc').limit(200).then((rows) => {
 		_.each(rows, (row) => {
 			if (playerManager.isOnline(row.name)) row.online = true;
+			row.kpd = round2(row.frags / row.deaths);
+			row.acc = round2(row.accFrags / row.frags);
+			delete row.accFrags;
 		});
 		return rows;
 	});
