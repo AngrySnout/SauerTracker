@@ -4,10 +4,15 @@ import Promise from 'bluebird';
 import app from '../../util/web';
 import cache from '../../util/cache';
 import serverManager from '../../tracker/server-manager';
-import { getServerList } from '../v1/servers';
+import redis from '../../util/redis';
+import { validateServers } from './schema';
 
 app.get('/api/v2/servers', (req, res) => {
-	getServerList()
-		.then((list) => { res.send(list); })
+	redis.getAsync('server-list')
+		.then((list) => {
+			const servers = JSON.parse(list);
+			validateServers(servers);
+			res.send(servers);
+		})
 		.catch((err) => { res.status(500).send({ error: err }); });
 });

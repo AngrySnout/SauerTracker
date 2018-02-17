@@ -1,0 +1,27 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"$id": "http://sauertracker.net/api/v2/schema/players.json",
+	"title": "Players",
+	"description": "List of players corresponding to search query",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"id": { "type": "number" },
+			"name": { "type": "string", "minimumLength": 1, "maximumLength": 15 },
+			"frags": { "type": "number" },
+			"flags": { "type": "number" },
+			"deaths": { "type": "number" },
+			"kpd": { "type": "number" },
+			"accFrags": { "type": "number" },
+			"tks": { "type": "number" },
+			"country": { "type": "string", "minimumLength": 2 },
+			"countryName": { "type": "string" },
+			"elo": { "type": "number" },
+			"instaStats": { "type": "object" },
+			"efficStats": { "type": "object" },
+			"online": { "type": "boolean" }
+		},
+		"additionalProperties": false
+	}
+}
