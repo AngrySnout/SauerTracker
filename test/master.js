@@ -46,7 +46,7 @@ describe('master', function() {
 	describe('#updateServerList()', function() {
 		it('should update the server list and save it in redis', function() {
 			mitm.once('connection', function(socket) { socket.write(sampleMasterReply); socket.emit('end'); });
-			return Promise.all([ expect(master.updateServerList()).to.eventually.eql('OK'),
+			return Promise.all([ expect(master.updateServerList()).to.eventually.not.be.rejected,
 				expect(redis.getAsync('servers')).to.eventually.eql(JSON.stringify(sampleServerList)) ]);
 		});
 	});
