@@ -17,14 +17,14 @@ function populateRanks() {
 populateRanks();
 setInterval(populateRanks, 10 * 60 * 1000);
 
-function getTotalGames(name) {
+export function getTotalGames(name) {
 	return database.count('* as count').from('stats').join('games', 'games.id', 'stats.game').where('stats.name', name)
 		.whereNot('stats.state', 5)
 		.then(rows => rows[0].count);
 }
 
-function getDuels(name) {
-	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%'${escapePostgresLike(name)}'%`)
+export function getDuels(name) {
+	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%${escapePostgresLike(name)}%`)
 		.then((rows) => {
 			const res = {
 				total: rows.length, wins: 0, losses: 0, ties: 0,
@@ -41,7 +41,7 @@ function getDuels(name) {
 		});
 }
 
-function getLastGames(name) {
+export function getLastGames(name) {
 	return database.select('games.id', 'games.host', 'games.port', 'games.serverdesc', 'games.gamemode', 'games.map', 'games.gametype', 'games.meta', 'games.timestamp', 'stats.flags', 'stats.frags', 'stats.deaths', 'stats.acc').from('stats').join('games', 'games.id', 'stats.game').where('stats.name', name)
 		.whereNot('stats.state', 5)
 		.orderBy('games.id', 'desc')
