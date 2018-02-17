@@ -45,19 +45,25 @@ export function getServerList() {
  *	Get the server list from the master server and save it in cache.
  */
 export function updateServerList() {
-	return getServerList().then((results) => {
-		logInfo(`Updated server list from master server (${results.length} servers)`);
-		return redis.setAsync('servers', JSON.stringify(results));
-	}).catch((err) => {
-		logError(err);
-		return err;
+	return redis.getAsync('last-master-update').then((lastUpdate) => {
+		if (lastUpdate && Date.now() - lastUpdate < config.master.updateInterval * 1000) return;
+		getServerList().then((results) => {
+			logInfo(`Updated server list from master server (${results.length} servers)`);
+			return Promise.all([
+				redis.setAsync('servers', JSON.stringify(results)),
+				redis.setAsync('last-master-update', Date.now()),
+			]);
+		}).catch((err) => {
+			logError(err);
+			return err;
+		});
 	});
 }
 
 /**
  *	Run updateServerList every interval milliseconds.
  */
-export function start(interval) {
-	setInterval(updateServerList, interval);
+export function start() {
+	setInterval(updateServerList, 30000);
 	updateServerList();
 }

@@ -12,7 +12,7 @@ if (config.tracker.enable) {
 }
 
 if (config.master.enable) {
-	require('./tracker/master').start(config.master.updateInterval * 1000);
+	require('./tracker/master').start();
 }
 
 if (config.irc.enable) {
