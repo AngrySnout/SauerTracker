@@ -18,8 +18,8 @@
 			"country": { "type": "string", "minimumLength": 2 },
 			"countryName": { "type": "string" },
 			"elo": { "type": "number" },
-			"instaStats": { "type": "object" },
-			"efficStats": { "type": "object" },
+			"instaStats": { "$ref": "defs.json#/definitions/modeStats" },
+			"efficStats": { "$ref": "defs.json#/definitions/modeStats" },
 			"online": { "type": "boolean" }
 		},
 		"additionalProperties": false

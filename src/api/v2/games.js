@@ -8,6 +8,7 @@ import { escapePostgresLike } from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 import serverManager from '../../tracker/server-manager';
+import { validateGames } from './schema';
 
 const pageLimit = 20;
 const maxPageLimit = 1000;
@@ -46,9 +47,9 @@ export function findGames(params) {
 		}
 	}
 
-	const pagiQuery = query.clone().count('* as count').max('id as max').min('id as min');
+	const pagiQuery = query.clone().count('* as count').max('id as last').min('id as first');
 
-	query = query.select('id', 'host', 'port', 'timestamp as time', 'map', 'gamemode as mode', 'gametype as type', 'numplayers as clients', 'meta', 'serverdesc as description');
+	query = query.select('id', 'host', 'port', 'timestamp as time', 'map as mapName', 'gamemode as gameMode', 'gametype as gameType', 'numplayers as clients', 'meta', 'serverdesc as description');
 
 	if (params.before) query.where('id', '<', params.before);
 	if (params.after) query.where('id', '>', params.after);
@@ -60,6 +61,8 @@ export function findGames(params) {
 		let games = results[0];
 		if (params.after) games = games.reverse();
 		_.each(games, (gm) => {
+			gm.time = gm.time.toISOString();
+
 			if (gm.meta) {
 				try {
 					gm.meta = JSON.parse(gm.meta);
@@ -71,39 +74,22 @@ export function findGames(params) {
 
 			const server = serverManager.find(gm.host, gm.port);
 			if (server) {
-				gm.server = _.pick(server, ['descriptionStyled', 'description', 'country', 'countryName', 'host', 'port']);
+				gm = Object.assign(gm, _.pick(server, ['descriptionStyled', 'description', 'country', 'countryName', 'host', 'port', 'info']));
 			} else {
-				gm.server = {
-					descriptionStyle: gm.description,
-					description: gm.description,
-					host: gm.host,
-					port: gm.port,
-				};
-				const gipl = geoip.lookup(gm.host);
-				gm.server.country = gipl ? gipl.country : '';
-				gm.server.countryName = gipl ? countries.getName(gm.server.country, 'en') : 'Unknown';
+				gm.descriptionStyled = gm.description;
 			}
-			delete gm.host;
-			delete gm.port;
-			delete gm.description;
+			const gipl = geoip.lookup(gm.host);
+			gm.country = gipl ? gipl.country : '';
+			gm.countryName = gipl ? countries.getName(gm.country, 'en') : 'Unknown';
 		});
+		results[1][0].count = parseInt(results[1][0].count, 10);
 		return { results: games, stats: results[1][0] };
 	});
 }
 
 app.get('/api/v2/games/find', (req, res) => {
 	findGames(req.query).then((result) => {
+		validateGames(result);
 		res.send(result);
-	});
-});
-
-app.get('/api/v2/games/players', (req, res) => {
-	if (!req.query.players) {
-		res.status(400).send({ error: 'You must provide a \'players\' parameter in the query string.' });
-		return;
-	}
-	const promises = _.map(req.query.players.split(' '), name => findGames(_.assign({}, req.query, { players: name })));
-	Promise.all(promises).then((results) => {
-		res.send(results);
 	});
 });

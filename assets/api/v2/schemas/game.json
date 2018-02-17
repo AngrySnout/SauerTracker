@@ -5,12 +5,10 @@
 	"description": "A single game",
 	"type": "object",
 	"allOf": [
-		{ "$ref": "defs.json#/definitions/server" },
+		{ "$ref": "defs.json#/definitions/game" },
 		{
 			"properties": {
-				"descriptionStyled": {}, "description": {}, "clients": {}, "gameMode": {}, "gameType": {}, "meta": {}, "mapName": {}, "country": {}, "countryName": {}, "host": {}, "port": {}, "info": {},
-				"id": { "type": "number" },
-				"time": { "type": "string", "format": "date-time" },
+				"descriptionStyled": {}, "description": {}, "clients": {}, "gameMode": {}, "gameType": {}, "meta": {}, "mapName": {}, "country": {}, "countryName": {}, "host": {}, "port": {}, "info": {}, "id": {}, "time": {},
 				"players": { "type": "array", "items": { "$ref": "defs.json#/definitions/player" } },
 				"teams": { "type": "array", "items": { "$ref": "defs.json#/definitions/team" } }
 			},

@@ -21,6 +21,9 @@ export function findPlayers(name, country) {
 			row.online = playerManager.isOnline(row.name);
 			row.country = row.country || '';
 			row.countryName = countries.getName(row.country, 'en');
+			row.kpd = round2(row.frags / row.deaths);
+			row.acc = round2(row.accFrags / row.frags);
+			delete row.accFrags;
 
 			row.instaStats = {
 				frags: 0, flags: 0, deaths: 0, tks: 0, acc: 0,

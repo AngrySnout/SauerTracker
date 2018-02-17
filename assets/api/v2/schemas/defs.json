@@ -59,6 +59,18 @@
 				"intern"
 			]
 		},
+		"modeStats": {
+			"type": "object",
+			"properties": {
+				"frags": { "type": "number" },
+				"flags": { "type": "number" },
+				"deaths": { "type": "number" },
+				"tks": { "type": "number" },
+				"kpd": { "type": "number" },
+				"acc": { "type": "number" }
+			},
+			"additionalProperties": false
+		},
 		"player": {
 			"type": "object",
 			"properties": {
@@ -93,7 +105,7 @@
 				"clients": { "type": "number", "minimum": 0, "maximum": 128 },
 				"gameMode": { "$ref": "defs.json#/definitions/gameMode" },
 				"gameType": { "$ref": "defs.json#/definitions/gameType" },
-				"meta": { "type": "array" },
+				"meta": { "anyOf": [ { "type": "array" }, { "type": "null" } ]},
 				"mapName": { "type": "string" },
 				"country": { "type": "string", "maxLength": 2 },
 				"countryName": { "type": "string" },
@@ -108,6 +120,19 @@
 					}
 				}
 			}
+		},
+		"game": {
+			"type": "object",
+			"allOf": [
+				{ "$ref": "defs.json#/definitions/server" },
+				{
+					"properties": {
+						"descriptionStyled": {}, "description": {}, "clients": {}, "gameMode": {}, "gameType": {}, "meta": {}, "mapName": {}, "country": {}, "countryName": {}, "host": {}, "port": {}, "info": {},
+						"id": { "type": "number" },
+						"time": { "type": "string", "format": "date-time" }
+					}
+				}
+			]
 		}
 	}
 }

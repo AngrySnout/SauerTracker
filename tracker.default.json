@@ -3,6 +3,7 @@
 	"website": {
 		"enable": true,
 		"serveStaticFiles": true,
+		"validateAPISchema": true,
 		"serverPort": 80,
 		"teamBalanceServerPort": 36581
 	},
