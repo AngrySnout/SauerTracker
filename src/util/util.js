@@ -96,49 +96,49 @@ const logger = winston.createLogger({
 /**
  *  Log error message.
  */
-export function logError(message) {
+export function logError() {
 	logger.log({
 		level: 'error',
-		...message.join(' '),
+		message: Array.from(arguments).join(' '),
 	});
 }
 
 /**
  *  Log warning message.
  */
-export function logWarn(message) {
+export function logWarn() {
 	logger.log({
 		level: 'warn',
-		...message.join(' '),
+		message: Array.from(arguments).join(' '),
 	});
 }
 
 /**
  *  Log info message.
  */
-export function logInfo(message) {
+export function logInfo() {
 	logger.log({
 		level: 'info',
-		...message.join(' '),
+		message: Array.from(arguments).join(' '),
 	});
 }
 
 /**
  *  Log verbose message.
  */
-export function logVerbose(message) {
+export function logVerbose() {
 	logger.log({
 		level: 'verbose',
-		...message.join(' '),
+		message: Array.from(arguments).join(' '),
 	});
 }
 
 /**
  *  Log debug message.
  */
-export function logDebug(message) {
+export function logDebug() {
 	logger.log({
 		level: 'debug',
-		...message.join(' '),
+		message: Array.from(arguments).join(' '),
 	});
 }
