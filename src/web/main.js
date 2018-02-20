@@ -12,7 +12,6 @@ require('./player');
 require('./clans');
 require('./clan');
 require('./profile');
-require('./help');
 require('./stats');
 require('./banners');
 
