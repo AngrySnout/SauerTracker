@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { logInfo } from '../util/util';
+import { logError, logInfo } from '../util/util';
 import database from '../util/database';
 import redis from '../util/redis';
 import Server from './server';
@@ -59,7 +59,8 @@ class ServerManager {
 			.then((count) => {
 				logInfo(`${count} servers added`);
 				return count;
-			});
+			})
+			.catch(err => logError(err.toString()));
 	}
 
 	serialize() {
