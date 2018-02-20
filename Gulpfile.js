@@ -82,7 +82,7 @@ gulp.task('js', () => {
 	return gulp.src('./src/**/*')
 		.pipe(plumber())
 		.pipe(sourcemaps.init({ loadMaps: true }))
-		.pipe(babel({ presets: ['es2015'] }))
+		.pipe(babel({ presets: ['env'] }))
 		.pipe(sourcemaps.write('.'))
 		.pipe(gulp.dest('./build/'));
 });
@@ -97,7 +97,7 @@ gulp.task('watch', () => {
 		.pipe(plumber())
 		.pipe(watch('src/**/*'))
 		.pipe(sourcemaps.init({ loadMaps: true }))
-		.pipe(babel({ presets: ['es2015'] }))
+		.pipe(babel({ presets: ['env'] }))
 		.pipe(sourcemaps.write('.'))
 		.pipe(gulp.dest('./build/'));
 });
