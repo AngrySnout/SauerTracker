@@ -49,7 +49,7 @@ function bundleJS(file, watch) {
 	if (watch) bundler = watchify(browserify(args));
 	else bundler = browserify(args);
 
-	bundler.transform('babelify', { presets: ['es2015'], only: /\/website\/js/ })
+	bundler.transform('babelify', { presets: ['env'], only: /\/website\/js/ })
 		.transform('browserify-shim')
 		.transform('debowerify')
 		.transform('./jadeify');
