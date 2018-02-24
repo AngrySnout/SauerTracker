@@ -42,7 +42,8 @@
 		{ "tag": "aCe|", "title": "Amazing Cube Events" },
 		{ "tag": "cH'", "title": "Coop Hopes", "website": "https://ch-clan.com" },
 		{ "tag": "|GM|", "title": "German Masters", "website": "http://germanmasters.clanwebsite.com/" },
-		{ "tag": "vVv|", "title": "vVv", "website": "http://vvv-clan.me/" }
+		{ "tag": "vVv|", "title": "vVv", "website": "http://vvv-clan.me/" },
+		{ "tag": ">ETK<", "title": "Elite Team Killers", "discord": "https://discordapp.com/invite/5Vs5kmB" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
