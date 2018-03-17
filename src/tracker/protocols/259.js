@@ -66,10 +66,6 @@ export function parsePlayerExtInfo105(p) {
 	player.privilege = p.getInt();
 	player.state = p.getInt();
 
-	if (player.name.toLowerCase() === 'zombie' && player.cn >= 128) {
-		this.game.zombie = true;
-	}
-
 	const ipbuf = Buffer.alloc(4);
 	p.buffer.copy(ipbuf, 0, p.offset, p.offset + 3);
 	ipbuf[3] = 0;
