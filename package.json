@@ -40,6 +40,7 @@
     "pg": "^6.1.2",
     "pm2": "^2.10.0",
     "pug": "^2.0.0-beta6",
+    "pug-runtime": "^2.0.4",
     "redis": "^2.8.0",
     "source-map-support": "^0.4.0",
     "winston": "^3.0.0-rc1",
