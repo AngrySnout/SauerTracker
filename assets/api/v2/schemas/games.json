@@ -1,0 +1,32 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"$id": "http://sauertracker.net/api/v2/schema/games.json",
+	"title": "Games",
+	"description": "List of games corresponding to search query",
+	"type": "object",
+	"properties": {
+		"results": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"allOf": [
+					{ "$ref": "defs.json#/definitions/game" },
+					{
+						"properties": {
+							"descriptionStyled": {}, "description": {}, "clients": {}, "gameMode": {}, "gameType": {}, "meta": {}, "mapName": {}, "country": {}, "countryName": {}, "host": {}, "port": {}, "info": {}, "id": {}, "time": {}
+						},
+						"additionalProperties": false
+					}
+				]
+			}
+		},
+		"stats": {
+			"type": "object",
+			"properties": {
+				"count": { "type": "number" },
+				"first": { "type": "number" },
+				"last": { "type": "number" }
+			}
+		}
+	}
+}

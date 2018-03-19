@@ -3,61 +3,70 @@ import Promise from 'bluebird';
 
 import config from '../../tracker.json';
 
-import {debug, error} from '../util/util';
+import { logInfo, logError } from '../util/util';
 import database from '../util/database';
 import Player from './player';
+import { saveSpy } from './spy';
 
 class PlayerManager {
 	constructor() {
 		this.players = {};
+		this.oldPlayers = {};
 		this.bans = {};
 		this.banNames = {};
 	}
 
-	updatePlayer(server, newState, oldState, curTime) {
-		let name = newState.name;
-		if (!name) return;
+	updatePlayer(gameMode, newState, oldState) {
+		const { name } = newState;
 		if (this.banNames[name] || this.bans[newState.ip]) return;
 		if (!this.players[name]) this.players[name] = new Player(name);
-		this.players[name].updateState(server, newState, oldState, curTime);
+		this.players[name].updateState(gameMode, newState, oldState);
 	}
 
-	flushplayers() {
-		let self = this;
-		return database('players').whereIn('name', _.map(self.players, 'name')).then(rows => {
+	flushPlayers() {
+		const self = this;
+		return database('players').whereIn('name', _.map(self.players, 'name')).then((rows) => {
 			rows = _.keyBy(rows, 'name');
-			return database.transaction(function(trx) {
-				let promises = [];
-				_.each(self.players, player => {
-					promises.push(player.saveStats(rows[player.name], trx));
-					promises.push(player.saveSpy());
+			const players = _.values(self.players);
+			const numPlayers = players.length;
+			return database.transaction(trx =>
+				Promise.all(_.map(players, player => player.saveStats(rows[player.name], trx))))
+				.then(() => {
+					self.oldPlayers = self.players;
+					self.players = {};
+					return numPlayers;
 				});
-				self.players = {};
-				return Promise.all(promises).finally(trx.commit);
-			}).then();
-		}).then(() => {
-			debug("Players flushed");
-		}).catch(error);
+		}).then((numPlayers) => {
+			logInfo(`Players flushed, ${numPlayers} players updated`);
+		})
+			.then(saveSpy)
+			.catch((error) => {
+				logError(`${error}`);
+			});
 	}
 
 	isOnline(name) {
-		return !!this.players[name];
+		return !!(this.players[name] || this.oldPlayers[name]);
 	}
 
 	start() {
-		let self = this;
-		database.select().table('bans').then(players => {
-			_.each(players, function (ban) {
+		const self = this;
+		database.select().table('bans').then((bans) => {
+			_.each(bans, (ban) => {
 				if (ban.ip) self.bans[ban.ip] = true;
-				else if (ban.name) self.banNames[ban.name] = true;
+				if (ban.name) self.banNames[ban.name] = true;
 			});
 		});
 
 		setInterval(() => {
-			this.flushplayers();
-		}, config.savePlayersInt*1000);
+			this.flushPlayers();
+		}, config.tracker.savePlayersInterval * 1000);
+
+		process.on('SIGINT', () => {
+			self.flushPlayers().finally(process.exit);
+		});
 	}
 }
 
-var playerManager = new PlayerManager();
+const playerManager = new PlayerManager();
 export default playerManager;

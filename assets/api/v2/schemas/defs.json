@@ -1,0 +1,138 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"$id": "http://sauertracker.net/api/v2/schema/defs.json",
+	"title": "Enums",
+	"description": "Definitions of various types used",
+	"definitions": {
+		"gameMode": {
+			"type": "string",
+			"enum": [
+				"ffa",
+				"coop_edit",
+				"teamplay",
+				"instagib",
+				"insta_team",
+				"efficiency",
+				"effic_team",
+				"tactics",
+				"tac_team",
+				"capture",
+				"regen_capture",
+				"ctf",
+				"insta_ctf",
+				"protect",
+				"insta_protect",
+				"hold",
+				"insta_hold",
+				"effic_ctf",
+				"effic_protect",
+				"effic_hold",
+				"collect",
+				"insta_collect",
+				"effic_collect"
+			]
+		},
+		"masterMode": {
+			"type": "string",
+			"enum": [
+				"auth",
+				"open",
+				"veto",
+				"locked",
+				"private",
+				"password"
+			]
+		},
+		"playerState": {
+			"type": "number",
+			"minimum": 0,
+			"maximum": 5
+		},
+		"gameType": {
+			"type": "string",
+			"enum": [
+				"duel",
+				"public",
+				"mix",
+				"clanwar",
+				"other",
+				"intern"
+			]
+		},
+		"modeStats": {
+			"type": "object",
+			"properties": {
+				"frags": { "type": "number" },
+				"flags": { "type": "number" },
+				"deaths": { "type": "number" },
+				"tks": { "type": "number" },
+				"kpd": { "type": "number" },
+				"acc": { "type": "number" }
+			},
+			"additionalProperties": false
+		},
+		"player": {
+			"type": "object",
+			"properties": {
+				"name": { "type": "string", "minimumLength": 1, "maximumLength": 15 },
+				"frags": { "type": "number" },
+				"team": { "type": "string", "minimumLength": 1, "maximumLength": 4 },
+				"flags": { "type": "number" },
+				"deaths": { "type": "number" },
+				"kpd": { "type": "number" },
+				"acc": { "type": "number" },
+				"tks": { "type": "number" },
+				"state": { "$ref": "defs.json#/definitions/playerState" },
+				"country": { "type": "string", "minimumLength": 2 },
+				"countryName": { "type": "string" },
+				"ping": { "type": "number" }
+			},
+			"additionalProperties": false
+		},
+		"team": {
+			"type": "object",
+			"properties": {
+				"name": { "type": "string", "minimumLength": 1, "maximumLength": 4 },
+				"score": { "type": "number" }
+			},
+			"additionalProperties": false
+		},
+		"server": {
+			"type": "object",
+			"properties": {
+				"descriptionStyled": { "type": "string" },
+				"description": { "type": "string" },
+				"clients": { "type": "number", "minimum": 0, "maximum": 128 },
+				"gameMode": { "$ref": "defs.json#/definitions/gameMode" },
+				"gameType": { "$ref": "defs.json#/definitions/gameType" },
+				"meta": { "anyOf": [ { "type": "array" }, { "type": "null" } ]},
+				"mapName": { "type": "string" },
+				"country": { "type": "string", "maxLength": 2 },
+				"countryName": { "type": "string" },
+				"host": { "type": "string", "format": "ipv4" },
+				"port": { "type": "number", "minimum": 0, "maximum": 65535 },
+				"info": {
+					"type": "object",
+					"properties": {
+						"website": { "type": "string" },
+						"demourl": { "type": "string" },
+						"banned": { "type": "string" }
+					}
+				}
+			}
+		},
+		"game": {
+			"type": "object",
+			"allOf": [
+				{ "$ref": "defs.json#/definitions/server" },
+				{
+					"properties": {
+						"descriptionStyled": {}, "description": {}, "clients": {}, "gameMode": {}, "gameType": {}, "meta": {}, "mapName": {}, "country": {}, "countryName": {}, "host": {}, "port": {}, "info": {},
+						"id": { "type": "number" },
+						"time": { "type": "string", "format": "date-time" }
+					}
+				}
+			]
+		}
+	}
+}

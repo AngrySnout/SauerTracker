@@ -1,0 +1,22 @@
+extends ./_layout.pug
+
+block vars
+    - section = "home";
+    - title = "Stats";
+
+block content
+    .row.main-container
+        ul.breadcrumbs
+            li.current= title
+        .medium-12.columns.end
+            label.big Last 7 days' statistics:
+            table
+                thead
+                    tr
+                        td(width="25%") Day
+                        td(width="25%", style="text-align: right;") Games
+                tbody
+                    for day in stats
+                        tr
+                            td= (day.date==today)? "Today": ((day.date==yesterday)? "Yesterday": day.date)
+                            td(style="text-align: right;")= day.games||0

@@ -1,4 +1,8 @@
+/* eslint-disable no-console */
+
 import _ from 'lodash';
+import winston from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 import config from '../../tracker.json';
 import vars from '../../vars.json';
@@ -10,7 +14,7 @@ import vars from '../../vars.json';
  *  @returns {string}
  */
 export function ipRepLB(ip, to) {
-	return ip.replace(/\.[\d\*]+$/, '.'+to);
+	return ip.replace(/\.[\d*]+$/, `.${to}`);
 }
 
 /**
@@ -19,7 +23,7 @@ export function ipRepLB(ip, to) {
  *  @returns {number}
  */
 export function round2(val) {
-	return Math.round(val*100)/100;
+	return Math.round(val * 100) / 100;
 }
 
 /**
@@ -28,10 +32,12 @@ export function round2(val) {
  *  @returns {boolean}
  */
 export function isValidIP(ip) {
-	let parts = ip.split('.');
-	if (parts.length != 4) return false;
+	const parts = ip.split('.');
+	if (parts.length !== 4) return false;
 	for (let i = 0; i < 4; i++) {
-		let n = Number(parts[i]);
+		// eslint-disable-next-line no-restricted-globals
+		if (isNaN(parts[i])) return false;
+		const n = Number(parts[i]);
 		if (n < 0 || n > 255) return false;
 	}
 	return true;
@@ -43,44 +49,7 @@ export function isValidIP(ip) {
  *  @returns {boolean}
  */
 export function isValidPort(port) {
-	return port>0 && port<65535;
-}
-
-/**
- *  Prints log message.
- *  @param {any} msg
- */
-export function log(...msg) {
-	console.log(...msg);
-}
-
-/**
- *  If in debug mode print stack stace and exits. Otherwise print error message.
- *  @param {any} msg
- */
-export function error(msg) {
-	log("Error:", msg);
-	if (config.debug) {
-		throw new Error(msg);
-	}
-}
-
-/**
- *  If in debug mode prints msg.
- *  @param {any} msg
- */
-export function debug(...msg) {
-	if (config.debug) log(...msg);
-}
-
-/**
- *  If condition is not truthful, if in debug mode; print stack trace and exits, otherwise; print error message.
- *  @param {any} condition
- *  @param {string} msg
- */
-export function assert(condition, msg) {
-	if (config.debug) throw new Error("Assert failed: "+msg);
-	else log("Assert failed: "+msg);
+	return port > 0 && port < 65535;
 }
 
 /**
@@ -97,8 +66,8 @@ export function escapePostgresLike(text) {
  *  @param {string} name
  */
 export function getClan(name) {
-	let clan = _.find(vars.clans, clan => (name.indexOf(clan.tag) >= 0));
-	return clan&&clan.tag;
+	const clan = _.find(vars.clans, c => (name.indexOf(c.tag) >= 0));
+	return clan && clan.tag;
 }
 
 /**
@@ -112,3 +81,64 @@ ObjectNotFoundError.prototype = Object.create(Error.prototype);
  */
 export function ObjectBannedError() {}
 ObjectBannedError.prototype = Object.create(Error.prototype);
+
+const logger = winston.createLogger({
+	format: winston.format.combine(
+		winston.format.timestamp(),
+		winston.format.printf(info => `${info.timestamp} (${info.level}): ${info.message}`),
+	),
+	transports: [
+		new winston.transports.Console(),
+		new DailyRotateFile({ filename: './logs/log' }),
+	],
+});
+
+/**
+ *  Log error message.
+ */
+export function logError() {
+	logger.log({
+		level: 'error',
+		message: Array.from(arguments).join(' '),
+	});
+}
+
+/**
+ *  Log warning message.
+ */
+export function logWarn() {
+	logger.log({
+		level: 'warn',
+		message: Array.from(arguments).join(' '),
+	});
+}
+
+/**
+ *  Log info message.
+ */
+export function logInfo() {
+	logger.log({
+		level: 'info',
+		message: Array.from(arguments).join(' '),
+	});
+}
+
+/**
+ *  Log verbose message.
+ */
+export function logVerbose() {
+	logger.log({
+		level: 'verbose',
+		message: Array.from(arguments).join(' '),
+	});
+}
+
+/**
+ *  Log debug message.
+ */
+export function logDebug() {
+	logger.log({
+		level: 'debug',
+		message: Array.from(arguments).join(' '),
+	});
+}

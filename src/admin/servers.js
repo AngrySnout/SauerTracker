@@ -7,26 +7,26 @@ export function countServers() {
 
 export function addServer(host, port) {
 	try {
-		let added = serverManager.add(host, port||28785);
+		const added = serverManager.add(host, port || 28785);
 		if (added) {
-			let server = { host: host, port: parseInt(port) };
+			const server = { host, port: parseInt(port, 10) };
 			database('servers').insert(server).then();
 		}
-		return added? "Done!": "Error: server already exists.";
-	} catch(e) {
+		return added ? 'Done!' : 'Error: server already exists.';
+	} catch (e) {
 		return e;
 	}
 }
 
 export function delServer(host, port) {
 	try {
-		let removed = serverManager.remove(host, port, true);
+		const removed = serverManager.remove(host, port, true);
 		if (removed) {
-			let query = database('servers').where({ host: host, port: parseInt(port) });
+			const query = database('servers').where({ host, port: parseInt(port, 10) });
 			query.del().then();
 		}
-		return removed? "Done!": "Error: server not found.";
-	} catch(e) {
+		return removed ? 'Done!' : 'Error: server not found.';
+	} catch (e) {
 		return e;
 	}
 }
@@ -35,25 +35,25 @@ export function findServer(host, port) {
 	return serverManager.find(host, port);
 }
 
-var infos = ['website', 'demourl', 'banned', 'keep'];
+const infos = ['website', 'demourl', 'banned', 'keep'];
 export function setInfo(host, port, key, value) {
 	if (infos.indexOf(key) < 0) throw new Error(`Invalid info param '${key}'.`);
-	var server = serverManager.find(host, port);
-	if (!server) return "Error: server not found.";
+	const server = serverManager.find(host, port);
+	if (!server) return 'Error: server not found.';
 
 	try {
 		server.setInfo(key, value);
-		database('servers').where({ host: host, port: port }).then(rows => {
+		database('servers').where({ host, port }).then((rows) => {
 			if (rows.length) {
 				database('servers').where({ id: rows[0].id }).update(key, value).then();
 			} else {
-				let newserv = { host: host, port: port };
+				const newserv = { host, port };
 				newserv[key] = value;
 				database('servers').insert(newserv).then();
 			}
 		});
-		return "Done!";
-	} catch(e) {
+		return 'Done!';
+	} catch (e) {
 		return e;
 	}
 }

@@ -1,21 +1,20 @@
 import _ from 'lodash';
-import Promise from 'bluebird';
 
 import vars from '../../vars.json';
 
 import app from '../util/web';
-import cache from '../util/cache';
-import serverManager from '../tracker/server-manager';
-import {getServerList} from '../api/v1/servers';
+import redis from '../util/redis';
 
-app.get('/', function (req, res) {
-    getServerList().then(list => {
-        res.render('servers', {servers: _.orderBy(list, 'clients', 'desc'), sortedBy: 'clients', sortOrder: 'desc', vars: vars, noBanner: (req.query.banner==="no")});
-    }).catch(error => {
-        res.status(500).send({ error: error });
-    });
+app.get('/', (req, res) => {
+	redis.getAsync('server-list').then((list) => {
+		res.render('servers', {
+			servers: _.orderBy(list ? JSON.parse(list) : [], 'clients', 'desc'), sortedBy: 'clients', sortOrder: 'desc', vars, noBanner: (req.query.banner === 'no'),
+		});
+	}).catch((err) => {
+		res.status(500).send({ error: err.message });
+	});
 });
 
-app.get('/servers', function (req, res) {
-    res.redirect('/');
+app.get('/servers', (req, res) => {
+	res.redirect('/');
 });

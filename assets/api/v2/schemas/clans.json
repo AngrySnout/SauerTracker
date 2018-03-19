@@ -1,0 +1,27 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"$id": "http://sauertracker.net/api/v2/schema/clans.json",
+	"title": "Clans",
+	"description": "List of clans",
+	"type": "array",
+	"items": {
+		"type": "object",
+		"properties": {
+			"tag": { "type": "string" },
+			"title": { "type": "string" },
+			"website": {
+				"anyOf": [
+					{ "type": "null" },
+					{ "type": "string", "format": "uri" }
+				]
+			},
+			"wins": { "type": "number", "minimum": 0 },
+			"losses": { "type": "number", "minimum": 0 },
+			"ties": { "type": "number", "minimum": 0 },
+			"rate": { "type": "number" },
+			"points": { "type": "number" },
+			"rank": { "type": "number", "minimum": 1 }
+		},
+		"additionalProperties": false
+	}
+}

@@ -1,0 +1,97 @@
+if !server || !server.gameMode
+    | Server not found.
+else
+    .row
+        .large-4.columns
+            h2: a(href=("/server/"+server.host+"/"+server.port)) !{server.descriptionStyled}
+            a#server-address(onclick="showConnect('"+server.host+"', "+server.port+")") #{server.host}:#{server.port}
+            span  |  
+                if (server.country && server.country != "unknown")
+                    img.flag(src="/images/flags/"+server.country+".png")
+                |  #{server.countryName}
+        .large-6.columns.end(style="margin-top: 10px")
+            if server.info.banned
+                span(style="color: red") This server is banned. Reason: #{server.info.banned}.
+            else
+                a(href=("/games/find?host="+server.host+"&port="+server.port)) View other games from this server...
+            br
+            if server.zombie
+                span(style="color: red") Zombie games are not recorded.
+                br
+            if server.gameMode == "coop_edit"
+                span(style="color: red") Coop-edit games are not recorded.
+                br
+            h5(style="margin-top: 10px")
+                | #{server.gameMode}
+                span#map-name  #{server.mapName}
+                if server.masterMode
+                    |  |
+                    span(style=("color: "+vars.materModeColors[server.masterMode]))  #{server.masterMode}
+                if server.gameType
+                    |  | #{server.gameType}
+                if server.timeLeftString
+                    |  | #{server.timeLeftString}
+                    if server.timeLeftString != "intermission"
+                        |  left
+                |  |
+                span(style=(server.clients==server.maxClients? "color: yellow": ""))  #{server.clients}
+                    if server.maxClients
+                        | /#{server.maxClients}
+                |  players
+                if server.time
+                    |  |  
+                    span.date= (server.time instanceof Date)? server.time.toJSON(): server.time
+
+    - var players = _.groupBy(server.players, function (pl) { return pl.state==5; });
+    - var specs = players[true];
+    - players = players[false];
+    - var teamMode = vars.gameModes[server.gameMode].teamMode;
+    - var flagMode = vars.gameModes[server.gameMode].flagMode;
+    - if (!teamMode) {
+    -     teams = [{players: players}];
+    - } else {
+    -     var teams = _.groupBy(players, "team");
+    -     teams = _.orderBy(_.map(server.teams, function (val, key) {
+    -         if (teamMode && !flagMode) val = _.sumBy(teams[key], "frags");
+    -         return {name: key, score: val, players: teams[key]};
+    -     }), "score", "desc");
+    - }
+    - _.each(teams, function (team) { team.players = _.orderBy(team.players, ["flags", "frags", "deaths"], ["desc", "desc", "asc"]); })
+    .row(style="margin-top: 10px")
+        for team, i in teams
+            .medium-6.large-4.columns(class=(i==teams.length-1? "end": undefined))
+                .row
+                    .small-12.columns
+                        if !teamMode && team.players.length
+                            label.big Players
+                        else
+                            label.big
+                                span(class=(team.name=="good"? "primary": "alert")) #{team.name}
+                                |  #{team.score}
+                for player in team.players
+                    .row.bordered-left
+                        .small-1.columns
+                            if flagMode
+                                span.label(class=(player.flags? "success": "secondary")) #{player.flags}
+                        .small-4.columns
+                            a(href=("/player/"+encodeURIComponent(player.name)), class=(player.highlight? "highlighted": null)) #{player.name}
+                        .small-2.columns
+                            | #{player.frags}/#{player.deaths}
+                        .small-5.columns.end
+                            if player.country
+                                img.flag(src=("/images/flags/"+player.country+".png"))
+                                |  
+                                a.no-color(href="/players/find?country="+player.country)= player.country
+
+        if specs
+            .medium-6.large-4.columns.end
+                label.big Spectators
+
+                for spec in specs
+                    .row.bordered-left
+                        .small-4.columns
+                            a(href=("/player/"+spec.name), class=(spec.highlight? "highlighted": null)) #{spec.name}
+                        .small-5.columns.end
+                            if spec.country
+                                img.flag(src=("/images/flags/"+spec.country+".png"))
+                                |  #{spec.country}

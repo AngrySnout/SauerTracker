@@ -1,12 +1,14 @@
-var config = require("./tracker.json");
+/* global module */
 
-var database = {
-	"client": "pg",
-	"connection": config.databaseConnection,
-	"searchPath": "knex,public"
+const config = require('./tracker.json');
+
+const database = {
+	client: 'pg',
+	connection: config.postgresURL,
+	searchPath: 'knex,public',
 };
 
 module.exports = {
 	development: database,
-	production: database
+	production: database,
 };
