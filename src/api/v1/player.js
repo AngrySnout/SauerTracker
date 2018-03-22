@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 import moment from 'moment';
+import countries from 'i18n-iso-countries';
 
 import vars from '../../../vars.json';
 
@@ -82,6 +83,9 @@ export function getPlayer(name) {
 				row.clanTag = pclan.tag;
 			}
 			if (playerManager.isOnline(row.name)) row.online = true;
+			
+			row.countryName = countries.getName(row.country, 'en')||'Unknown';
+			
 			return Promise.all([getTotalGames(name), getLastGames(name), database('playerranks').where({ name }), getDuels(name)])
 				.then(results => ({
 					player: row,

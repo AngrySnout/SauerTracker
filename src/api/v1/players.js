@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 import dgram from 'dgram';
+import countries from 'i18n-iso-countries';
 
 import config from '../../../tracker.json';
 
@@ -25,6 +26,7 @@ export function findPlayers(name, country) {
 			row.kpd = round2(row.frags / row.deaths);
 			row.acc = round2(row.accFrags / row.frags);
 			delete row.accFrags;
+			row.countryName = countries.getName(row.country, 'en')||'Unknown';
 		});
 		return rows;
 	});
