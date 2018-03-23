@@ -35,7 +35,7 @@ export function findGames(params) {
 		}
 	}
 
-	const pagiQuery = query.clone().count('* as count').max('id as max').min('id as min');
+	//const pagiQuery = query.clone().count('* as count').max('id as max').min('id as min');
 
 	if (params.beforeid) query.where('id', '<', params.beforeid);
 	if (params.afterid) query.where('id', '>', params.afterid);
@@ -43,7 +43,7 @@ export function findGames(params) {
 	query.orderBy('id', params.afterid ? 'asc' : 'desc')
 		.limit(params.limit ? Math.min(params.limit, maxPageLimit) : pageLimit);
 
-	return Promise.all([query, pagiQuery]).then((results) => {
+	return Promise.all([query/*, pagiQuery*/]).then((results) => {
 		let games = results[0];
 		if (params.afterid) games = games.reverse();
 		_.each(games, (gm) => {
@@ -58,7 +58,7 @@ export function findGames(params) {
 				if (gm.meta[1] === gm.meta[3]) gm.draw = true;
 			}
 		});
-		return { results: games, stats: results[1][0] };
+		return { results: games, stats: { count: -1, max: 99999999, min: 1 }/*results[1][0]*/ };
 	});
 }
 

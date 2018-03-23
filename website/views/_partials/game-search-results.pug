@@ -51,8 +51,8 @@ if (!noHead)
                                     |  Newer
                             else
                                 | &nbsp;
-                        .small-4.columns.text-center
-                            label.big #{stats.count} results
+                        //- .small-4.columns.text-center
+                        //-     label.big #{stats.count} results
                         .small-4.columns.text-center
                             if nextPageURL
                                 a#next-page-button.hollow.button.secondary(href=(nextPageURL), onclick=("return loadPage('"+nextPageURL+"');")) Older 
