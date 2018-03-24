@@ -90,7 +90,7 @@ export default class Player {
 
 		redis.zincrbyAsync('top-countries', _.sum(_.map(this.modeStats, 'frags')), this.country);
 
-		if (this.name) {
+		if (row && row.name) {
 			return database('players').where('name', this.name).update(stats).transacting(trx)
 				.then();
 		}
