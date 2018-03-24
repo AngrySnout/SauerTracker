@@ -13,5 +13,5 @@ export function addPlayerSpy(name, ip, server) {
 export function saveSpy() {
 	const oldPlayer = players;
 	players = {};
-	return _.map(oldPlayer, (player, name) => _.map(player.ips, (info, ip) => database.raw('insert into spy (name, ip, lastseen, lshost, lsport) values (?, ?, ?, ?, ?) on conflict (name, ip) do update set lastseen = excluded.lastseen, lshost = excluded.lshost, lsport = excluded.lsport', name, ip, info.time, info.host, info.port)));
+	return _.map(oldPlayer, (player, name) => _.map(player, (info, ip) => database.raw('insert into spy (name, ip, lastseen, lshost, lsport) values (?, ?, ?, ?, ?) on conflict (name, ip) do update set lastseen = excluded.lastseen, lshost = excluded.lshost, lsport = excluded.lsport', name, ip, info.time, info.host, info.port)));
 }
