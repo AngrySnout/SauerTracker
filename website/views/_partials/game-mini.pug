@@ -94,4 +94,5 @@ else
                         .small-5.columns.end
                             if spec.country
                                 img.flag(src=("/images/flags/"+spec.country+".png"))
-                                |  #{spec.country}
+                                |  
+                                a.no-color(href="/players/find?country="+spec.country)= spec.country

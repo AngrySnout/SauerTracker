@@ -138,6 +138,7 @@ else
                                 td
                                     if spec.country
                                         img.flag(src=("/images/flags/"+spec.country+".png"))
-                                    |   #{spec.countryName}
+                                    |  
+                                    a.no-color(href="/players/find?country="+spec.country)= spec.countryName
                                 if pings
                                     td #{spec.ping||0}
