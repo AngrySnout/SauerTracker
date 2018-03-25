@@ -208,7 +208,10 @@ export default class Server {
 						playerManager.updatePlayer(this.game.gameMode, player, oldPlayer);
 					}
 
-					addPlayerSpy(player.name, player.ip, { host: this.host, port: this.port });
+					addPlayerSpy(
+						player.name, player.ip, player.country,
+						{ host: this.host, port: this.port },
+					);
 				} else if (respType === -10) { // EXT_PLAYERSTATS_RESP_IDS
 					const newCNs = [];
 					while (st.remaining() > 0) newCNs.push(st.getInt());
