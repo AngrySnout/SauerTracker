@@ -43,7 +43,8 @@
 		{ "tag": "cH'", "title": "Coop Hopes", "website": "https://ch-clan.com" },
 		{ "tag": "|GM|", "title": "German Masters", "website": "http://germanmasters.clanwebsite.com/" },
 		{ "tag": "vVv|", "title": "vVv", "website": "http://vvv-clan.me/" },
-		{ "tag": ">ETK<", "title": "Elite Team Killers", "discord": "https://discordapp.com/invite/5Vs5kmB" }
+		{ "tag": ">ETK<", "title": "Elite Team Killers", "discord": "https://discordapp.com/invite/5Vs5kmB" },
+		{ "tag": "hammer_of_", "title": "THE HAMMER CLAN", "discord": "https://hammerofclan.weebly.com/" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
