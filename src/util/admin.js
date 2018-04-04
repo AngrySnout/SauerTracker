@@ -107,6 +107,10 @@ addhandler('addserv', `${config.irc.prefix}addserv [ip] [port]: adds a new serve
 	bot.message(sendTo, serversAdmin.addServer(host, Number(port)));
 });
 
+addhandler('addhiddenserv', `${config.irc.prefix}addhiddenserv [ip] [port] [fakePort]: adds a new hidden server to the tracker.`, 'o', (sendTo, host, port, fakePort) => {
+	bot.message(sendTo, serversAdmin.addHiddenServer(host, Number(port), fakePort));
+});
+
 addhandler('delserv', `${config.irc.prefix}delserv [ip] [port]: removes a server from the tracker.`, 'o', (sendTo, host, port) => {
 	bot.message(sendTo, serversAdmin.delServer(host, Number(port)));
 });

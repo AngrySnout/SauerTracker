@@ -20,6 +20,17 @@ class ServerManager {
 		return false;
 	}
 
+	addHidden(host, port, fakePort, info) {
+		if (!_.find(this.list, { host: '0.0.0.0', port: parseInt(fakePort, 10) })) {
+			const newServ = new Server(host, port, info);
+			newServ.host = '0.0.0.0';
+			newServ.port = parseInt(fakePort, 10);
+			this.list.push(newServ);
+			return true;
+		}
+		return false;
+	}
+
 	find(host, port) {
 		return _.find(this.list, { host, port });
 	}

@@ -18,6 +18,15 @@ export function addServer(host, port) {
 	}
 }
 
+export function addHiddenServer(host, port, fakePort) {
+	try {
+		const added = serverManager.addHidden(host, port || 28785, fakePort);
+		return added ? 'Done!' : 'Error: server already exists.';
+	} catch (e) {
+		return e;
+	}
+}
+
 export function delServer(host, port) {
 	try {
 		const removed = serverManager.remove(host, port, true);

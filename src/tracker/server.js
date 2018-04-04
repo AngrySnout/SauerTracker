@@ -30,7 +30,9 @@ export default class Server {
 		if (!isValidPort(port)) throw new Error(`Invalid port ${port} provided to Server().`);
 
 		this.host = host;
+		this.realHost = host;
 		this.port = port;
+		this.realPort = port;
 		this.lastReply = new Date().getTime() - 1;
 		this.lastPoll = 0;
 		this.lastExtInfoPoll = 0;
@@ -39,7 +41,7 @@ export default class Server {
 		this.description = '';
 		this.descriptionStyled = '';
 
-		const gipl = geoip.lookup(this.host);
+		const gipl = geoip.lookup(this.realHost);
 		this.country = gipl ? gipl.country : '';
 
 		if (info) {
@@ -68,7 +70,7 @@ export default class Server {
 				socket = null;
 			});
 
-			socket.send(buf, 0, buf.length, this.port + 1, this.host);
+			socket.send(buf, 0, buf.length, this.realPort + 1, this.realHost);
 			if (type === 0) serverPolled(this.host, this.port);
 
 			(sock => setTimeout(() => {
@@ -210,7 +212,7 @@ export default class Server {
 
 					addPlayerSpy(
 						player.name, player.ip, player.country,
-						{ host: this.host, port: this.port },
+						{ host: this.realHost, port: this.realPort },
 					);
 				} else if (respType === -10) { // EXT_PLAYERSTATS_RESP_IDS
 					const newCNs = [];
@@ -235,7 +237,7 @@ export default class Server {
 			}
 			}
 		} catch (err) {
-			logWarn(`Error: Server response parsing failed: ${err} ${this.description} ${this.host} ${this.port} ${type} ${data}`);
+			logWarn(`Error: Server response parsing failed: ${err} ${this.description} ${this.realHost} ${this.realPort} ${type} ${data}`);
 			logWarn(err.stack);
 		}
 	}
