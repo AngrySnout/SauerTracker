@@ -26,7 +26,7 @@ export function findPlayers(name, country) {
 			row.kpd = round2(row.frags / row.deaths);
 			row.acc = round2(row.accFrags / row.frags);
 			delete row.accFrags;
-			row.countryName = countries.getName(row.country, 'en')||'Unknown';
+			row.countryName = countries.getName(row.country, 'en') || 'Unknown';
 		});
 		return rows;
 	});
@@ -229,5 +229,5 @@ export function startTeamBalanceServer() {
 		logInfo(`Team balance server listening on port ${address.port}`);
 	});
 
-	server.bind(config.tracker.teamBalanceServerPort);
+	server.bind(config.website.teamBalanceServerPort);
 }
