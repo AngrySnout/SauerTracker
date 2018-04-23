@@ -31,23 +31,24 @@ function saveGame(server, type) {
 		specs: ` ${_.map(_.filter(server.game.players, { state: 5 }), 'name').join(' ')} `,
 	};
 
+	const game = _.cloneDeep(server.game);
 	return database('games').insert(data).returning('id').then((gameID) => {
 		const promises = [];
-		if (server.game.teams) {
-			if (server.game.gameMode.indexOf('team') >= 0 &&
-					server.game.teams.length === 2 &&
-					server.game.teams.good === 0 &&
-					server.game.teams.evil === 0) {
-				_.each(server.game.players, (player) => {
-					if (player.state !== 5) server.game.teams[player.team] += player.frags;
+		if (game.teams) {
+			if (game.gameMode.indexOf('team') >= 0 &&
+					game.teams.length === 2 &&
+					game.teams.good === 0 &&
+					game.teams.evil === 0) {
+				_.each(game.players, (player) => {
+					if (player.state !== 5) game.teams[player.team] += player.frags;
 				});
 			}
-			_.each(server.game.teams, (score, team) => {
+			_.each(game.teams, (score, team) => {
 				promises.push(saveTeamStats(gameID[0], team, score));
 			});
 		}
-		if (server.game.players) {
-			_.each(server.game.players, (player) => {
+		if (game.players) {
+			_.each(game.players, (player) => {
 				promises.push(savePlayerStats(gameID[0], player));
 			});
 		}
