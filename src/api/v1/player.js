@@ -25,7 +25,7 @@ export function getTotalGames(name) {
 }
 
 export function getDuels(name) {
-	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%${escapePostgresLike(name)}%`)
+	return database.select('meta').from('games').where('gametype', 'duel').where('meta', 'LIKE', `%"${escapePostgresLike(name)}"%`)
 		.then((rows) => {
 			const res = {
 				total: rows.length, wins: 0, losses: 0, ties: 0,
@@ -83,9 +83,9 @@ export function getPlayer(name) {
 				row.clanTag = pclan.tag;
 			}
 			if (playerManager.isOnline(row.name)) row.online = true;
-			
-			row.countryName = countries.getName(row.country, 'en')||'Unknown';
-			
+
+			row.countryName = countries.getName(row.country, 'en') || 'Unknown';
+
 			return Promise.all([getTotalGames(name), getLastGames(name), database('playerranks').where({ name }), getDuels(name)])
 				.then(results => ({
 					player: row,
