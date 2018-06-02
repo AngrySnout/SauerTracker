@@ -45,7 +45,8 @@
 		{ "tag": "vVv|", "title": "vVv", "website": "http://vvv-clan.me/" },
 		{ "tag": ">ETK<", "title": "Elite Team Killers", "discord": "https://discordapp.com/invite/5Vs5kmB" },
 		{ "tag": "hammer_of_", "title": "THE HAMMER CLAN", "discord": "https://hammerofclan.weebly.com/" },
-		{ "tag": "|tee|", "title": "tee" }
+		{ "tag": "|tee|", "title": "tee" },
+		{ "tag": "6.0'", "title": "6.0'" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
