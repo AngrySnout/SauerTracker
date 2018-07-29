@@ -27,6 +27,10 @@ block content
                         br
                         if info.website
                             label.big Website: <a href=#{info.website}>#{info.website}</a>
+                            if info.discord
+                                br
+                        if info.discord
+                            label.big Discord: <a href=#{info.discord}>#{info.discord}</a>
                         br
                                     
                         if bannerURL
@@ -45,7 +49,7 @@ block content
                                         td(colspan=3) Recently seen members
                                 tbody
                                     - var chunks = _.chunk(members, 3);
-                                    - if (chunks[chunks.length-1].length < 3) {
+                                    - if (chunks[chunks.length-1] && chunks[chunks.length-1].length < 3) {
                                     -   for (var i = chunks[chunks.length-1].length; i < 3; i++) {
                                     -       chunks[chunks.length-1].push({ name: "" });
                                     -   }
