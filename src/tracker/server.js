@@ -14,9 +14,9 @@ import { parseGameInfo259, parsePlayerExtInfo105, parseTeamsExtInfo105 } from '.
 import { serverPolled, serverReplied } from '../util/metrics';
 
 const typeBuffers = [
-	new Buffer('8001', 'hex'),
-	new Buffer('0001ff', 'hex'), // EXT_PLAYERSTATS -1
-	new Buffer('0002', 'hex'), // EXT_TEAMSCORE
+	new Buffer.from('01', 'hex'),
+	new Buffer.from('0001ff', 'hex'), // EXT_PLAYERSTATS -1
+	new Buffer.from('0002', 'hex'), // EXT_TEAMSCORE
 ];
 
 const POLL_PING = 0;
@@ -156,7 +156,7 @@ export default class Server {
 
 	parseReply(data, type, time) {
 		try {
-			const st = new Packet(data, (type === 1) ? 3 : 2);
+			const st = new Packet(data, typeBuffers[type].length);
 
 			// eslint-disable-next-line default-case
 			switch (type) {
