@@ -40,6 +40,23 @@ app.use((req, res, next) => {
 		res.setHeader('Expires', '0');
 	}
 
+	// Scramble all IP addresses for some people
+	let ipAddress = req.headers['x-forwarded-for'] || req.ip;
+	if (ipAddress.substr(0, 7) == "::ffff:") {
+		ipAddress = ipAddress.substr(7)
+	}
+	if (ipAddress.startsWith('173.80.85.')) {
+		let send = res.send;
+		res.send = function (string) {
+			let body = string instanceof Buffer ? string.toString() : string;
+			body = body.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/g, function (w, a, b, c, d) {
+				d = parseInt(d)+1;
+				return `${c}.${b}.${a}.${d}`;
+			});
+			send.call(this, body);
+		};
+	}
+
 	next();
 });
 
