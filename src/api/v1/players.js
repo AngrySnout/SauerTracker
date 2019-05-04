@@ -43,10 +43,11 @@ export function makeTeams(names, mode, map) {
 
 	// Get average number of frags and of flags per game for each player for selected map and mode
 	let query1 = database.avg('frags as avgFrags').avg('flags as avgFlags').select('stats.name').from('stats')
-		.join('games', 'games.id', 'stats.game');
+		.join('games', 'games.id', 'stats.game')
+		.where('gametype', 'mix');
 	if (mode) query1 = query1.where('gamemode', mode);
 	// if (map) query1 = query1.where('map', map);
-	query1 = query1.whereRaw('games.timestamp > CURRENT_DATE - INTERVAL \'1 months\'').whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name');
+	query1 = query1.whereRaw('games.timestamp > CURRENT_DATE - INTERVAL \'3 months\'').whereIn('stats.name', names).whereNot('stats.state', 5).groupBy('stats.name');
 
 	// Get average number of frags and of flags per game for selected mode and map
 	let query2 = database.avg('frags as avgFrags').avg('flags as avgFlags').from('stats').join('games', 'games.id', 'stats.game');
@@ -206,11 +207,9 @@ export function startTeamBalanceServer() {
 		if (s) mode = s;
 		s = st.getString();
 		if (s) map = s;
-	    console.log('message received...', names, mode, map);
 
 		makeTeams(names, mode, map)
 			.then((teams) => {
-                console.log('message sent...', teams);
 				// eslint-disable-next-line new-cap
 				const buf = new Buffer.alloc(1024);
 				const p = new Packet(buf);
