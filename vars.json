@@ -50,7 +50,8 @@
 		{ "tag": "[sQ]", "title": "sQuare up", "website": "http://sqclan.com/" },
 		{ "tag": "]RS[", "title": "Rocket Shooters" },
 		{ "tag": "sync'", "title": "sync'" },
-		{ "tag": "|-ReX-|", "title": "|-ReX-|" }
+		{ "tag": "|-ReX-|", "title": "|-ReX-|" },
+		{ "tag": "rse|", "title": "rse|" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
