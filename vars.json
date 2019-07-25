@@ -51,7 +51,8 @@
 		{ "tag": "]RS[", "title": "Rocket Shooters" },
 		{ "tag": "sync'", "title": "sync'" },
 		{ "tag": "|-ReX-|", "title": "|-ReX-|" },
-		{ "tag": "rse|", "title": "rse|" }
+		{ "tag": "rse|", "title": "rse|" },
+		{ "tag": "}TC{", "title": "}TC{" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
