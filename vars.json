@@ -53,7 +53,8 @@
 		{ "tag": "|-ReX-|", "title": "|-ReX-|" },
 		{ "tag": "rse|", "title": "rse|" },
 		{ "tag": "}TC{", "title": "}TC{" },
-		{ "tag": ".hpp", "title": "High Performance People" }
+		{ "tag": ".hpp", "title": "High Performance People" },
+		{ "tag": ".asp", "title": "aspire" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
