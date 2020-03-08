@@ -5,7 +5,6 @@ import app from '../../util/web';
 import { round2, escapePostgresLike } from '../../util/util';
 import database from '../../util/database';
 import playerManager from '../../tracker/player-manager';
-import { validatePlayers } from './schema';
 
 export function findPlayers(name, country) {
 	if (typeof name === 'undefined') name = '';
@@ -65,6 +64,6 @@ export function findPlayers(name, country) {
 
 app.get('/api/v2/players/find', (req, res) => {
 	findPlayers(req.query.name, req.query.country)
-		.then((results) => { validatePlayers(results); res.send(results); })
+		.then((results) => { res.send(results); })
 		.catch((err) => { res.status(500).send({ error: err.message }); });
 });

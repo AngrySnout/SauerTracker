@@ -7,7 +7,6 @@ import playerManager from '../../tracker/player-manager';
 import database from '../../util/database';
 import { getTotalGames, getDuels } from '../v1/player';
 import { round2, getClan, ObjectNotFoundError, ObjectBannedError } from '../../util/util';
-import { validatePlayer } from './schema';
 
 export function getLastGames(name) {
 	return database.select('games.id', 'games.host', 'games.port', 'games.serverdesc as description', 'games.gamemode as gameMode', 'games.map as mapName', 'games.gametype as gameTypea', 'games.meta', 'games.timestamp as time', 'stats.flags', 'stats.frags', 'stats.deaths', 'stats.tks', 'stats.kpd', 'stats.acc').from('stats').join('games', 'games.id', 'stats.game').where('stats.name', name)
@@ -100,7 +99,6 @@ export function getPlayer(name) {
 app.get('/api/v2/player/:name', (req, res) => {
 	getPlayer(req.params.name)
 		.then((result) => {
-			validatePlayer(result);
 			res.send(result);
 		})
 		.catch(ObjectNotFoundError, () => { res.status(404).send({ error: 'No player found with this name.' }); })

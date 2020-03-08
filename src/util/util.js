@@ -4,7 +4,7 @@ import _ from 'lodash';
 import winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-import config from '../../tracker.json';
+import config from '../../config.json';
 import vars from '../../vars.json';
 
 /**
@@ -14,7 +14,7 @@ import vars from '../../vars.json';
  *  @returns {string}
  */
 export function ipRepLB(ip, to) {
-	return ip.replace(/\.[\d*]+$/, `.${to}`);
+  return ip.replace(/\.[\d*]+$/, `.${to}`);
 }
 
 /**
@@ -23,7 +23,7 @@ export function ipRepLB(ip, to) {
  *  @returns {number}
  */
 export function round2(val) {
-	return Math.round(val * 100) / 100;
+  return Math.round(val * 100) / 100;
 }
 
 /**
@@ -32,15 +32,15 @@ export function round2(val) {
  *  @returns {boolean}
  */
 export function isValidIP(ip) {
-	const parts = ip.split('.');
-	if (parts.length !== 4) return false;
-	for (let i = 0; i < 4; i++) {
-		// eslint-disable-next-line no-restricted-globals
-		if (isNaN(parts[i])) return false;
-		const n = Number(parts[i]);
-		if (n < 0 || n > 255) return false;
-	}
-	return true;
+  const parts = ip.split('.');
+  if (parts.length !== 4) return false;
+  for (let i = 0; i < 4; i++) {
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(parts[i])) return false;
+    const n = Number(parts[i]);
+    if (n < 0 || n > 255) return false;
+  }
+  return true;
 }
 
 /**
@@ -49,7 +49,7 @@ export function isValidIP(ip) {
  *  @returns {boolean}
  */
 export function isValidPort(port) {
-	return port > 0 && port < 65535;
+  return port > 0 && port < 65535;
 }
 
 /**
@@ -58,7 +58,7 @@ export function isValidPort(port) {
  *  @returns {string}
  */
 export function escapePostgresLike(text) {
-	return String(text).replace(/[_%]/g, s => `\\${s}`);
+  return String(text).replace(/[_%]/g, s => `\\${s}`);
 }
 
 /**
@@ -66,8 +66,8 @@ export function escapePostgresLike(text) {
  *  @param {string} name
  */
 export function getClan(name) {
-	const clan = _.find(vars.clans, c => (name.indexOf(c.tag) >= 0));
-	return clan && clan.tag;
+  const clan = _.find(vars.clans, c => name.indexOf(c.tag) >= 0);
+  return clan && clan.tag;
 }
 
 /**
@@ -83,62 +83,64 @@ export function ObjectBannedError() {}
 ObjectBannedError.prototype = Object.create(Error.prototype);
 
 const logger = winston.createLogger({
-	format: winston.format.combine(
-		winston.format.timestamp(),
-		winston.format.printf(info => `${info.timestamp} (${info.level}): ${info.message}`),
-	),
-	transports: [
-		new winston.transports.Console(),
-		new DailyRotateFile({ filename: './logs/log' }),
-	],
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(
+      info => `${info.timestamp} (${info.level}): ${info.message}`
+    )
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new DailyRotateFile({ filename: './logs/log' }),
+  ],
 });
 
 /**
  *  Log error message.
  */
 export function logError() {
-	logger.log({
-		level: 'error',
-		message: Array.from(arguments).join(' '),
-	});
+  logger.log({
+    level: 'error',
+    message: Array.from(arguments).join(' '),
+  });
 }
 
 /**
  *  Log warning message.
  */
 export function logWarn() {
-	logger.log({
-		level: 'warn',
-		message: Array.from(arguments).join(' '),
-	});
+  logger.log({
+    level: 'warn',
+    message: Array.from(arguments).join(' '),
+  });
 }
 
 /**
  *  Log info message.
  */
 export function logInfo() {
-	logger.log({
-		level: 'info',
-		message: Array.from(arguments).join(' '),
-	});
+  logger.log({
+    level: 'info',
+    message: Array.from(arguments).join(' '),
+  });
 }
 
 /**
  *  Log verbose message.
  */
 export function logVerbose() {
-	logger.log({
-		level: 'verbose',
-		message: Array.from(arguments).join(' '),
-	});
+  logger.log({
+    level: 'verbose',
+    message: Array.from(arguments).join(' '),
+  });
 }
 
 /**
  *  Log debug message.
  */
 export function logDebug() {
-	logger.log({
-		level: 'debug',
-		message: Array.from(arguments).join(' '),
-	});
+  logger.log({
+    level: 'debug',
+    message: Array.from(arguments).join(' '),
+  });
 }

@@ -5,7 +5,6 @@ import { ObjectNotFoundError } from '../../util/util';
 
 import database from '../../util/database';
 import serverManager from '../../tracker/server-manager';
-import { validateServer } from './schema';
 
 export function findServer(host, port) {
 	port = parseInt(port, 10);
@@ -28,7 +27,7 @@ export function findServer(host, port) {
 
 app.get('/api/v2/server/:host/:port', (req, res) => {
 	findServer(req.params.host, req.params.port)
-		.then((server) => { validateServer(server); res.send(server); })
+		.then((server) => { res.send(server); })
 		.catch(ObjectNotFoundError, () => { res.status(404).send({ error: 'Server not found.' }); })
 		.catch((err) => { res.status(500).send({ error: err }); });
 });

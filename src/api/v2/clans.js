@@ -8,7 +8,6 @@ import app from '../../util/web';
 import cache from '../../util/cache';
 import { logError, round2 } from '../../util/util';
 import redis from '../../util/redis';
-import { validateClans } from './schema';
 
 cache.set('clans-v2', 10 * 60 * 1000, () => Promise.join(
 	redis.hgetallAsync('clan-games'), redis.hgetallAsync('clan-wins'), redis.hgetallAsync('clan-losses'),
@@ -46,7 +45,6 @@ export function getClans() {
 
 app.get('/api/v2/clans', (req, res) => {
 	getClans().then((clans) => {
-		validateClans(clans);
 		res.send({ clans });
 	}).catch((err) => {
 		logError(err);
