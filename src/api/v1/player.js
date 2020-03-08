@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 import moment from 'moment';
-import countries from 'i18n-iso-countries';
 
 import vars from '../../../vars.json';
 
@@ -17,6 +16,7 @@ import {
 } from '../../util/util';
 import playerManager from '../../tracker/player-manager';
 import database from '../../util/database';
+import { getCountryName } from '../../util/country';
 
 function populateRanks() {
   database
@@ -138,7 +138,7 @@ export function getPlayer(name) {
         }
         if (playerManager.isOnline(row.name)) row.online = true;
 
-        row.countryName = countries.getName(row.country, 'en') || 'Unknown';
+        row.countryName = getCountryName(row.country) || 'Unknown';
 
         return Promise.all([
           getTotalGames(name),

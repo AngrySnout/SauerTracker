@@ -1,13 +1,12 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
-import countries from 'i18n-iso-countries';
 import moment from 'moment';
 
 import { escapePostgresLike } from '../../util/util';
 import app from '../../util/web';
 import database from '../../util/database';
 import serverManager from '../../tracker/server-manager';
-import getCountry from '../../util/country';
+import getCountry, { getCountryName } from '../../util/country';
 
 const pageLimit = 20;
 const maxPageLimit = 1000;
@@ -123,7 +122,7 @@ export function findGames(params) {
       }
       gm.country = getCountry(gm.host);
       gm.countryName = gm.country
-        ? countries.getName(gm.country, 'en')
+        ? getCountryName(gm.country)
         : 'Unknown';
     });
     results[1][0].count = parseInt(results[1][0].count, 10);

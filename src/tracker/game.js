@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
-import countries from 'i18n-iso-countries';
 
 import config from '../../config.json';
 import vars from '../../vars.json';
@@ -8,6 +7,7 @@ import vars from '../../vars.json';
 import { round2, logInfo, logError, getClan } from '../util/util';
 import database from '../util/database';
 import redis from '../util/redis';
+import { getCountryName } from '../util/country';
 
 function saveTeamStats(gameID, team, score) {
   return database('scores').insert({ game: gameID, team, score });
@@ -229,7 +229,7 @@ function serializePlayer(pl) {
     'country',
     'ping',
   ]);
-  ret.countryName = countries.getName(pl.country, 'en');
+  ret.countryName = getCountryName(pl.country);
   return ret;
 }
 

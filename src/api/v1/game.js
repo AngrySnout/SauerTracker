@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
-import countries from 'i18n-iso-countries';
 
 import app from '../../util/web';
 import { round2, ObjectNotFoundError } from '../../util/util';
 import database from '../../util/database';
 import serverManager from '../../tracker/server-manager';
-import getCountry from '../../util/country';
+import getCountry, { getCountryName } from '../../util/country';
 
 export function getGameScores(id) {
   return database('scores')
@@ -34,7 +33,7 @@ export function getGameStats(id) {
         if (!plr.country || plr.country === 'unknown') {
           plr.country = '';
           plr.countryName = 'Unknown';
-        } else plr.countryName = countries.getName(plr.country, 'en');
+        } else plr.countryName = getCountryName(plr.country);
         if (!plr.kpd) plr.kpd = round2(plr.frags / Math.max(plr.deaths, 1));
       });
       return rows;
@@ -89,7 +88,7 @@ export function getGame(id) {
     } else {
       locals.country = getCountry(results[0].host);
       locals.countryName = locals.country
-        ? countries.getName(locals.country, 'en')
+        ? getCountryName(locals.country)
         : 'Unknown';
     }
 

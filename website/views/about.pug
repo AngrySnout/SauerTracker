@@ -70,9 +70,9 @@ block content
                                     if topCountries[i] && topCountries[i] != "unknown"
                                         img.flag(src=("/images/flags/"+topCountries[i]+".png"))
                                         |  
-                                        a(href="/players/find?country="+topCountries[i])= countryName(topCountries[i], 'en')
+                                        a(href="/players/find?country="+topCountries[i])= countryName(topCountries[i])
                                     else
-                                        = countryName(topCountries[i], 'en')
+                                        = countryName(topCountries[i])
                                 td= topCountries[i+1]
         .large-4.columns
             if topServers

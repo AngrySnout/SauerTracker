@@ -1,7 +1,6 @@
 /* eslint-disable no-buffer-constructor */
 import dgram from 'dgram';
 import _ from 'lodash';
-import countries from 'i18n-iso-countries';
 
 import config from '../../config.json';
 
@@ -15,7 +14,7 @@ import {
   parseTeamsExtInfo105,
 } from './protocols/259';
 import { serverPolled, serverReplied } from '../util/metrics';
-import getCountry from '../util/country';
+import getCountry, { getCountryName } from '../util/country';
 
 const typeBuffers = [
   new Buffer.from('01', 'hex'),
@@ -287,7 +286,7 @@ export default class Server {
       descriptionStyled: this.descriptionStyled,
       description: this.description,
       country: this.country,
-      countryName: countries.getName(this.country, 'en'),
+      countryName: getCountryName(this.country),
       host: this.host,
       port: this.port,
     };

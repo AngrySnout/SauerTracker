@@ -84,7 +84,7 @@ export function parsePlayerExtInfo105(p) {
   ipbuf[3] = 0;
   const ip = ipbuf.readUInt32BE(0);
   player.ip = formatIP(ip);
-  const country = getCountry(ip);
+  player.country = getCountry(player.ip);
 
   return player;
 }

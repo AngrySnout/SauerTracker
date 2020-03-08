@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
-import countries from 'i18n-iso-countries';
 import moment from 'moment';
 
 import app from '../util/web';
@@ -9,6 +8,7 @@ import database from '../util/database';
 import playerManager from '../tracker/player-manager';
 import { findPlayers } from '../api/v1/players';
 import playersTemplate from '../../website/views/players.pug';
+import { getCountryName } from '../util/country';
 
 cache.set('top-players', 60 * 60 * 1000, () =>
   database
@@ -283,7 +283,7 @@ cache.set('player-countries', 2 * 60 * 60 * 1000, () =>
         if (!country.country) sumUnknown += parseInt(country.count, 10);
         else {
           country.name =
-            countries.getName(country.country, 'en') ||
+            getCountryName(country.country) ||
             country.country ||
             'Unknown';
           newList.push(country);

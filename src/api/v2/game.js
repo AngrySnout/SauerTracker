@@ -1,12 +1,11 @@
 import Promise from 'bluebird';
-import countries from 'i18n-iso-countries';
 
 import app from '../../util/web';
 import { ObjectNotFoundError } from '../../util/util';
 import serverManager from '../../tracker/server-manager';
 import { getGameRow, getGameStats } from '../v1/game';
 import database from '../../util/database';
-import getCountry from '../../util/country';
+import getCountry, { getCountryName } from '../../util/country';
 
 export function getGameScores(id) {
   return database('scores')
@@ -44,7 +43,7 @@ export function getGame(id) {
 
     locals.country = getCountry(results[0].host);
     locals.countryName = locals.country
-      ? countries.getName(locals.country, 'en')
+      ? getCountryName(locals.country)
       : 'Unknown';
 
     locals.meta = [];

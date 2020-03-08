@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
-import countries from 'i18n-iso-countries';
 
 import app from '../util/web';
 import cache from '../util/cache';
@@ -8,6 +7,7 @@ import { logError } from '../util/util';
 import database from '../util/database';
 import redis from '../util/redis';
 import aboutTemplate from '../../website/views/about.pug';
+import { getCountryName } from '../util/country';
 
 cache.set('top-10-players', 60 * 60 * 1000, () =>
   database('players')
@@ -68,7 +68,7 @@ app.get('/about', (req, res) => {
         topCountries: results[1],
         topServers: results[2],
         serverNames: results[3],
-        countryName: countries.getName,
+        countryName: getCountryName,
       });
     })
     .catch(err => {

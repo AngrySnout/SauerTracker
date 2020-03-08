@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import countries from 'i18n-iso-countries';
 
 import vars from '../../../vars.json';
 import app from '../../util/web';
@@ -7,6 +6,7 @@ import playerManager from '../../tracker/player-manager';
 import database from '../../util/database';
 import { getTotalGames, getDuels } from '../v1/player';
 import { round2, getClan, ObjectNotFoundError, ObjectBannedError } from '../../util/util';
+import { getCountryName } from '../../util/country';
 
 export function getLastGames(name) {
 	return database.select('games.id', 'games.host', 'games.port', 'games.serverdesc as description', 'games.gamemode as gameMode', 'games.map as mapName', 'games.gametype as gameTypea', 'games.meta', 'games.timestamp as time', 'stats.flags', 'stats.frags', 'stats.deaths', 'stats.tks', 'stats.kpd', 'stats.acc').from('stats').join('games', 'games.id', 'stats.game').where('stats.name', name)
@@ -37,7 +37,7 @@ export function getPlayer(name) {
 
 			row.online = playerManager.isOnline(row.name);
 			row.country = row.country || '';
-			row.countryName = countries.getName(row.country, 'en');
+			row.countryName = getCountryName(row.country);
 			row.kpd = round2(row.frags / row.deaths);
 			row.acc = round2(row.accFrags / row.frags);
 			delete row.accFrags;
