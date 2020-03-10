@@ -8,9 +8,9 @@ const chartDataMonth = {
   labels: [],
   datasets: [
     {
-      label: 'Player Activity Month chart',
-      fillColor: 'rgba(220,220,220,0.2)',
-      strokeColor: 'rgba(220,220,220,1)',
+      label: 'Games/Day',
+      backgroundColor: 'rgba(220,220,220,0.2)',
+      borderColor: 'rgba(220,220,220,1)',
       pointColor: 'rgba(220,220,220,1)',
       pointStrokeColor: '#fff',
       pointHighlightFill: '#fff',
@@ -76,7 +76,12 @@ function updateMonthChartData(activity) {
   const ctx = $('#player-activity-month')
     .get(0)
     .getContext('2d');
-  new Chart(ctx).Line(chartDataMonth, monthOptions);
+  const config = {
+    type: 'line',
+    data: chartDataMonth,
+    options: monthOptions,
+  };
+  new Chart(ctx, config);
 }
 
 $.get(

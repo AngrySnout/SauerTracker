@@ -16,9 +16,9 @@ const chartDataDay = {
   labels: clampTimes,
   datasets: [
     {
-      label: 'Server History Day chart',
-      fillColor: 'rgba(220,220,220,0.2)',
-      strokeColor: 'rgba(220,220,220,1)',
+      label: 'Players/Hour',
+      backgroundColor: 'rgba(220,220,220,0.2)',
+      borderColor: 'rgba(220,220,220,1)',
       pointColor: 'rgba(220,220,220,1)',
       pointStrokeColor: '#fff',
       pointHighlightFill: '#fff',
@@ -31,9 +31,9 @@ const chartDataMonth = {
   labels: [],
   datasets: [
     {
-      label: 'Server History Month chart',
-      fillColor: 'rgba(220,220,220,0.2)',
-      strokeColor: 'rgba(220,220,220,1)',
+      label: 'Games/Day',
+      backgroundColor: 'rgba(220,220,220,0.2)',
+      borderColor: 'rgba(220,220,220,1)',
       pointColor: 'rgba(220,220,220,1)',
       pointStrokeColor: '#fff',
       pointHighlightFill: '#fff',
@@ -117,7 +117,12 @@ function updateDayChartData(activity) {
   const ctx = $('#server-activity-day')
     .get(0)
     .getContext('2d');
-  new Chart(ctx).Line(chartDataDay, dayOptions);
+  const config = {
+    type: 'line',
+    data: chartDataDay,
+    options: dayOptions,
+  };
+  new Chart(ctx, config);
 }
 
 function updateMonthChartData(activity) {
@@ -157,7 +162,12 @@ function updateMonthChartData(activity) {
   const ctx = $('#server-activity-month')
     .get(0)
     .getContext('2d');
-  new Chart(ctx).Line(chartDataMonth, monthOptions);
+  const config = {
+    type: 'line',
+    data: chartDataMonth,
+    options: monthOptions,
+  };
+  new Chart(ctx, config);
 }
 
 export function loadCharts(host, port) {
