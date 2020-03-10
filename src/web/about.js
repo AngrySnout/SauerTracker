@@ -63,13 +63,13 @@ app.get('/about', (req, res) => {
         });
     })
     .then(results => {
-      res.render('about', {
+      res.send(aboutTemplate({
         topPlayers: results[0],
         topCountries: results[1],
         topServers: results[2],
         serverNames: results[3],
         countryName: getCountryName,
-      });
+      }));
     })
     .catch(err => {
       logError(err);
