@@ -185,7 +185,8 @@ export default class Server {
           const nattr = st.getInt();
           const gameVersion = st.getInt();
 
-          if (gameVersion === 259) {
+          if (gameVersion === 259 || gameVersion === 260) { // versions 259 and 260 are fully compatible
+            this.version = gameVersion;
             this.lastReply = time;
             const oldGame = this.game;
             const serverInfo = parseGameInfo259(st, nclients, nattr, this);
@@ -289,6 +290,7 @@ export default class Server {
       countryName: getCountryName(this.country),
       host: this.host,
       port: this.port,
+      version: this.version,
     };
     if (expanded) res.info = this.info;
 

@@ -1,7 +1,8 @@
 import { filter } from 'fuzzaldrin';
-import $ from 'jquery';
 import _ from 'lodash';
 import vars from '../../vars.json';
+
+const $ = window.jQuery;
 
 import serverListTemplate from 'pug-loader!../views/_partials/server-list.pug';
 import clansOnlineTemplate from 'pug-loader!../views/_partials/clans-online.pug';

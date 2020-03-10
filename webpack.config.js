@@ -20,4 +20,23 @@ const serverConfig = {
   },
 };
 
-module.exports = [serverConfig];
+const websiteConfig = {
+  entry: glob_entries('./website/js/[^_]*.js'),
+  output: {
+    path: path.resolve(__dirname, 'assets/js'),
+    filename: '[name].js',
+  },
+  module: {
+    rules: [{ test: /\.pug/, use: 'pug-loader' }],
+    rules: [
+      { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
+    ],
+  },
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all',
+  //   },
+  // },
+};
+
+module.exports = [serverConfig, websiteConfig];

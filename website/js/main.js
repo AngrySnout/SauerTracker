@@ -1,8 +1,9 @@
-import $ from 'jquery';
 import moment from 'moment';
 import _ from 'lodash';
 
-import '../styles/styles.scss';
+const $ = window.jQuery;
+
+// import '../styles/styles.scss';
 
 window.dateReflow = function() {
   const now = moment();

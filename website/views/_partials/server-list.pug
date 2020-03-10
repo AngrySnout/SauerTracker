@@ -28,7 +28,10 @@ table.scroll#table-contents(width="100%")
         for server in servers
             if (!hideEmpty || server.clients > 0)
                 tr.unclickable(class=(server.highlight? "highlighted": undefined))
-                    td.nowrap.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")): a.disable-default(href="/server/"+server.host+"/"+server.port) !{server.description? server.descriptionStyled: server.host+":"+server.port}
+                    td.nowrap.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")): a.disable-default(href="/server/"+server.host+"/"+server.port)
+                      | !{server.description? server.descriptionStyled: server.host+":"+server.port}
+                      if server.version && server.version !== 259
+                        span.badge.small.primary(style="color: white; margin-left: 0.5rem;") SVN
                     td.clickable(style=(server.isFull? "color: yellow;": ""), onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.clients}/#{server.maxClients}
                     td.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.gameMode}
                     td.nowrap.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.mapName}
