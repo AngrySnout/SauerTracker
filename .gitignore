@@ -10,3 +10,4 @@ tracker.json
 src/web/compat.js
 npm-debug.log
 logs/
+dist/
