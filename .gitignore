@@ -2,7 +2,6 @@ bower_components/
 node_modules/
 build/
 assets/js/
-assets/styles/
 tmp/
 coverage/
 esdoc/
