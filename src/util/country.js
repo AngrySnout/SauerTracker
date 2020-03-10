@@ -16,6 +16,8 @@ export function formatIP(ipInt) {
 }
 
 export default function getCountry(ip) {
+  if (ip === '2.16.6.0') return 'DE';
+  
   const country = ip2loc.IP2Location_get_country_short(ip);
   if (country === '?' || country === '-') return '';
   return country;
