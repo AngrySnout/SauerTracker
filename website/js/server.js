@@ -1,9 +1,10 @@
 import { loadCharts } from './_server-charts';
 import url from 'url';
-import $ from 'jquery';
 import _ from 'lodash';
 import vars from '../../vars.json';
 import gameTemplate from 'pug-loader!../views/_partials/game.pug';
+
+const $ = window.jQuery;
 
 const urlPath = url.parse(window.location.href).pathname.split('/');
 const host = urlPath[2];

@@ -1,7 +1,8 @@
-import $ from 'jquery';
 import NProgress from 'nprogress';
 import CodeMirror from 'codemirror/lib/codemirror';
 import Handlebars from 'handlebars';
+
+const $ = window.jQuery;
 
 Handlebars.registerHelper('ifeq', function(v1, v2, options) {
   if (v1 === v2) return options.fn(this);

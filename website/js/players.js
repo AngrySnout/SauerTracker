@@ -1,6 +1,7 @@
 import NProgress from 'nprogress';
-import $ from 'jquery';
 import _ from 'lodash';
+
+const $ = window.jQuery;
 
 import searchResultsTemplate from 'pug-loader!../views/_partials/player-search-results.pug';
 

@@ -1,4 +1,4 @@
-import $ from 'jquery';
+const $ = window.jQuery;
 
 import similarGamesTemplate from 'pug-loader!../views/_partials/similar-games.pug';
 

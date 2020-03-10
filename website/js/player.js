@@ -1,7 +1,8 @@
 import Chart from 'chart.js';
 import NProgress from 'nprogress';
-import $ from 'jquery';
 import moment from 'moment';
+
+const $ = window.jQuery;
 
 const chartDataMonth = {
   labels: [],

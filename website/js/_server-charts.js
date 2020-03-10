@@ -1,7 +1,8 @@
 import NProgress from 'nprogress';
-import $ from 'jquery';
 import moment from 'moment';
 import Chart from 'chart.js';
+
+const $ = window.jQuery;
 
 // TODO: this file could use some cleaning up
 

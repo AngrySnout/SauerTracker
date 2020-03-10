@@ -1,8 +1,9 @@
 import NProgress from 'nprogress';
-import $ from 'jquery';
 import _ from 'lodash';
 import url from 'url';
 const { dateReflow, disableDefault } = window;
+
+const $ = window.jQuery;
 
 const vars = require('../../vars.json');
 
