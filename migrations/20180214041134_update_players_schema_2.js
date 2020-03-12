@@ -1,6 +1,5 @@
-
-exports.up = function(knex, Promise) {
-	return knex.raw(`Update players SET
+exports.up = function(knex) {
+  return knex.raw(`Update players SET
 		instastats = json_build_array(
 			instastats::json->0,
 			instastats::json->1,
@@ -16,8 +15,8 @@ exports.up = function(knex, Promise) {
 		)`);
 };
 
-exports.down = function(knex, Promise) {
-	return knex.raw(`Update players SET
+exports.down = function(knex) {
+  return knex.raw(`Update players SET
 		instastats = json_build_array(
 			instastats::json->0,
 			instastats::json->1,

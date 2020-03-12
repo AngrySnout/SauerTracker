@@ -1,6 +1,5 @@
-
-exports.up = function(knex, Promise) {
-	return knex.raw(`
+exports.up = function(knex) {
+  return knex.raw(`
 UPDATE games SET
     gamemode = c.new_name
 FROM (values
@@ -25,8 +24,8 @@ WHERE c.old_name = games.gamemode
 	`);
 };
 
-exports.down = function(knex, Promise) {
-  	return knex.raw(`
+exports.down = function(knex) {
+  return knex.raw(`
 UPDATE games SET
     gamemode = c.new_name
 FROM (values
