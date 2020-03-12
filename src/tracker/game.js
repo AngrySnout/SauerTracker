@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 
-import config from '../../config.json';
 import vars from '../../vars.json';
 
 import { round2, logInfo, logError, getClan } from '../util/util';
 import database from '../util/database';
 import redis from '../util/redis';
 import { getCountryName } from '../util/country';
+import { getBaseElo } from '../util/config';
 
 function saveTeamStats(gameID, team, score) {
   return database('scores').insert({ game: gameID, team, score });
@@ -106,7 +106,7 @@ export function calcEloChange(eloSelf, eloOther, fragsSelf, fragsOther) {
   return Math.round(
     10 *
       (Math.log(fragsSelf / fragsOther) + Math.log(eloOther / eloSelf)) *
-      (eloSelf / config.tracker.baseElo)
+      (eloSelf / getBaseElo())
   );
 }
 
@@ -132,7 +132,8 @@ export function getGameType(game, threshold) {
     vars.duelModes.indexOf(self.gameMode) >= 0 &&
     vars.lockedMModes.indexOf(self.masterMode) >= 0 &&
     !(vars.gameModes[self.gameMode].teamMode && pls[0].team === pls[1].team) &&
-    pls[0].frags > threshold && pls[1].frags > threshold
+    pls[0].frags > threshold &&
+    pls[1].frags > threshold
   ) {
     pls = _.sortBy(pls, 'frags');
     return ['duel', [pls[0].name, pls[0].frags, pls[1].name, pls[1].frags]];
@@ -290,10 +291,8 @@ export default class Game {
           const plNames = _.map(pls, 'name');
           return getPlayersElo(plNames).then(elos => {
             const elo = [
-              (elos[plNames[0]] && elos[plNames[0]].elo) ||
-                config.tracker.baseElo,
-              (elos[plNames[1]] && elos[plNames[1]].elo) ||
-                config.tracker.baseElo,
+              (elos[plNames[0]] && elos[plNames[0]].elo) || getBaseElo(),
+              (elos[plNames[1]] && elos[plNames[1]].elo) || getBaseElo(),
             ];
             const elod1 = calcEloChange(
               elo[0],

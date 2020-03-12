@@ -1,11 +1,12 @@
 import dgram from 'dgram';
 
-import config from '../../config.json';
-
 import { logInfo, logError } from '../util/util';
+import { getBalancePort } from '../util/config';
 import Packet from '../util/packet';
 
 export default function startTeamBalanceServer() {
+  if (!getBalancePort()) return;
+
   const server = dgram.createSocket('udp4');
 
   server.on('error', err => {
@@ -48,5 +49,5 @@ export default function startTeamBalanceServer() {
     logInfo(`Team balance server listening on port ${address.port}`);
   });
 
-  server.bind(config.website.teamBalanceServerPort);
+  server.bind(getBalancePort());
 }

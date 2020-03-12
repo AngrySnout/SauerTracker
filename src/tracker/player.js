@@ -1,10 +1,10 @@
 import _ from 'lodash';
 
-import config from '../../config.json';
 import vars from '../../vars.json';
 
 import database from '../util/database';
 import redis from '../util/redis';
+import { getBaseElo } from '../util/config';
 
 const emptyStats = {
   frags: 0,
@@ -49,7 +49,7 @@ export function updateRow(name, row, modeStats, country) {
     deaths: row.deaths || 0,
     tks: row.tks || 0,
     accFrags: row.accFrags || 0,
-    elo: row.elo || config.tracker.baseElo,
+    elo: row.elo || getBaseElo(),
     country: row.country || '',
     instastats: row.instastats || '[0,0,0,0,0]',
     efficstats: row.efficstats || '[0,0,0,0,0]',

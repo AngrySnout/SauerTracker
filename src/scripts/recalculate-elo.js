@@ -5,11 +5,11 @@ import Promise from 'bluebird';
 import _ from 'lodash';
 
 import database from '../util/database';
-import config from '../../config.json';
 import { calcEloChange } from '../tracker/game';
+import { getBaseElo } from '../util/config';
 
 database('players')
-  .update({ elo: config.baseElo })
+  .update({ elo: getBaseElo() })
   .then(() => {
     database('games')
       .where({ gametype: 'duel' })
@@ -20,8 +20,8 @@ database('players')
           try {
             const meta = JSON.parse(row.meta);
 
-            if (!(meta[0] in newElos)) newElos[meta[0]] = config.baseElo;
-            if (!(meta[2] in newElos)) newElos[meta[2]] = config.baseElo;
+            if (!(meta[0] in newElos)) newElos[meta[0]] = getBaseElo();
+            if (!(meta[2] in newElos)) newElos[meta[2]] = getBaseElo();
 
             const elod1 = calcEloChange(
               newElos[meta[0]],

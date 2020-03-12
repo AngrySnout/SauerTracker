@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 
-import config from '../../config.json';
-
 import { logInfo, logError } from '../util/util';
 import database from '../util/database';
 import Player from './player';
@@ -70,7 +68,7 @@ class PlayerManager {
 
     setInterval(() => {
       this.flushPlayers();
-    }, config.tracker.savePlayersInterval * 1000);
+    }, 600000);
 
     process.on('SIGINT', () => {
       self.flushPlayers().finally(process.exit);

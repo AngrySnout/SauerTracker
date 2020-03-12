@@ -32,11 +32,6 @@ const websiteConfig = {
       { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
     ],
   },
-  // optimization: {
-  //   splitChunks: {
-  //     chunks: 'all',
-  //   },
-  // },
 };
 
 module.exports = [serverConfig, websiteConfig];
