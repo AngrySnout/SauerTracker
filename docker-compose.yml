@@ -13,6 +13,7 @@ services:
       BASE_ELO: 1200
       MASTER_PORT: 28787
       MASTER_HOST: sauerbraten.org
+      NODE_ENV: production
     entrypoint: './docker-entrypoint.sh'
     command: 'start'
     depends_on:

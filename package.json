@@ -9,7 +9,7 @@
   "scripts": {
     "build": "webpack-cli --mode production",
     "buildDev": "webpack-cli --mode development",
-    "migrate": "NODE_ENV=production knex migrate:latest",
+    "migrate": "knex migrate:latest",
     "start": "node dist/tracker.js",
     "detectClanwars": "node dist/detectClanwars.js",
     "recalculateElo": "node dist/recalculateElo.js"
