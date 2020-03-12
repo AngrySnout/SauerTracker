@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  tracker:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      PORT: 8080
+      BALANCE_PORT: 36581
+      DATABASE_URL: 'postgres://postgres:postgrespassword@postgres:5432/postgres'
+      REDIS_URL: 'redis://redis'
+      BASE_ELO: 1200
+      MASTER_PORT: 28787
+      MASTER_HOST: sauerbraten.org
+    entrypoint: './docker-entrypoint.sh'
+    command: 'start'
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  redis:
+    image: redis
+    restart: always

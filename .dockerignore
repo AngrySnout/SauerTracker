@@ -1,0 +1,14 @@
+bower_components/
+node_modules/
+build/
+assets/js/
+tmp/
+coverage/
+esdoc/
+config.json
+src/web/compat.js
+npm-debug.log
+logs/
+dist/
+docker-compose.yml
+Dockerfile
