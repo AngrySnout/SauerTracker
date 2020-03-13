@@ -1,136 +1,134 @@
 {
-	"clans": [
-		{ "tag": "!s]", "title": "!mpressive Squad", "website": "http://impressivesquad.eu" },
-		{ "tag": "|RB|", "title": "Red Butchers", "website": "http://butchers.su" },
-		{ "tag": ".cS|", "title": "Cube Strikers" },
-		{ "tag": ".rC|", "title": "Rising Cubers", "website": "http://rising-cubers.eu" },
-		{ "tag": "GC1/", "title": "Gamer Class 1"},
-		{ "tag": "vaQ'", "title": "Vulture Attack Squad", "website": "http://vaq-clan.de" },
-		{ "tag": "sp4nk", "title": "sp4nk", "website": "http://sp4nk.net" },
-		{ "tag": "[tBMC]", "title": "The Blue Monkey Cult", "website": "http://thebluemonkeycult.webs.com" },
-		{ "tag": "oo|", "title": "Ogros", "website": "http://ogros.org" },
-		{ "tag": "w00p|", "title": "w00p", "website": "http://woop.us" },
-		{ "tag": "|DM|", "title": "Dangerous Monkeys", "website": "http://dm.fraggedstuff.com" },
-		{ "tag": "|noVI:", "title": "No Violence", "website": "http://noviteam.de" },
-		{ "tag": "[FD]", "title": "Forgotten Dream", "website": "http://forgottendream.org" },
-		{ "tag": "=DK=", "title": "Dark Keepers", "website": "http://www.darkkeepers.dk" },
-		{ "tag": "eXc|", "title": "Excellence" },
-		{ "tag": "Crowd>", "title": "Crowd", "website": "http://crowd.gg" },
-		{ "tag": "|HD|", "title": "High Definition" },
-		{ "tag": "<sAs/", "title": "sAs" },
-		{ "tag": "cm|", "title": "Cubic Matter", "website": "http://cubicmatter.net" },
-		{ "tag": "glory|", "title": "Glory" },
-		{ "tag": "|ORK|", "title": "ORK" },
-		{ "tag": "[GLX]", "title": "GLX" },
-		{ "tag": "eC.", "title": "Enigmatic Crew", "website": "http://enicrew.tk" },
-		{ "tag": "<pWn>", "title": "pWn" },
-		{ "tag": ".c2|", "title": "C2", "website": "http://c2clan.tk" },
-		{ "tag": "(ESP)", "title": "Especial Super Paragons", "website": "http://espteam.org" },
-		{ "tag": "[RUSS]", "title": "RUSS", "website": "http://russauerclan.boards.net" },
-		{ "tag": "RED|", "title": "RED" },
-		{ "tag": "#TJS.", "title": "TJS" },
-		{ "tag": "va|", "title": "VoxelArmy", "website": "http://www.voxelarmy.com" },
-		{ "tag": "vE'", "title": "vE'ctor", "website": "http://vector.enjin.com" },
-		{ "tag": "|EK|", "title": "Eternal Killers", "website": "http://tekclansauer.createaforum.com" },
-		{ "tag": "MyS", "title": "Makes you Sick", "website": "http://myys.bplaced.net" },
-		{ "tag": "|ONI|", "title": "ONI", "website": "http://www.oniclan.enjin.com" },
-		{ "tag": "ww|", "title": "War Wolves", "website": "http://ww-warwolves.enjin.com" },
-		{ "tag": "|SM|", "title": "Superior Mappers", "website": "http://superiormappers.forumotion.eu" },
-		{ "tag": "'eS|", "title": "Essential Smileys" },
-		{ "tag": "s3xy|", "title": "Sexiest Clan", "website": "http://sexysauer.com" },
-		{ "tag": "xS'", "title": "eXperimental Squad", "website": "http://impressivesquad.eu" },
-		{ "tag": "aCe|", "title": "Amazing Cube Events" },
-		{ "tag": "cH'", "title": "Coop Hopes", "website": "https://ch-clan.com" },
-		{ "tag": "|GM|", "title": "German Masters", "website": "http://germanmasters.clanwebsite.com/" },
-		{ "tag": "vVv|", "title": "vVv", "website": "http://vvv-clan.me/" },
-		{ "tag": ">ETK<", "title": "Elite Team Killers", "discord": "https://discordapp.com/invite/5Vs5kmB" },
-		{ "tag": "hammer_of_", "title": "THE HAMMER CLAN", "website": "https://hammerofclan.weebly.com/" },
-		{ "tag": "|tee|", "title": "The Endless Effort", "website": "https://teeclan.amebaownd.com/" },
-		{ "tag": "6.0'", "title": "6.0'" },
-		{ "tag": "[sQ]", "title": "sQuare up", "website": "http://sqclan.com/" },
-		{ "tag": "]RS[", "title": "Rocket Shooters" },
-		{ "tag": "sync'", "title": "sync'" },
-		{ "tag": "|-ReX-|", "title": "|-ReX-|" },
-		{ "tag": "rse|", "title": "rse|" },
-		{ "tag": "}TC{", "title": "}TC{" },
-		{ "tag": ".hpp", "title": "High Performance People" },
-		{ "tag": ".asp", "title": "aspire" }
-	],
-	"materModeColors": {
-	  "auth": "lightgray",
-	  "open": "lightgreen",
-	  "veto": "yellow",
-	  "locked": "yellow",
-	  "private": "red",
-	  "password": "red"
-	},
-	"gameModes": {
-		"ffa": {},
-		"coop_edit": {},
-		"teamplay": { "teamMode": true },
-		"instagib": { "instaMode": true },
-		"insta_team": { "teamMode": true, "instaMode": true },
-		"efficiency": { "efficMode": true },
-		"effic_team": { "teamMode": true, "efficMode": true },
-		"tactics": {},
-		"tac_team": { "teamMode": true },
-		"capture": { "teamMode": true, "flagMode": true },
-		"regen_capture": { "teamMode": true, "flagMode": true },
-		"ctf": { "teamMode": true, "flagMode": true },
-		"insta_ctf": { "teamMode": true, "instaMode": true, "flagMode": true },
-		"protect": { "teamMode": true, "flagMode": true },
-		"insta_protect": { "teamMode": true, "instaMode": true, "flagMode": true },
-		"hold": { "teamMode": true, "flagMode": true },
-		"insta_hold": { "teamMode": true, "instaMode": true, "flagMode": true },
-		"effic_ctf": { "teamMode": true, "efficMode": true, "flagMode": true },
-		"effic_protect": { "teamMode": true, "efficMode": true, "flagMode": true },
-		"effic_hold": { "teamMode": true, "efficMode": true, "flagMode": true },
-		"collect": { "teamMode": true, "flagMode": true },
-		"insta_collect": { "teamMode": true, "instaMode": true, "flagMode": true },
-		"effic_collect": { "teamMode": true, "efficMode": true, "flagMode": true }
-	},
-	"gameModeGroups": [
-		{ "name": "Classic", "modes": [
-				{ "name": "coop_edit" },
-				{ "name": "ffa" },
-				{ "name": "instagib" },
-				{ "name": "efficiency" },
-				{ "name": "tactics" }
-			] },
-		{ "name": "Team", "modes": [
-				{ "name": "teamplay" },
-				{ "name": "insta_team" },
-				{ "name": "effic_team" },
-				{ "name": "tac_team" }
-			] },
-		{ "name": "Capture The Flag", "modes": [
-				{ "name": "ctf" },
-				{ "name": "insta_ctf" },
-				{ "name": "effic_ctf" }
-			] },
-		{ "name": "Hold", "modes": [
-				{ "name": "hold" },
-				{ "name": "insta_hold" },
-				{ "name": "effic_hold" }
-			] },
-		{ "name": "Protect", "modes": [
-				{ "name": "protect" },
-				{ "name": "insta_protect" },
-				{ "name": "effic_protect" }
-			] },
-		{ "name": "Capture", "modes": [
-				{ "name": "capture" },
-				{ "name": "regen_capture" }
-			] },
-		{ "name": "Collect", "modes": [
-				{ "name": "collect" },
-				{ "name": "insta_collect" },
-				{ "name": "effic_collect" }
-			] }
-	],
-	"duelModes": [ "instagib", "insta_team", "efficiency", "effic_team", "tactics", "tac_team", "ffa", "teamplay" ],
-	"mixModes": [ "teamplay", "insta_team", "effic_team", "capture", "regen_capture", "ctf", "insta_ctf", "protect", "insta_protect", "hold", "insta_hold", "effic_ctf", "effic_protect", "effic_hold", "collect", "insta_collect", "effic_collect" ],
-	"lockedMModes": [ "locked", "private", "password" ],
-	"duelThresholds": { "instagib": 8, "insta_team": 8, "efficiency": 8, "effic_team": 8, "tactics": 0, "tac_team": 0, "ffa": -1000, "teamplay": -1000 },
-	"bannerURL": "https://banners.sauertracker.net/"
+  "clans": [],
+  "materModeColors": {
+    "auth": "lightgray",
+    "open": "lightgreen",
+    "veto": "yellow",
+    "locked": "yellow",
+    "private": "red",
+    "password": "red"
+  },
+  "gameModes": {
+    "ffa": {},
+    "coop_edit": {},
+    "teamplay": { "teamMode": true },
+    "instagib": { "instaMode": true },
+    "insta_team": { "teamMode": true, "instaMode": true },
+    "efficiency": { "efficMode": true },
+    "effic_team": { "teamMode": true, "efficMode": true },
+    "tactics": {},
+    "tac_team": { "teamMode": true },
+    "capture": { "teamMode": true, "flagMode": true },
+    "regen_capture": { "teamMode": true, "flagMode": true },
+    "ctf": { "teamMode": true, "flagMode": true },
+    "insta_ctf": { "teamMode": true, "instaMode": true, "flagMode": true },
+    "protect": { "teamMode": true, "flagMode": true },
+    "insta_protect": { "teamMode": true, "instaMode": true, "flagMode": true },
+    "hold": { "teamMode": true, "flagMode": true },
+    "insta_hold": { "teamMode": true, "instaMode": true, "flagMode": true },
+    "effic_ctf": { "teamMode": true, "efficMode": true, "flagMode": true },
+    "effic_protect": { "teamMode": true, "efficMode": true, "flagMode": true },
+    "effic_hold": { "teamMode": true, "efficMode": true, "flagMode": true },
+    "collect": { "teamMode": true, "flagMode": true },
+    "insta_collect": { "teamMode": true, "instaMode": true, "flagMode": true },
+    "effic_collect": { "teamMode": true, "efficMode": true, "flagMode": true }
+  },
+  "gameModeGroups": [
+    {
+      "name": "Classic",
+      "modes": [
+        { "name": "coop_edit" },
+        { "name": "ffa" },
+        { "name": "instagib" },
+        { "name": "efficiency" },
+        { "name": "tactics" }
+      ]
+    },
+    {
+      "name": "Team",
+      "modes": [
+        { "name": "teamplay" },
+        { "name": "insta_team" },
+        { "name": "effic_team" },
+        { "name": "tac_team" }
+      ]
+    },
+    {
+      "name": "Capture The Flag",
+      "modes": [
+        { "name": "ctf" },
+        { "name": "insta_ctf" },
+        { "name": "effic_ctf" }
+      ]
+    },
+    {
+      "name": "Hold",
+      "modes": [
+        { "name": "hold" },
+        { "name": "insta_hold" },
+        { "name": "effic_hold" }
+      ]
+    },
+    {
+      "name": "Protect",
+      "modes": [
+        { "name": "protect" },
+        { "name": "insta_protect" },
+        { "name": "effic_protect" }
+      ]
+    },
+    {
+      "name": "Capture",
+      "modes": [{ "name": "capture" }, { "name": "regen_capture" }]
+    },
+    {
+      "name": "Collect",
+      "modes": [
+        { "name": "collect" },
+        { "name": "insta_collect" },
+        { "name": "effic_collect" }
+      ]
+    }
+  ],
+  "duelModes": [
+    "instagib",
+    "insta_team",
+    "efficiency",
+    "effic_team",
+    "tactics",
+    "tac_team",
+    "ffa",
+    "teamplay"
+  ],
+  "mixModes": [
+    "teamplay",
+    "insta_team",
+    "effic_team",
+    "capture",
+    "regen_capture",
+    "ctf",
+    "insta_ctf",
+    "protect",
+    "insta_protect",
+    "hold",
+    "insta_hold",
+    "effic_ctf",
+    "effic_protect",
+    "effic_hold",
+    "collect",
+    "insta_collect",
+    "effic_collect"
+  ],
+  "lockedMModes": ["locked", "private", "password"],
+  "duelThresholds": {
+    "instagib": 8,
+    "insta_team": 8,
+    "efficiency": 8,
+    "effic_team": 8,
+    "tactics": 0,
+    "tac_team": 0,
+    "ffa": -1000,
+    "teamplay": -1000
+  },
+  "bannerURL": "https://banners.sauertracker.net/"
 }
