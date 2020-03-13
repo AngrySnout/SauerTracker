@@ -30,5 +30,5 @@ export function getMasterPort() {
 
 export function getMasterHost() {
   const variable = process.env.MASTER_HOST;
-  return variable ? variable : 'sauerbraten.org';
+  return variable ? variable : 'master.tomatenquark.org';
 }

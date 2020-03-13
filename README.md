@@ -1,6 +1,6 @@
-# Sauer Tracker 2
+# Sauer Tracker 2 (Tomatenquark branch)
 
-Global server and player stats tracking for Cube 2: Sauerbraten.
+Global server and player stats tracking for Cube 2: Tomatenquark.
 
 This is the second iteration of [sauertracker.net](http://sauertracker.net/). It
 has many improvements over the original Tracker.
@@ -32,7 +32,7 @@ DATABASE_URL: 'postgres://localhost:5432'
 REDIS_URL: 'redis://localhost:6379'
 BASE_ELO: 1200
 MASTER_PORT: 28787
-MASTER_HOST: sauerbraten.org
+MASTER_HOST: master.tomatenquark.org
 ```
 
 Shared configuration, which includes known clans and mode definitions, is found
@@ -59,6 +59,8 @@ Configuration can be changed in _docker-compose.yml_ under
 # Clone the repository
 git clone https://github.com/AngrySnout/SauerTracker
 cd SauerTracker
+# Checkout the tomatenquark branch
+git checkout tomatenquark
 # Install the dependencies
 yarn install
 # Build the Tracker

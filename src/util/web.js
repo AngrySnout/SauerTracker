@@ -16,15 +16,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 if (process.env.NODE_ENV !== 'production') app.locals.pretty = true;
 
 app.use((req, res, next) => {
-  // If using an old domain, redirect to "sauertracker.net"
-  if (
-    req.get('host') === 'uk.cube2.org' ||
-    req.get('host') === 'tracker.impressivesquad.eu'
-  ) {
-    res.redirect(`${req.protocol}://sauertracker.net${req.originalUrl}`);
-    return;
-  }
-
   // Enable cross-origin on all routes
   res.header('Access-Control-Allow-Origin', '*');
   res.header(

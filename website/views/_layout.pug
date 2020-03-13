@@ -7,9 +7,9 @@ html
         
         block vars
         if title
-            title #{title} - !mpressive Sauer Tracker
+            title #{title} - Tomatenquark Tracker
         else
-            title !mpressive Sauer Tracker
+            title Tomatenquark Tracker
         
         link(rel="shortcut icon", type="image/x-icon", href="/images/squid.png")
         link(rel="stylesheet", href="/styles/styles.css", type="text/css")
@@ -18,7 +18,7 @@ html
         #wrapper
             .title-bar(data-responsive-toggle="top-menu", data-hide-for="medium")
                 button.menu-icon(type="button", data-toggle)
-                .title-bar-title !mpressive Sauer Tracker
+                .title-bar-title Tomatenquark Tracker
             
             .top-bar(id="top-menu")
                 .column.row
@@ -26,7 +26,7 @@ html
                         ul.menu
                             li: a.menu-text(href="/")
                                 img.logo(src="/images/squid.png")
-                                | !mpressive Sauer Tracker
+                                | Tomatenquark Tracker
                     .top-bar-right
                         ul.menu
                             li(class=(section=="servers"? "active": undefined)): a(href="/") Servers
@@ -38,19 +38,12 @@ html
                 block content
                 footer.footer.row
                     .row(data-equalizer, data-equalize-on="medium")
-                        .medium-5.columns(data-equalizer-watch)
-                            strong !mpressive Sauer Tracker &copy; 2019 - !mpressive Squad
+                        .medium-7.columns(data-equalizer-watch)
+                            strong Tomatenquark &copy; 2019
                             br
                             | If you have questions, suggestions, or bug reports, create an issue on <a href="https://github.com/AngrySnout/SauerTracker/issues">GitHub</a> or join us on <a href="https://discord.gg/CzGZXsQ">Discord</a>.
                             br
                             small This site or product includes IP2Location LITE data available from <a href="https://lite.ip2location.com">https://lite.ip2location.com</a>.
-                        .medium-2.columns(data-equalizer-watch)
-                            i.fa.fa-user
-                            |  Clan links:
-                            ol
-                                li: a(href="http://impressivesquad.eu") Website
-                                li: a(href="http://impressivesquad.eu/index.php?site=forum") Forums
-                                li: a(href="https://mibbit.com/?channel=%23impressivesquad&server=irc.gamesurge.net") IRC
                         .medium-2.columns(data-equalizer-watch)
                             i.fa.fa-bars
                             |  Quick links:
@@ -62,9 +55,7 @@ html
                             i.fa.fa-external-link-square
                             |  External links:
                             ol
-                                li: a(href="http://sauerduels.org/") SauerDuels League
-                                li: a(href="http://sauerbraten.org/") Sauerbraten official website
-                                li: a(href="http://sauerworld.org/") SauerWorld
+                                li: a(href="https://tomatenquark.org/") Tomatenquark official website
 
         script(src="/vendor/jquery.min.js")
         script(src="/vendor/foundation.min.js")
