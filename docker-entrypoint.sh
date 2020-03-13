@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "ENTRYPOINT"
+./wait-for-it.sh postgres:5432
 
 if [ "$1" = 'start' ]; then
     yarn migrate
