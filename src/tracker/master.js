@@ -9,7 +9,6 @@ import { getMasterPort, getMasterHost } from '../util/config';
 function pollMasterServer() {
   return new Promise((resolve, reject) => {
     let agg = '';
-    console.log(getMasterPort(), getMasterHost());
     const socket = net.connect(getMasterPort(), getMasterHost(), () => {
       socket.write('list\n');
     });
