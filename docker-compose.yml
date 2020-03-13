@@ -12,7 +12,7 @@ services:
       REDIS_URL: 'redis://redis'
       BASE_ELO: 1200
       MASTER_PORT: 28787
-      MASTER_HOST: sauerbraten.org
+      MASTER_HOST: master.tomatenquark.org
       NODE_ENV: production
     entrypoint: './docker-entrypoint.sh'
     command: 'start'
