@@ -12,10 +12,6 @@ block content
         .medium-12.columns
             #game
                 include ./_partials/game.pug
-            if bannerURL
-                br
-                a(href="/banners?type=server&host="+server.host+"&port="+server.port)
-                    img#banner(src=bannerURL+"server?theme=default&host="+server.host+"&port="+server.port)
             if !server.info.banned && !server.zombie
                 .row.columns.client-side(style="margin-top: 1em")
                     label.big Server activity for today (avg # of players, time is in UTC):

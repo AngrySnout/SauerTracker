@@ -40,11 +40,6 @@ block content
                                 a(href='/clan/'+player.clanTag) #{player.clan}
                         br
                             
-                        if vars.bannerURL
-                            br
-                            a(href="/banners?type=player&name="+encodeURIComponent(player.name))
-                                img#banner(src=vars.bannerURL+"player?theme=default&name="+encodeURIComponent(player.name))
-                            br
                         br
                     
                     .medium-12.large-6.columns
