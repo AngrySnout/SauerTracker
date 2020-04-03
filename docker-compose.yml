@@ -22,6 +22,8 @@ services:
   postgres:
     image: postgres
     restart: always
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: postgrespassword
   redis:
