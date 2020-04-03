@@ -181,7 +181,11 @@ export default class Server {
           const nattr = st.getInt();
           const gameVersion = st.getInt();
 
-          if (gameVersion === 259 || gameVersion === 260) {
+          if (
+            gameVersion === 259 ||
+            gameVersion === 260 ||
+            gameVersion === 261
+          ) {
             // versions 259 and 260 are fully compatible
             this.version = gameVersion;
             this.lastReply = time;

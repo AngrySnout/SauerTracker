@@ -30,7 +30,7 @@ table.scroll#table-contents(width="100%")
                 tr.unclickable(class=(server.highlight? "highlighted": undefined))
                     td.nowrap.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")): a.disable-default(href="/server/"+server.host+"/"+server.port)
                       | !{server.description? server.descriptionStyled: server.host+":"+server.port}
-                      if server.version && server.version != 260
+                      if server.version && server.version != 261
                         span.badge.small.primary(style="color: white; margin-left: 0.5rem;") {{ server.version }}
                     td.clickable(style=(server.isFull? "color: yellow;": ""), onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.clients}/#{server.maxClients}
                     td.clickable(onclick=("showServer('"+server.host+"', "+server.port+")")) #{server.gameMode}
