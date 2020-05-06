@@ -54,7 +54,8 @@
 		{ "tag": "rse|", "title": "rse|" },
 		{ "tag": "}TC{", "title": "}TC{" },
 		{ "tag": ".hpp", "title": "High Performance People" },
-		{ "tag": ".asp", "title": "aspire" }
+		{ "tag": ".asp", "title": "aspire" },
+		{ "tag": "|xs|", "title": "|xs|" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
