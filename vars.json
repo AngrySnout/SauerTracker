@@ -55,7 +55,7 @@
 		{ "tag": "}TC{", "title": "}TC{" },
 		{ "tag": ".hpp", "title": "High Performance People" },
 		{ "tag": ".asp", "title": "aspire" },
-		{ "tag": "|sx|", "title": "|sx|" }
+		{ "tag": "|sx|", "title": "|sx|", "discord": "https://discord.gg/tYbFF8k" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
