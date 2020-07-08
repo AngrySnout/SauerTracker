@@ -56,7 +56,8 @@
 		{ "tag": ".hpp", "title": "High Performance People" },
 		{ "tag": ".asp", "title": "aspire" },
 		{ "tag": "|sx|", "title": "|sx|", "discord": "https://discord.gg/tYbFF8k" },
-		{ "tag": "[OIT]", "title": "OgrosItalian\\TEAM\\", "website": "https://sauerbratenclanogrositalianteam.webs.com/" }
+		{ "tag": "[OIT]", "title": "OgrosItalian\\TEAM\\", "website": "https://sauerbratenclanogrositalianteam.webs.com/" },
+		{ "tag": "[nF]", "title": "[nF] neverFall", "website": "https://nf-neverfall.odoo.com/" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
