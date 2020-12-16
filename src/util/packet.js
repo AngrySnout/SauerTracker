@@ -53,7 +53,7 @@ const uni2cubechars =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
-const cube2colors = ['#40ff80', '#60a0ff', '#ffc040', '#ff4040', '#808080', '#c040c0', '#ff8000', 'white', 'black', 'cyan'];
+const cube2colors = ['#40ff80', '#60a0ff', '#ffc040', '#ff4040', '#808080', '#c040c0', '#ff8000', 'white', 'cyan', 'black'];
 
 /**
  *  Convert Cube 2 string to its UTF8 equivalent.
