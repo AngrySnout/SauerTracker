@@ -57,7 +57,9 @@
 		{ "tag": ".asp", "title": "aspire" },
 		{ "tag": "|sx|", "title": "|sx|", "discord": "https://discord.gg/tYbFF8k" },
 		{ "tag": "[OIT]", "title": "OgrosItalian\\TEAM\\", "website": "https://sauerbratenclanogrositalianteam.webs.com/" },
-		{ "tag": "[nF]", "title": "[nF] neverFall", "website": "https://nf-neverfall.odoo.com/" }
+		{ "tag": "[nF]", "title": "[nF] neverFall", "website": "https://nf-neverfall.odoo.com/" },
+		{ "tag": "GOD$", "title": "Gods Original Daily $hooting" },
+		{ "tag": "=TrS=", "title": "=TrS=" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
