@@ -2,14 +2,14 @@ import net from 'net';
 import Promise from 'bluebird';
 import _ from 'lodash';
 
-import config from '../../config.json';
 import redis from '../util/redis';
 import { logInfo, logError } from '../util/util';
+import { getMasterPort, getMasterHost } from '../util/config';
 
 function pollMasterServer() {
   return new Promise((resolve, reject) => {
     let agg = '';
-    const socket = net.connect(config.master.port, config.master.name, () => {
+    const socket = net.connect(getMasterPort(), getMasterHost(), () => {
       socket.write('list\n');
     });
     socket.on('data', data => {
@@ -47,11 +47,7 @@ export function getServerList() {
  */
 export function updateServerList() {
   return redis.getAsync('last-master-update').then(lastUpdate => {
-    if (
-      lastUpdate &&
-      Date.now() - lastUpdate < config.master.updateInterval * 1000
-    )
-      return;
+    if (lastUpdate && Date.now() - lastUpdate < 600000) return;
     getServerList()
       .then(results => {
         logInfo(

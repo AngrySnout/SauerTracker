@@ -63,6 +63,30 @@ npm restart
 npm stop
 ```
 
+## Docker
+
+```bash
+# Clone the repository
+git clone https://github.com/AngrySnout/SauerTracker
+cd SauerTracker
+# Start SauerTracker
+docker-compose up -d
+```
+
+### Importing an Old Database
+
+```bash
+# If you don't have a dump file already, create one using
+pg_dump SauerTracker > dump.sql
+# Then put this file in the root directory, edit docker-compose.yml and uncomment the line
+# - ./dump.sql:/docker-entrypoint-initdb.d/init.sql:ro
+# Start only the database
+docker-compose up postgres
+# Wait for the import to finish then press CTRL+C to shut it down, recomment the line, and
+# start SauerTracker
+docker-compose up -d
+```
+
 ## Development
 
 For development it is easier to have _Gulp_ and _Knex_ installed globally. This can be achieved with:

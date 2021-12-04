@@ -1,10 +1,10 @@
 import knex from 'knex';
 
-import config from '../../config.json';
+import { getDatabaseURL } from '../util/config';
 
 const database = knex({
   client: 'pg',
-  connection: config.postgresURL,
+  connection: getDatabaseURL(),
   searchPath: ['knex', 'public'],
 });
 export default database;

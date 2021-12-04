@@ -2,8 +2,6 @@
 import dgram from 'dgram';
 import _ from 'lodash';
 
-import config from '../../config.json';
-
 import { isValidIP, isValidPort, logWarn } from '../util/util';
 import Packet from '../util/packet';
 import playerManager from '../tracker/player-manager';
@@ -99,19 +97,17 @@ export default class Server {
     // eslint-disable-next-line default-case
     switch (type) {
       case POLL_PING: {
-        // we ping the server if time since last poll has exceeded config.tracker.pingInterval
+        // we ping the server if time since last poll has exceeded 10
         // seconds or if we need to update extinfo
         return (
-          time - this.lastPoll > config.tracker.pingInterval * 1000 ||
-          this.shouldPoll(POLL_EXTINFO, time)
+          time - this.lastPoll > 10000 || this.shouldPoll(POLL_EXTINFO, time)
         );
       }
       case POLL_EXTINFO: {
         // we poll for extinfo when time since last extinfo poll has exceeded
-        // config.tracker.extInfoPingInterval seconds or if we need to poll for endgame
+        // 5 seconds or if we need to poll for endgame
         return (
-          (time - this.lastExtInfoPoll >
-            config.tracker.extInfoPingInterval * 1000 &&
+          (time - this.lastExtInfoPoll > 5000 &&
             this.game &&
             this.game.clients > 0) ||
           this.shouldPoll(POLL_ENDGAME, time)
@@ -120,13 +116,13 @@ export default class Server {
       case POLL_ENDGAME: {
         // we poll for endgame when the server is not banned, the game has less than 5 seconds left,
         // is not paused, and has players, and time since last endgame poll has exceeded
-        // config.tracker.endGamePingInterval seconds
+        // 2 seconds
         return (
           !this.info.banned &&
           this.game &&
           this.game.timeLeft < 5 &&
           !this.game.paused &&
-          time - this.lastPoll > config.tracker.endGamePingInterval * 1000 &&
+          time - this.lastPoll > 2000 &&
           this.game.clients > 0
         );
       }
@@ -185,7 +181,8 @@ export default class Server {
           const nattr = st.getInt();
           const gameVersion = st.getInt();
 
-          if (gameVersion === 259 || gameVersion === 260) { // versions 259 and 260 are fully compatible
+          if (gameVersion === 259 || gameVersion === 260) {
+            // versions 259 and 260 are fully compatible
             this.version = gameVersion;
             this.lastReply = time;
             const oldGame = this.game;
