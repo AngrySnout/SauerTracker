@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 
-import config from '../../config.json';
 import vars from '../../vars.json';
 
 import { round2, logInfo, logError, getClan } from '../util/util';

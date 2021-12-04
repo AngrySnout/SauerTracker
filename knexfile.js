@@ -1,8 +1,6 @@
-const config = require('./config.json');
-
 const database = {
   client: 'pg',
-  connection: config.postgresURL,
+  connection: process.env.DATABASE_URL,
   searchPath: ['knex', 'public'],
 };
 
