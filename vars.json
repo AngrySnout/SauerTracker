@@ -59,7 +59,8 @@
 		{ "tag": "[OIT]", "title": "OgrosItalian\\TEAM\\", "website": "https://sauerbratenclanogrositalianteam.webs.com/" },
 		{ "tag": "[nF]", "title": "[nF] neverFall", "website": "https://nf-neverfall.odoo.com/" },
 		{ "tag": "GOD$", "title": "Gods Original Daily $hooting" },
-		{ "tag": "=TrS=", "title": "=TrS=" }
+		{ "tag": "=TrS=", "title": "=TrS=" },
+		{ "tag": "|OG|", "title": "Overland Gunslingers" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
