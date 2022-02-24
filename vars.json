@@ -60,7 +60,8 @@
 		{ "tag": "[nF]", "title": "[nF] neverFall", "website": "https://nf-neverfall.odoo.com/" },
 		{ "tag": "GOD$", "title": "Gods Original Daily $hooting" },
 		{ "tag": "=TrS=", "title": "=TrS=" },
-		{ "tag": "|OG|", "title": "Overland Gunslingers" }
+		{ "tag": "|OG|", "title": "Overland Gunslingers" },
+		{ "tag": "*Ur|", "title": "Unicorn Rage", "discord": "https://discord.gg/6yDUuBb4pT" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
