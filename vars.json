@@ -16,6 +16,7 @@
 		{ "tag": "=DK=", "title": "Dark Keepers", "website": "http://www.darkkeepers.dk" },
 		{ "tag": "eXc|", "title": "Excellence" },
 		{ "tag": "Crowd>", "title": "Crowd", "website": "http://crowd.gg" },
+		{ "tag": "RD|", "title": "Real Deal", "website": "https://freddaws.wixsite.com/realdeal" },
 		{ "tag": "|HD|", "title": "High Definition" },
 		{ "tag": "<sAs/", "title": "sAs" },
 		{ "tag": "cm|", "title": "Cubic Matter", "website": "http://cubicmatter.net" },
@@ -61,7 +62,8 @@
 		{ "tag": "GOD$", "title": "Gods Original Daily $hooting" },
 		{ "tag": "=TrS=", "title": "=TrS=" },
 		{ "tag": "|OG|", "title": "Overland Gunslingers" },
-		{ "tag": "*Ur|", "title": "Unicorn Rage", "discord": "https://discord.gg/6yDUuBb4pT" }
+		{ "tag": "*Ur|", "title": "Unicorn Rage", "discord": "https://discord.gg/6yDUuBb4pT" },
+		{ "tag": "Spring", "title": "Spring Clan" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
