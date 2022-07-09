@@ -61,7 +61,8 @@
 		{ "tag": "GOD$", "title": "Gods Original Daily $hooting" },
 		{ "tag": "=TrS=", "title": "=TrS=" },
 		{ "tag": "|OG|", "title": "Overland Gunslingers" },
-		{ "tag": "*Ur|", "title": "Unicorn Rage", "discord": "https://discord.gg/6yDUuBb4pT" }
+		{ "tag": "*Ur|", "title": "Unicorn Rage", "discord": "https://discord.gg/6yDUuBb4pT" },
+		{ "tag": "TMNT", "title": "Teenage Mutant Ninja Turtles" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
