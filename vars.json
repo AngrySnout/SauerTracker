@@ -63,7 +63,8 @@
 		{ "tag": "|OG|", "title": "Overland Gunslingers" },
 		{ "tag": "*Ur|", "title": "Unicorn Rage", "discord": "https://discord.gg/6yDUuBb4pT" },
 		{ "tag": "TMNT", "title": "Teenage Mutant Ninja Turtles" },
-		{ "tag": "[tDMC|", "title": "The (blue) Dangerous Monkey Cult" }
+		{ "tag": "[tDMC|", "title": "The (blue) Dangerous Monkey Cult" },
+                { "tag": "|AV|", "title": "Ad Vitam Aeternam", "discord": "https://discord.gg/WFENvC4hBE" }
 	],
 	"materModeColors": {
 	  "auth": "lightgray",
